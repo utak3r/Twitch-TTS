@@ -1,0 +1,58 @@
+[package]
+name = "twitch-tts"
+version = "0.1.0"
+edition = "2024"
+authors = ["Piotr <utak3r> Borys"]
+description = "Natywny, lokalny serwer i interfejs TTS dla streamerów Twitcha"
+license = "MIT"
+
+[package.metadata.winres]
+FileDescription = "Twitch TTS Streamer App"
+ProductName = "Twitch TTS"
+OriginalFilename = "twitch-tts.exe"
+LegalCopyright = "Copyright © 2026 Piotr <utak3r> Borys"
+LegalTrademarks = ""
+
+[dependencies]
+# GUI & Windowing
+slint = { version = "1.17.1", features = ["backend-winit"] }
+
+# Asynchroniczność & Wielowątkowość
+tokio = { version = "1", features = ["full"] }
+tokio-util = "0.7"
+futures-util = "0.3"
+
+# Sieć & Twitch API
+tokio-tungstenite = { version = "0.26", features = ["native-tls"] }
+reqwest = { version = "0.12", features = ["json"] }
+hyper = { version = "1.5", features = ["full"] }
+http-body-util = "0.1"
+url = "2.5"
+urlencoding = "2.1"
+serde_json = "1.0"
+
+# Audio
+cpal = "0.15"
+rodio = "0.20"
+hound = "3.5"
+
+# Globalne Skróty Klawiszowe
+global-hotkey = "0.8"
+
+# Konfiguracja & Serializacja
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.9"
+regex = "1.11"
+unicode-normalization = "0.1"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+# Logowanie & Narzędzia
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+open = "5.3"
+rfd = "0.15"
+
+[build-dependencies]
+slint-build = "1.17.1"
+winres = "0.1"
