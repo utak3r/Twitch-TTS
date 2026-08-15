@@ -24,7 +24,7 @@ slint::include_modules!();
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // 1. Initialize logging
+
     let filter_layer = tracing_subscriber::EnvFilter::try_from_default_env()
         .unwrap_or_else(|_| "twitch_tts=info,warn,error".into());
     let fmt_layer = tracing_subscriber::fmt::layer().with_target(false);
@@ -34,26 +34,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with(fmt_layer)
         .try_init();
 
-    info!("Starting Twitch TTS Desktop App (Rust + Slint)...");
+    info!("Starting Twitch TTS Desktop App...");
 
-    // 2. Load Configuration
     let config_manager = ConfigManager::new(DEFAULT_CONFIG_PATH);
     let cfg = config_manager.get();
 
-    // 3. Initialize Slint Main Window
     let main_window = MainWindow::new()?;
 
-    // 4. Create Tokio communication channels
     let (hotkey_action_tx, hotkey_action_rx) = mpsc::unbounded_channel::<HotkeyAction>();
 
-    // 5. Setup UI Bridge
     let app_state = ui::bridge::setup_ui_bridge(
         &main_window,
         config_manager.clone(),
         hotkey_action_rx,
     );
 
-    // 6. Start Hotkeys if enabled in config
     if cfg.hotkeys.enabled {
         let mut hotkeys = app_state.hotkeys.lock().unwrap();
         if let Err(err) = hotkeys.start(
@@ -65,7 +60,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    // 7. Auto-connect Twitch if credentials are present
     if !cfg.twitch.oauth_token.trim().is_empty()
         && !cfg.twitch.broadcaster_user_id.trim().is_empty()
         && !crate::twitch::auth::get_client_id().is_empty()
@@ -74,7 +68,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         twitch.connect(app_state.chat_tx.clone(), app_state.status_tx.clone());
     }
 
-    // 8. Run Slint UI Event Loop
     info!("Launching Slint event loop...");
     main_window.run()?;
     info!("Twitch TTS exited normally.");

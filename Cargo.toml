@@ -1,6 +1,6 @@
 [package]
 name = "twitch-tts"
-version = "0.1.0"
+version = "1.0.1"
 edition = "2024"
 authors = ["Piotr <utak3r> Borys"]
 description = "Natywny, lokalny serwer i interfejs TTS dla streamerów Twitcha"
@@ -56,3 +56,6 @@ rfd = "0.15"
 [build-dependencies]
 slint-build = "1.17.1"
 winres = "0.1"
+
+[package.metadata.wix]
+defines = ["PiperSrc=piper", "ModelsSrc=models"]
