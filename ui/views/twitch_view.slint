@@ -1,0 +1,144 @@
+import { Theme, Card, PrimaryButton, SecondaryButton, DangerButton, ToggleSwitch } from "../theme.slint";
+import { LineEdit, Button } from "std-widgets.slint";
+
+export component TwitchView inherits VerticalLayout {
+    in_out property <string> oauth_token: "";
+    in_out property <string> broadcaster_user_id: "";
+    in_out property <bool> read_all_chat: true;
+    in_out property <string> reward_id: "";
+
+    in property <bool> is_connected: false;
+    in property <bool> is_authenticating: false;
+    in property <string> auth_status_message: "";
+
+    callback start_oauth_flow();
+    callback connect_twitch();
+    callback disconnect_twitch();
+    callback twitch_settings_changed();
+
+    spacing: 16px;
+
+    // 1-Click OAuth Card
+    Card {
+        VerticalLayout {
+            padding: 18px;
+            spacing: 12px;
+
+            Text {
+                text: "🎮 Twitch 1-Click Fast Authorization";
+                color: Theme.text_primary;
+                font_size: Theme.font_size_lg;
+                font_weight: 800;
+            }
+
+            Text {
+                text: "Click the button below to authorize Twitch TTS with your Twitch account. A browser window will open automatically, authenticate securely, and save your credentials.";
+                color: Theme.text_secondary;
+                font_size: Theme.font_size_base;
+            }
+
+            HorizontalLayout {
+                spacing: 14px;
+                alignment: start;
+
+                PrimaryButton {
+                    text: root.is_authenticating ? "⏳ Listening on port 17563..." : "🔑 1-Click Twitch OAuth Login";
+                    enabled: !root.is_authenticating;
+                    clicked => { root.start_oauth_flow(); }
+                }
+
+                if root.auth_status_message != "" : Text {
+                    text: root.auth_status_message;
+                    color: Theme.primary_hover;
+                    font_size: Theme.font_size_base;
+                    font_weight: 600;
+                    vertical_alignment: center;
+                }
+            }
+        }
+    }
+
+    // Manual Configuration & Credentials
+    Card {
+        VerticalLayout {
+            padding: 18px;
+            spacing: 12px;
+
+            Text {
+                text: "⚙️ Credentials & Streamer Account";
+                color: Theme.text_primary;
+                font_size: Theme.font_size_lg;
+                font_weight: 800;
+            }
+
+            VerticalLayout {
+                spacing: 4px;
+                Text { text: "OAuth Access Token:"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                LineEdit {
+                    text <=> root.oauth_token;
+                    input_type: password;
+                    placeholder_text: "oauth:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+                    edited => { root.twitch_settings_changed(); }
+                }
+            }
+
+            VerticalLayout {
+                spacing: 4px;
+                Text { text: "Broadcaster Channel / User ID:"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                LineEdit {
+                    text <=> root.broadcaster_user_id;
+                    placeholder_text: "Numeric Twitch user ID or channel login name";
+                    edited => { root.twitch_settings_changed(); }
+                }
+            }
+        }
+    }
+
+    // Listening Modes
+    Card {
+        VerticalLayout {
+            padding: 18px;
+            spacing: 12px;
+
+            Text {
+                text: "📡 Chat Listening & Trigger Mode";
+                color: Theme.text_primary;
+                font_size: Theme.font_size_lg;
+                font_weight: 800;
+            }
+
+            ToggleSwitch {
+                label: "Read All Chat Messages";
+                description: "Synthesize all incoming chat messages (excluding ignored bots and spam)";
+                checked <=> root.read_all_chat;
+                toggled => { root.twitch_settings_changed(); }
+            }
+
+            if !root.read_all_chat : VerticalLayout {
+                spacing: 4px;
+                Text { text: "Channel Points Custom Reward ID:"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                LineEdit {
+                    text <=> root.reward_id;
+                    placeholder_text: "e.g. 92af127c-7326-4483-a59b-b0b3202120ba";
+                    edited => { root.twitch_settings_changed(); }
+                }
+            }
+
+            HorizontalLayout {
+                spacing: 12px;
+                alignment: start;
+
+                if !root.is_connected : PrimaryButton {
+                    text: "⚡ Connect to Twitch EventSub";
+                    clicked => { root.connect_twitch(); }
+                }
+
+                if root.is_connected : DangerButton {
+                    text: "🔌 Disconnect Twitch";
+                    active: true;
+                    clicked => { root.disconnect_twitch(); }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,198 @@
+import { Theme, Card, PrimaryButton, SecondaryButton } from "../theme.slint";
+import { Slider, ScrollView, TextEdit } from "std-widgets.slint";
+
+export component TestLabView inherits VerticalLayout {
+    in_out property <string> test_text: "Cześć utak3r! Jak tam dzisiejszy stream?";
+    in property <string> transformed_aliases: "";
+    in property <string> transformed_censored: "";
+    in property <string> transformed_final: "";
+    in_out property <float> test_speed: 1.0;
+    in property <bool> is_synthesizing: false;
+
+    callback text_changed(string);
+    callback synthesize_and_play(string, float);
+    callback export_to_wav(string, float);
+
+    spacing: 16px;
+
+    // Title / Description Card
+    Card {
+        VerticalLayout {
+            padding: 16px;
+            spacing: 6px;
+
+            Text {
+                text: "🧪 Speech Synthesis Lab";
+                color: Theme.text_primary;
+                font_size: Theme.font_size_xl;
+                font_weight: 800;
+            }
+
+            Text {
+                text: "Test speech synthesis, adjust cadence in real-time, inspect moderation pipeline stages, and export sample WAV files.";
+                color: Theme.text_secondary;
+                font_size: Theme.font_size_base;
+            }
+        }
+    }
+
+    // Main Input Area & Pipeline Visualizer
+    HorizontalLayout {
+        spacing: 16px;
+
+        // Left column: Input and Parameters
+        VerticalLayout {
+            horizontal_stretch: 1;
+            spacing: 12px;
+
+            Card {
+                VerticalLayout {
+                    padding: 16px;
+                    spacing: 12px;
+
+                    Text {
+                        text: "Input Phrase:";
+                        color: Theme.text_primary;
+                        font_size: Theme.font_size_md;
+                        font_weight: 700;
+                    }
+
+                    TextEdit {
+                        height: 140px;
+                        text <=> root.test_text;
+                        edited => { root.text_changed(root.test_text); }
+                    }
+
+                    // Speed Slider
+                    VerticalLayout {
+                        spacing: 6px;
+                        HorizontalLayout {
+                            alignment: space_between;
+                            Text {
+                                text: "Speech Rate (Cadence):";
+                                color: Theme.text_secondary;
+                                font_size: Theme.font_size_base;
+                                font_weight: 600;
+                            }
+                            Text {
+                                text: Math.round(root.test_speed * 100) + "% (" + root.test_speed + "x)";
+                                color: Theme.primary_hover;
+                                font_size: Theme.font_size_base;
+                                font_weight: 700;
+                            }
+                        }
+
+                        Slider {
+                            minimum: 0.5;
+                            maximum: 2.0;
+                            value <=> root.test_speed;
+                        }
+                    }
+
+                    // Action Buttons
+                    HorizontalLayout {
+                        spacing: 12px;
+
+                        PrimaryButton {
+                            horizontal_stretch: 1;
+                            text: root.is_synthesizing ? "⏳ Synthesizing..." : "🔊 Synthesize & Play";
+                            enabled: root.test_text != "" && !root.is_synthesizing;
+                            clicked => {
+                                root.synthesize_and_play(root.test_text, root.test_speed);
+                            }
+                        }
+
+                        SecondaryButton {
+                            text: "💾 Export WAV";
+                            enabled: root.test_text != "" && !root.is_synthesizing;
+                            clicked => {
+                                root.export_to_wav(root.test_text, root.test_speed);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Right column: Pipeline Transformation Stages
+        VerticalLayout {
+            horizontal_stretch: 1;
+
+            Card {
+                VerticalLayout {
+                    padding: 16px;
+                    spacing: 12px;
+
+                    Text {
+                        text: "🔍 Real-time Filter Breakdown";
+                        color: Theme.text_primary;
+                        font_size: Theme.font_size_md;
+                        font_weight: 700;
+                    }
+
+                    // Stage 1: Original Text
+                    VerticalLayout {
+                        spacing: 4px;
+                        Text { text: "1. Raw Input:"; color: Theme.text_muted; font_size: Theme.font_size_sm; font_weight: 700; }
+                        Rectangle {
+                            height: 38px;
+                            background: Theme.surface_light;
+                            border_radius: Theme.radius_sm;
+                            HorizontalLayout {
+                                padding_left: 10px; padding_right: 10px;
+                                Text { text: root.test_text; color: Theme.text_primary; font_size: Theme.font_size_base; overflow: elide; vertical_alignment: center; }
+                            }
+                        }
+                    }
+
+                    // Stage 2: After Aliases
+                    VerticalLayout {
+                        spacing: 4px;
+                        Text { text: "2. After Phonetic Aliases:"; color: Theme.text_muted; font_size: Theme.font_size_sm; font_weight: 700; }
+                        Rectangle {
+                            height: 38px;
+                            background: Theme.surface_light;
+                            border_radius: Theme.radius_sm;
+                            HorizontalLayout {
+                                padding_left: 10px; padding_right: 10px;
+                                Text { text: root.transformed_aliases; color: #60a5fa; font_size: Theme.font_size_base; overflow: elide; vertical_alignment: center; }
+                            }
+                        }
+                    }
+
+                    // Stage 3: After Profanity Filter
+                    VerticalLayout {
+                        spacing: 4px;
+                        Text { text: "3. After Profanity / Spam Filter:"; color: Theme.text_muted; font_size: Theme.font_size_sm; font_weight: 700; }
+                        Rectangle {
+                            height: 38px;
+                            background: Theme.surface_light;
+                            border_radius: Theme.radius_sm;
+                            HorizontalLayout {
+                                padding_left: 10px; padding_right: 10px;
+                                Text { text: root.transformed_censored; color: #f59e0b; font_size: Theme.font_size_base; overflow: elide; vertical_alignment: center; }
+                            }
+                        }
+                    }
+
+                    // Stage 4: Final Sent to Piper
+                    VerticalLayout {
+                        spacing: 4px;
+                        Text { text: "4. Final Text Sent to Piper TTS:"; color: Theme.text_muted; font_size: Theme.font_size_sm; font_weight: 700; }
+                        Rectangle {
+                            height: 46px;
+                            background: Theme.primary_light;
+                            border_width: 1px;
+                            border_color: Theme.primary;
+                            border_radius: Theme.radius_sm;
+                            HorizontalLayout {
+                                padding_left: 10px; padding_right: 10px;
+                                Text { text: root.transformed_final; color: Theme.primary_hover; font_size: Theme.font_size_md; font_weight: 700; overflow: elide; vertical_alignment: center; }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

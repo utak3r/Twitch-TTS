@@ -1,0 +1,243 @@
+import { Theme, Card, PrimaryButton, SecondaryButton, DangerButton, ToggleSwitch } from "../theme.slint";
+import { LineEdit, SpinBox, ScrollView, TextEdit } from "std-widgets.slint";
+
+export struct AliasItem {
+    key: string,
+    value: string,
+}
+
+export struct IgnoredUserItem {
+    name: string,
+}
+
+export component FiltersView inherits VerticalLayout {
+    in_out property <bool> enable_profanity: true;
+    in_out property <bool> filter_emotes: true;
+    in_out property <bool> announce_username: true;
+    in_out property <string> username_template: "{nick} mówi: {message}";
+    in_out property <int> max_characters: 150;
+    in_out property <int> max_repeated_chars: 3;
+
+    in property <[AliasItem]> aliases: [];
+    in property <[IgnoredUserItem]> ignored_users: [];
+    in_out property <string> profanity_words_raw: "";
+
+    in_out property <string> new_alias_key: "";
+    in_out property <string> new_alias_val: "";
+    in_out property <string> new_ignored_user: "";
+
+    callback add_alias(string, string);
+    callback remove_alias(string);
+    callback add_ignored_user(string);
+    callback remove_ignored_user(string);
+    callback profanity_words_saved(string);
+    callback filter_settings_changed();
+
+    spacing: 14px;
+
+    // Moderation Switches & Spam Limits
+    Card {
+        VerticalLayout {
+            padding: 16px;
+            spacing: 12px;
+
+            Text {
+                text: "🛡️ Moderation & Spam Settings";
+                color: Theme.text_primary;
+                font_size: Theme.font_size_lg;
+                font_weight: 800;
+            }
+
+            HorizontalLayout {
+                spacing: 24px;
+
+                VerticalLayout {
+                    horizontal_stretch: 1;
+                    spacing: 6px;
+
+                    ToggleSwitch {
+                        label: "Censor Profanity";
+                        description: "Replace offensive words with 'piiiiiip'";
+                        checked <=> root.enable_profanity;
+                        toggled => { root.filter_settings_changed(); }
+                    }
+
+                    ToggleSwitch {
+                        label: "Filter Twitch Emotes";
+                        description: "Strip standard and third-party emote names";
+                        checked <=> root.filter_emotes;
+                        toggled => { root.filter_settings_changed(); }
+                    }
+
+                    ToggleSwitch {
+                        label: "Announce Username";
+                        description: "Read sender nick before message";
+                        checked <=> root.announce_username;
+                        toggled => { root.filter_settings_changed(); }
+                    }
+                }
+
+                VerticalLayout {
+                    horizontal_stretch: 1;
+                    spacing: 10px;
+
+                    VerticalLayout {
+                        spacing: 4px;
+                        Text { text: "Username Template:"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                        LineEdit {
+                            text <=> root.username_template;
+                            placeholder_text: "{nick} mówi: {message}";
+                            edited => { root.filter_settings_changed(); }
+                        }
+                    }
+
+                    HorizontalLayout {
+                        spacing: 12px;
+
+                        VerticalLayout {
+                            horizontal_stretch: 1;
+                            spacing: 4px;
+                            Text { text: "Max Characters:"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                            SpinBox {
+                                minimum: 20;
+                                maximum: 500;
+                                value <=> root.max_characters;
+                            }
+                        }
+
+                        VerticalLayout {
+                            horizontal_stretch: 1;
+                            spacing: 4px;
+                            Text { text: "Max Repeated Chars:"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                            SpinBox {
+                                minimum: 1;
+                                maximum: 10;
+                                value <=> root.max_repeated_chars;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Tables: Aliases & Ignored Bots
+    HorizontalLayout {
+        spacing: 14px;
+        height: 280px;
+
+        // Phonetic Aliases
+        Card {
+            horizontal_stretch: 1;
+            VerticalLayout {
+                padding: 14px;
+                spacing: 8px;
+
+                Text { text: "🗣️ Phonetic Aliases (Nick / Word -> Replacement)"; color: Theme.text_primary; font_size: Theme.font_size_md; font_weight: 700; }
+
+                HorizontalLayout {
+                    spacing: 6px;
+                    LineEdit { horizontal_stretch: 1; placeholder_text: "Target (e.g. utak3r)"; text <=> root.new_alias_key; }
+                    LineEdit { horizontal_stretch: 1; placeholder_text: "Replacement (e.g. utaker)"; text <=> root.new_alias_val; }
+                    PrimaryButton {
+                        text: "Add";
+                        enabled: root.new_alias_key != "" && root.new_alias_val != "";
+                        clicked => {
+                            root.add_alias(root.new_alias_key, root.new_alias_val);
+                            root.new_alias_key = "";
+                            root.new_alias_val = "";
+                        }
+                    }
+                }
+
+                ScrollView {
+                    VerticalLayout {
+                        spacing: 4px;
+                        for a in root.aliases : Rectangle {
+                            height: 32px;
+                            background: Theme.surface_light;
+                            border_radius: Theme.radius_sm;
+                            HorizontalLayout {
+                                padding_left: 8px; padding_right: 8px;
+                                spacing: 8px;
+                                Text { width: 110px; text: a.key; color: #60a5fa; font_weight: 700; overflow: elide; vertical_alignment: center; }
+                                Text { text: "➔"; color: Theme.text_muted; vertical_alignment: center; }
+                                Text { horizontal_stretch: 1; text: a.value; color: Theme.text_primary; overflow: elide; vertical_alignment: center; }
+                                DangerButton {
+                                    text: "✕";
+                                    clicked => { root.remove_alias(a.key); }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Ignored Users / Bots
+        Card {
+            horizontal_stretch: 1;
+            VerticalLayout {
+                padding: 14px;
+                spacing: 8px;
+
+                Text { text: "🚫 Ignored Users & Bots (Blacklist)"; color: Theme.text_primary; font_size: Theme.font_size_md; font_weight: 700; }
+
+                HorizontalLayout {
+                    spacing: 6px;
+                    LineEdit { horizontal_stretch: 1; placeholder_text: "User name to ignore (e.g. Nightbot)"; text <=> root.new_ignored_user; }
+                    PrimaryButton {
+                        text: "Ignore";
+                        enabled: root.new_ignored_user != "";
+                        clicked => {
+                            root.add_ignored_user(root.new_ignored_user);
+                            root.new_ignored_user = "";
+                        }
+                    }
+                }
+
+                ScrollView {
+                    VerticalLayout {
+                        spacing: 4px;
+                        for u in root.ignored_users : Rectangle {
+                            height: 32px;
+                            background: Theme.surface_light;
+                            border_radius: Theme.radius_sm;
+                            HorizontalLayout {
+                                padding_left: 8px; padding_right: 8px;
+                                spacing: 8px;
+                                Text { horizontal_stretch: 1; text: u.name; color: Theme.danger; font_weight: 700; overflow: elide; vertical_alignment: center; }
+                                DangerButton {
+                                    text: "Unblock";
+                                    clicked => { root.remove_ignored_user(u.name); }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Profanity Words Editor
+    Card {
+        VerticalLayout {
+            padding: 14px;
+            spacing: 8px;
+
+            HorizontalLayout {
+                alignment: space_between;
+                Text { text: "📖 Censored Words Dictionary (one word per line)"; color: Theme.text_primary; font_size: Theme.font_size_md; font_weight: 700; }
+                SecondaryButton {
+                    text: "💾 Save Words Dictionary";
+                    clicked => { root.profanity_words_saved(root.profanity_words_raw); }
+                }
+            }
+
+            TextEdit {
+                height: 100px;
+                text <=> root.profanity_words_raw;
+            }
+        }
+    }
+}

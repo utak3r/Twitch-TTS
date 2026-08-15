@@ -1,0 +1,212 @@
+export global Theme {
+    out property <color> background: #0e0e13;
+    out property <color> surface: #181822;
+    out property <color> surface_light: #222230;
+    out property <color> surface_hover: #2a2a3c;
+    out property <color> border: #323246;
+    out property <color> border_light: #44445e;
+
+    out property <color> primary: #9146ff;
+    out property <color> primary_hover: #a970ff;
+    out property <color> primary_active: #772ce8;
+    out property <color> primary_light: #9146ff26;
+
+    out property <color> success: #10b981;
+    out property <color> success_bg: #10b98126;
+    out property <color> warning: #f59e0b;
+    out property <color> warning_bg: #f59e0b26;
+    out property <color> danger: #ef4444;
+    out property <color> danger_hover: #dc2626;
+    out property <color> danger_bg: #ef444426;
+
+    out property <color> text_primary: #f9fafb;
+    out property <color> text_secondary: #9ca3af;
+    out property <color> text_muted: #6b7280;
+
+    out property <length> font_size_sm: 11px;
+    out property <length> font_size_base: 13px;
+    out property <length> font_size_md: 14px;
+    out property <length> font_size_lg: 16px;
+    out property <length> font_size_xl: 20px;
+
+    out property <length> radius_sm: 4px;
+    out property <length> radius_base: 8px;
+    out property <length> radius_lg: 12px;
+}
+
+export component Card inherits Rectangle {
+    background: Theme.surface;
+    border_radius: Theme.radius_base;
+    border_width: 1px;
+    border_color: Theme.border;
+}
+
+export component PrimaryButton inherits Rectangle {
+    in property <string> text: "Button";
+    in property <bool> enabled: true;
+    in property <image> icon;
+    in property <bool> has_icon: false;
+    callback clicked();
+
+    background: !root.enabled ? Theme.surface_light : (touch.pressed ? Theme.primary_active : (touch.has_hover ? Theme.primary_hover : Theme.primary));
+    border_radius: Theme.radius_base;
+    height: 36px;
+    animate background { duration: 150ms; }
+
+    touch := TouchArea {
+        enabled: root.enabled;
+        clicked => { root.clicked(); }
+        mouse_cursor: root.enabled ? pointer : default;
+    }
+
+    HorizontalLayout {
+        padding_left: 14px;
+        padding_right: 14px;
+        spacing: 8px;
+        alignment: center;
+
+        if root.has_icon : Image {
+            source: root.icon;
+            width: 16px;
+            height: 16px;
+            vertical_alignment: center;
+        }
+
+        Text {
+            text: root.text;
+            color: !root.enabled ? Theme.text_muted : Theme.text_primary;
+            font_size: Theme.font_size_md;
+            font_weight: 600;
+            vertical_alignment: center;
+        }
+    }
+}
+
+export component DangerButton inherits Rectangle {
+    in property <string> text: "Delete";
+    in property <bool> active: false;
+    in property <bool> enabled: true;
+    callback clicked();
+
+    background: !root.enabled ? Theme.surface_light : (root.active ? Theme.danger : (touch.pressed ? #991b1b : (touch.has_hover ? Theme.danger_hover : Theme.danger_bg)));
+    border_radius: Theme.radius_base;
+    border_width: 1px;
+    border_color: root.active ? Theme.danger_hover : Theme.danger;
+    height: 36px;
+    animate background { duration: 150ms; }
+
+    touch := TouchArea {
+        enabled: root.enabled;
+        clicked => { root.clicked(); }
+        mouse_cursor: root.enabled ? pointer : default;
+    }
+
+    HorizontalLayout {
+        padding_left: 12px;
+        padding_right: 12px;
+        alignment: center;
+
+        Text {
+            text: root.text;
+            color: root.active ? #ffffff : (touch.has_hover ? #ffffff : Theme.danger);
+            font_size: Theme.font_size_base;
+            font_weight: 600;
+            vertical_alignment: center;
+        }
+    }
+}
+
+export component SecondaryButton inherits Rectangle {
+    in property <string> text: "Cancel";
+    in property <bool> enabled: true;
+    callback clicked();
+
+    background: touch.pressed ? Theme.surface_hover : (touch.has_hover ? Theme.surface_light : Theme.surface);
+    border_radius: Theme.radius_base;
+    border_width: 1px;
+    border_color: Theme.border;
+    height: 36px;
+    animate background { duration: 150ms; }
+
+    touch := TouchArea {
+        enabled: root.enabled;
+        clicked => { root.clicked(); }
+        mouse_cursor: pointer;
+    }
+
+    HorizontalLayout {
+        padding_left: 12px;
+        padding_right: 12px;
+        alignment: center;
+
+        Text {
+            text: root.text;
+            color: Theme.text_primary;
+            font_size: Theme.font_size_base;
+            font_weight: 500;
+            vertical_alignment: center;
+        }
+    }
+}
+
+export component ToggleSwitch inherits Rectangle {
+    in_out property <bool> checked: false;
+    in property <string> label: "";
+    in property <string> description: "";
+    callback toggled(bool);
+
+    height: 48px;
+    background: transparent;
+
+    touch := TouchArea {
+        clicked => {
+            root.checked = !root.checked;
+            root.toggled(root.checked);
+        }
+        mouse_cursor: pointer;
+    }
+
+    HorizontalLayout {
+        spacing: 12px;
+        alignment: space_between;
+
+        VerticalLayout {
+            alignment: center;
+            spacing: 2px;
+            Text {
+                text: root.label;
+                color: Theme.text_primary;
+                font_size: Theme.font_size_md;
+                font_weight: 600;
+            }
+            if root.description != "" : Text {
+                text: root.description;
+                color: Theme.text_secondary;
+                font_size: Theme.font_size_sm;
+            }
+        }
+
+        VerticalLayout {
+            alignment: center;
+            Rectangle {
+                width: 44px;
+                height: 24px;
+                border_radius: 12px;
+                background: root.checked ? Theme.primary : Theme.surface_light;
+                border_width: 1px;
+                border_color: root.checked ? Theme.primary_hover : Theme.border;
+                animate background { duration: 150ms; }
+
+                Rectangle {
+                    x: root.checked ? 22px : 2px;
+                    y: 2px;
+                    width: 18px;
+                    height: 18px;
+                    border_radius: 9px;
+                    background: #ffffff;
+                    animate x { duration: 150ms; easing: ease-out; }
+                }
+            }
+        }
+    }
+}

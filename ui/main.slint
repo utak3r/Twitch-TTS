@@ -1,0 +1,398 @@
+import {
+    Theme,
+    Card,
+    PrimaryButton,
+    SecondaryButton,
+    DangerButton,
+} from "theme.slint";
+import { LiveView, ActivityItem } from "views/live_view.slint";
+import { TestLabView } from "views/test_lab.slint";
+import {
+    FiltersView,
+    AliasItem,
+    IgnoredUserItem,
+} from "views/filters_view.slint";
+import { AudioView } from "views/audio_view.slint";
+import { TwitchView } from "views/twitch_view.slint";
+import { SettingsView } from "views/settings_view.slint";
+
+export { ActivityItem, AliasItem, IgnoredUserItem }
+component NavTabItem inherits Rectangle {
+    in property <string> icon;
+    in property <string> title;
+    in property <int> tab_index;
+    in property <int> active_tab;
+    in property <bool> enabled: true;
+    callback select_tab(int);
+
+    height: 42px;
+    background: !root.enabled ? transparent : (root.active_tab == root.tab_index ? Theme.primary_light : (touch.has_hover ? Theme.surface_light : transparent));
+    border_radius: Theme.radius_base;
+    border_width: 1px;
+    border_color: (!root.enabled || root.active_tab != root.tab_index) ? transparent : Theme.primary;
+    opacity: root.enabled ? 1.0 : 0.45;
+
+    touch := TouchArea {
+        enabled: root.enabled;
+        clicked => { root.select_tab(root.tab_index); }
+        mouse_cursor: root.enabled ? pointer : not-allowed;
+    }
+
+    HorizontalLayout {
+        padding_left: 12px;
+        spacing: 10px;
+        Text {
+            text: root.icon;
+            font_size: Theme.font_size_md;
+            vertical_alignment: center;
+        }
+
+        Text {
+            text: root.title;
+            color: !root.enabled ? Theme.text_muted : (root.active_tab == root.tab_index ? Theme.primary_hover : Theme.text_primary);
+            font_size: Theme.font_size_base;
+            font_weight: root.active_tab == root.tab_index ? 700 : 500;
+            vertical_alignment: center;
+        }
+    }
+}
+
+export component MainWindow inherits Window {
+    title: "Twitch TTS - Local Streamer Voice Engine";
+    icon: @image-url("../assets/app_icon.png");
+    min_width: 980px;
+    min_height: 640px;
+    preferred_width: 1100px;
+    preferred_height: 740px;
+    background: Theme.background;
+
+    // Current navigation tab: 0 = Live, 1 = Test Lab, 2 = Filters, 3 = Audio, 4 = Twitch, 5 = Settings
+    in_out property <int> active_tab: 0;
+
+    // Shared State & Properties
+    in_out property <string> connection_status: "offline"; // "connected", "reconnecting", "offline"
+    in_out property <string> channel_name: "utak3r";
+    in_out property <bool> is_muted: false;
+    in_out property <int> queue_count: 0;
+    in_out property <float> volume: 1.0;
+    in_out property <bool> is_speaking: false;
+    in_out property <[ActivityItem]> activities: [];
+
+    // Test Lab properties
+    in_out property <string> test_text: "Cześć utak3r! Jak tam dzisiejszy stream?";
+    in_out property <string> transformed_aliases: "";
+    in_out property <string> transformed_censored: "";
+    in_out property <string> transformed_final: "";
+    in_out property <float> test_speed: 1.0;
+    in_out property <bool> is_synthesizing: false;
+
+    // Filters properties
+    in_out property <bool> enable_profanity: true;
+    in_out property <bool> filter_emotes: true;
+    in_out property <bool> announce_username: true;
+    in_out property <string> username_template: "{nick} mówi: {message}";
+    in_out property <int> max_characters: 150;
+    in_out property <int> max_repeated_chars: 3;
+    in_out property <[AliasItem]> aliases: [];
+    in_out property <[IgnoredUserItem]> ignored_users: [];
+    in_out property <string> profanity_words_raw: "";
+
+    // Audio properties
+    in_out property <string> model_path: "./models/voice.onnx";
+    in_out property <string> config_path: "./models/voice.onnx.json";
+    in_out property <int> speaker_id: 0;
+    in_out property <float> speech_rate: 1.0;
+    in_out property <string> selected_device_name: "Default";
+    in_out property <float> padding_sec: 0.3;
+    in_out property <[string]> available_devices: ["Default"];
+
+    // Twitch properties
+    in_out property <string> twitch_oauth_token: "";
+    in_out property <string> broadcaster_user_id: "";
+    in_out property <bool> read_all_chat: true;
+    in_out property <string> reward_id: "";
+    in_out property <bool> is_authenticating: false;
+    in_out property <string> auth_status_message: "";
+
+    // Settings properties
+    in_out property <bool> hotkeys_enabled: false;
+    in_out property <string> mute_hotkey: "F9";
+    in_out property <string> skip_hotkey: "F10";
+    in_out property <bool> minimize_to_tray: false;
+    in_out property <string> save_status: "All changes saved automatically";
+
+    // Callbacks to Rust
+    callback toggle_mute();
+    callback skip_current();
+    callback clear_queue();
+    callback quick_synthesize(string);
+    callback replay_item(string);
+    callback add_alias_for_user(string);
+    callback ignore_user(string);
+    callback volume_changed(float);
+
+    callback test_text_changed(string);
+    callback test_synthesize_and_play(string, float);
+    callback test_export_to_wav(string, float);
+
+    callback add_alias(string, string);
+    callback remove_alias(string);
+    callback add_ignored_user(string);
+    callback remove_ignored_user(string);
+    callback save_profanity_words(string);
+    callback filter_settings_changed();
+
+    callback browse_model();
+    callback browse_config();
+    callback refresh_devices();
+    callback audio_settings_changed();
+
+    callback start_oauth_flow();
+    callback connect_twitch();
+    callback disconnect_twitch();
+    callback twitch_settings_changed();
+
+    callback settings_changed();
+    callback save_config_now();
+
+    HorizontalLayout {
+        padding: 0px;
+        spacing: 0px;
+
+        // Left Navigation Sidebar
+        Rectangle {
+            width: 220px;
+            background: Theme.surface;
+            border_width: 1px;
+            border_color: Theme.border;
+
+            VerticalLayout {
+                padding: 16px;
+                spacing: 12px;
+
+                // Logo Header
+                HorizontalLayout {
+                    spacing: 10px;
+                    alignment: start;
+
+                    Image {
+                        source: @image-url("../assets/app_icon.png");
+                        width: 32px;
+                        height: 32px;
+                    }
+
+                    VerticalLayout {
+                        alignment: center;
+                        Text {
+                            text: "Twitch TTS";
+                            color: Theme.text_primary;
+                            font_size: Theme.font_size_lg;
+                            font_weight: 800;
+                        }
+
+                        Text {
+                            text: "Local Streamer Voice Engine";
+                            color: Theme.primary_hover;
+                            font_size: 10px;
+                            font_weight: 700;
+                        }
+                    }
+                }
+
+                Rectangle {
+                    height: 1px;
+                    background: Theme.border;
+                }
+
+                // Navigation Items
+                VerticalLayout {
+                    spacing: 6px;
+
+                    NavTabItem {
+                        icon: "📊";
+                        title: "Live Monitor";
+                        tab_index: 0;
+                        active_tab: root.active_tab;
+                        select_tab(idx) => { root.active_tab = idx; }
+                    }
+
+                    NavTabItem {
+                        icon: "🧪";
+                        title: "Speech Lab";
+                        tab_index: 1;
+                        active_tab: root.active_tab;
+                        select_tab(idx) => { root.active_tab = idx; }
+                    }
+
+                    NavTabItem {
+                        icon: "🛡️";
+                        title: "Filters & Moderation";
+                        tab_index: 2;
+                        active_tab: root.active_tab;
+                        select_tab(idx) => { root.active_tab = idx; }
+                    }
+
+                    NavTabItem {
+                        icon: "🔊";
+                        title: "Audio & Voice";
+                        tab_index: 3;
+                        active_tab: root.active_tab;
+                        select_tab(idx) => { root.active_tab = idx; }
+                    }
+
+                    NavTabItem {
+                        icon: "🎮";
+                        title: "Twitch Account";
+                        tab_index: 4;
+                        active_tab: root.active_tab;
+                        select_tab(idx) => { root.active_tab = idx; }
+                    }
+
+                    NavTabItem {
+                        icon: "⚙️";
+                        title: "Hotkeys & System";
+                        tab_index: 5;
+                        active_tab: root.active_tab;
+                        enabled: false;
+                        select_tab(idx) => { root.active_tab = idx; }
+                    }
+                }
+
+                // Push bottom status
+                Rectangle {
+                    vertical_stretch: 1;
+                }
+
+                // Connection status mini indicator in sidebar
+                Rectangle {
+                    height: 38px;
+                    background: Theme.surface_light;
+                    border_radius: Theme.radius_base;
+                    HorizontalLayout {
+                        padding_left: 10px;
+                        padding_right: 10px;
+                        spacing: 8px;
+                        alignment: center;
+
+                        Rectangle {
+                            width: 8px;
+                            height: 8px;
+                            border_radius: 4px;
+                            background: root.connection_status == "connected" ? Theme.success : (root.connection_status == "reconnecting" ? Theme.warning : Theme.danger);
+                        }
+
+                        Text {
+                            text: root.connection_status == "connected" ? "Twitch Live" : (root.connection_status == "reconnecting" ? "Reconnecting" : "Offline");
+                            color: Theme.text_secondary;
+                            font_size: Theme.font_size_sm;
+                            font_weight: 600;
+                            vertical_alignment: center;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Right Content View Area
+        Rectangle {
+            horizontal_stretch: 1;
+            background: Theme.background;
+
+            VerticalLayout {
+                padding: 18px;
+
+                if root.active_tab == 0: LiveView {
+                    connection_status: root.connection_status;
+                    channel_name: root.channel_name;
+                    is_muted: root.is_muted;
+                    queue_count: root.queue_count;
+                    volume <=> root.volume;
+                    is_speaking: root.is_speaking;
+                    activities: root.activities;
+
+                    toggle_mute => { root.toggle_mute(); }
+                    skip_current => { root.skip_current(); }
+                    clear_queue => { root.clear_queue(); }
+                    quick_synthesize(txt) => { root.quick_synthesize(txt); }
+                    replay_item(id) => { root.replay_item(id); }
+                    add_alias_for_user(u) => { root.add_alias_for_user(u); }
+                    ignore_user(u) => { root.ignore_user(u); }
+                    volume_changed(v) => { root.volume_changed(v); }
+                }
+
+                if root.active_tab == 1: TestLabView {
+                    test_text <=> root.test_text;
+                    transformed_aliases: root.transformed_aliases;
+                    transformed_censored: root.transformed_censored;
+                    transformed_final: root.transformed_final;
+                    test_speed <=> root.test_speed;
+                    is_synthesizing: root.is_synthesizing;
+
+                    text_changed(txt) => { root.test_text_changed(txt); }
+                    synthesize_and_play(txt, spd) => { root.test_synthesize_and_play(txt, spd); }
+                    export_to_wav(txt, spd) => { root.test_export_to_wav(txt, spd); }
+                }
+
+                if root.active_tab == 2: FiltersView {
+                    enable_profanity <=> root.enable_profanity;
+                    filter_emotes <=> root.filter_emotes;
+                    announce_username <=> root.announce_username;
+                    username_template <=> root.username_template;
+                    max_characters <=> root.max_characters;
+                    max_repeated_chars <=> root.max_repeated_chars;
+                    aliases: root.aliases;
+                    ignored_users: root.ignored_users;
+                    profanity_words_raw <=> root.profanity_words_raw;
+
+                    add_alias(k, v) => { root.add_alias(k, v); }
+                    remove_alias(k) => { root.remove_alias(k); }
+                    add_ignored_user(u) => { root.add_ignored_user(u); }
+                    remove_ignored_user(u) => { root.remove_ignored_user(u); }
+                    profanity_words_saved(raw) => { root.save_profanity_words(raw); }
+                    filter_settings_changed => { root.filter_settings_changed(); }
+                }
+
+                if root.active_tab == 3: AudioView {
+                    model_path <=> root.model_path;
+                    config_path <=> root.config_path;
+                    speaker_id <=> root.speaker_id;
+                    speech_rate <=> root.speech_rate;
+                    selected_device_name <=> root.selected_device_name;
+                    padding_sec <=> root.padding_sec;
+                    available_devices: root.available_devices;
+
+                    browse_model => { root.browse_model(); }
+                    browse_config => { root.browse_config(); }
+                    refresh_devices => { root.refresh_devices(); }
+                    audio_settings_changed => { root.audio_settings_changed(); }
+                }
+
+                if root.active_tab == 4: TwitchView {
+                    oauth_token <=> root.twitch_oauth_token;
+                    broadcaster_user_id <=> root.broadcaster_user_id;
+                    read_all_chat <=> root.read_all_chat;
+                    reward_id <=> root.reward_id;
+                    is_connected: root.connection_status == "connected";
+                    is_authenticating: root.is_authenticating;
+                    auth_status_message: root.auth_status_message;
+
+                    start_oauth_flow => { root.start_oauth_flow(); }
+                    connect_twitch => { root.connect_twitch(); }
+                    disconnect_twitch => { root.disconnect_twitch(); }
+                    twitch_settings_changed => { root.twitch_settings_changed(); }
+                }
+
+                if root.active_tab == 5: SettingsView {
+                    hotkeys_enabled <=> root.hotkeys_enabled;
+                    mute_hotkey <=> root.mute_hotkey;
+                    skip_hotkey <=> root.skip_hotkey;
+                    minimize_to_tray <=> root.minimize_to_tray;
+                    save_status: root.save_status;
+
+                    settings_changed => { root.settings_changed(); }
+                    save_config_now => { root.save_config_now(); }
+                }
+            }
+        }
+    }
+}

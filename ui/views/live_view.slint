@@ -1,0 +1,348 @@
+import { Theme, Card, PrimaryButton, SecondaryButton, DangerButton } from "../theme.slint";
+import { LineEdit, Slider, ScrollView, Button } from "std-widgets.slint";
+
+export struct ActivityItem {
+    id: string,
+    time: string,
+    user: string,
+    text: string,
+    status: string,
+    status_type: string, // "playing", "spoken", "filtered", "ignored", "dropped", "skipped"
+}
+
+export component LiveView inherits VerticalLayout {
+    in property <string> connection_status: "offline"; // "connected", "reconnecting", "offline"
+    in property <string> channel_name: "";
+    in property <bool> is_muted: false;
+    in property <int> queue_count: 0;
+    in_out property <float> volume: 1.0;
+    in property <bool> is_speaking: false;
+    in property <[ActivityItem]> activities: [];
+
+    in_out property <string> quick_test_text: "";
+
+    callback toggle_mute();
+    callback skip_current();
+    callback clear_queue();
+    callback quick_synthesize(string);
+    callback replay_item(string);
+    callback add_alias_for_user(string);
+    callback ignore_user(string);
+    callback volume_changed(float);
+
+    spacing: 14px;
+
+    // Header Bar
+    Card {
+        height: 64px;
+        HorizontalLayout {
+            padding_left: 16px;
+            padding_right: 16px;
+            alignment: space_between;
+
+            // Connection Badge & VU meter
+            HorizontalLayout {
+                spacing: 12px;
+                alignment: center;
+
+                Rectangle {
+                    width: 10px;
+                    height: 10px;
+                    border_radius: 5px;
+                    background: root.connection_status == "connected" ? Theme.success : (root.connection_status == "reconnecting" ? Theme.warning : Theme.danger);
+                }
+
+                Text {
+                    text: root.connection_status == "connected" ? "CONNECTED (#" + root.channel_name + ")" : (root.connection_status == "reconnecting" ? "RECONNECTING..." : "OFFLINE");
+                    color: root.connection_status == "connected" ? Theme.success : (root.connection_status == "reconnecting" ? Theme.warning : Theme.danger);
+                    font_size: Theme.font_size_md;
+                    font_weight: 700;
+                    vertical_alignment: center;
+                }
+
+                if root.is_speaking : Rectangle {
+                    width: 70px;
+                    height: 20px;
+                    border_radius: 10px;
+                    background: Theme.primary_light;
+                    border_width: 1px;
+                    border_color: Theme.primary;
+
+                    HorizontalLayout {
+                        alignment: center;
+                        Text {
+                            text: "● SPEAKING";
+                            color: Theme.primary_hover;
+                            font_size: 10px;
+                            font_weight: 800;
+                            vertical_alignment: center;
+                        }
+                    }
+                }
+            }
+
+            // Controls
+            HorizontalLayout {
+                spacing: 10px;
+                alignment: center;
+
+                // Volume slider
+                HorizontalLayout {
+                    spacing: 8px;
+                    alignment: center;
+
+                    Text {
+                        text: "Vol: " + Math.round(root.volume * 100) + "%";
+                        color: Theme.text_secondary;
+                        font_size: Theme.font_size_sm;
+                        vertical_alignment: center;
+                    }
+
+                    Rectangle {
+                        width: 90px;
+                        Slider {
+                            minimum: 0.0;
+                            maximum: 1.5;
+                            value <=> root.volume;
+                            changed(val) => { root.volume_changed(val); }
+                        }
+                    }
+                }
+
+                // Mute button
+                DangerButton {
+                    text: root.is_muted ? "🔇 UNMUTE" : "🔊 MUTE";
+                    active: root.is_muted;
+                    clicked => { root.toggle_mute(); }
+                }
+
+                // Skip button
+                SecondaryButton {
+                    text: "⏭️ SKIP";
+                    clicked => { root.skip_current(); }
+                }
+
+                // Clear queue button
+                SecondaryButton {
+                    text: "🗑️ Clear (" + root.queue_count + ")";
+                    enabled: root.queue_count > 0;
+                    clicked => { root.clear_queue(); }
+                }
+            }
+        }
+    }
+
+    // Activity Log Table
+    Card {
+        VerticalLayout {
+            padding: 12px;
+            spacing: 8px;
+
+            // Table Header
+            Rectangle {
+                height: 32px;
+                background: Theme.surface_light;
+                border_radius: Theme.radius_sm;
+
+                HorizontalLayout {
+                    padding_left: 12px;
+                    padding_right: 12px;
+                    spacing: 8px;
+
+                    Text { width: 75px; text: "Time"; color: Theme.text_muted; font_size: Theme.font_size_sm; font_weight: 700; vertical_alignment: center; }
+                    Text { width: 120px; text: "User"; color: Theme.text_muted; font_size: Theme.font_size_sm; font_weight: 700; vertical_alignment: center; }
+                    Text { horizontal_stretch: 1; text: "Spoken Text"; color: Theme.text_muted; font_size: Theme.font_size_sm; font_weight: 700; vertical_alignment: center; }
+                    Text { width: 140px; text: "Status"; color: Theme.text_muted; font_size: Theme.font_size_sm; font_weight: 700; vertical_alignment: center; }
+                    Text { width: 160px; text: "Actions"; color: Theme.text_muted; font_size: Theme.font_size_sm; font_weight: 700; vertical_alignment: center; horizontal_alignment: right; }
+                }
+            }
+
+            // Table Rows Scroll View
+            ScrollView {
+                height: 380px;
+
+                VerticalLayout {
+                    spacing: 4px;
+                    alignment: start;
+
+                    if root.activities.length == 0 : Rectangle {
+                        height: 120px;
+                        HorizontalLayout {
+                            alignment: center;
+                            Text {
+                                text: "No chat messages received yet. Send a test message below!";
+                                color: Theme.text_muted;
+                                font_size: Theme.font_size_md;
+                                vertical_alignment: center;
+                            }
+                        }
+                    }
+
+                    for item[idx] in root.activities : Rectangle {
+                        height: 40px;
+                        background: Math.mod(idx, 2) == 0 ? Theme.surface : Theme.surface_light;
+                        border_radius: Theme.radius_sm;
+
+                        HorizontalLayout {
+                            padding_left: 12px;
+                            padding_right: 12px;
+                            spacing: 8px;
+
+                            Text {
+                                width: 75px;
+                                text: item.time;
+                                color: Theme.text_secondary;
+                                font_size: Theme.font_size_sm;
+                                vertical_alignment: center;
+                            }
+
+                            Text {
+                                width: 120px;
+                                text: item.user;
+                                color: #60a5fa;
+                                font_size: Theme.font_size_base;
+                                font_weight: 700;
+                                overflow: elide;
+                                vertical_alignment: center;
+                            }
+
+                            Text {
+                                horizontal_stretch: 1;
+                                text: item.text;
+                                color: Theme.text_primary;
+                                font_size: Theme.font_size_base;
+                                overflow: elide;
+                                vertical_alignment: center;
+                            }
+
+                            // Status Badge
+                            Rectangle {
+                                width: 140px;
+                                height: 24px;
+                                border_radius: 12px;
+                                background: item.status_type == "playing" ? Theme.primary_light :
+                                            (item.status_type == "spoken" ? Theme.success_bg :
+                                            (item.status_type == "dropped" ? Theme.warning_bg : Theme.danger_bg));
+                                border_width: 1px;
+                                border_color: item.status_type == "playing" ? Theme.primary :
+                                              (item.status_type == "spoken" ? Theme.success :
+                                              (item.status_type == "dropped" ? Theme.warning : Theme.danger));
+
+                                HorizontalLayout {
+                                    padding_left: 8px;
+                                    padding_right: 8px;
+                                    alignment: center;
+                                    Text {
+                                        text: item.status;
+                                        color: item.status_type == "playing" ? Theme.primary_hover :
+                                               (item.status_type == "spoken" ? Theme.success :
+                                               (item.status_type == "dropped" ? Theme.warning : Theme.danger));
+                                        font_size: Theme.font_size_sm;
+                                        font_weight: 700;
+                                        overflow: elide;
+                                        vertical_alignment: center;
+                                    }
+                                }
+                            }
+
+                            // Actions
+                            HorizontalLayout {
+                                width: 160px;
+                                spacing: 4px;
+                                alignment: end;
+
+                                Rectangle {
+                                    width: 48px;
+                                    height: 26px;
+                                    border_radius: Theme.radius_sm;
+                                    background: rep_touch.has_hover ? Theme.surface_hover : Theme.border;
+
+                                    rep_touch := TouchArea {
+                                        clicked => { root.replay_item(item.id); }
+                                        mouse_cursor: pointer;
+                                    }
+                                    HorizontalLayout {
+                                        alignment: center;
+                                        Text { text: "🔁 Play"; color: Theme.text_primary; font_size: 10px; font_weight: 600; vertical_alignment: center; }
+                                    }
+                                }
+
+                                Rectangle {
+                                    width: 48px;
+                                    height: 26px;
+                                    border_radius: Theme.radius_sm;
+                                    background: alias_touch.has_hover ? Theme.surface_hover : Theme.border;
+
+                                    alias_touch := TouchArea {
+                                        clicked => { root.add_alias_for_user(item.user); }
+                                        mouse_cursor: pointer;
+                                    }
+                                    HorizontalLayout {
+                                        alignment: center;
+                                        Text { text: "➕ Alias"; color: Theme.text_primary; font_size: 10px; font_weight: 600; vertical_alignment: center; }
+                                    }
+                                }
+
+                                Rectangle {
+                                    width: 52px;
+                                    height: 26px;
+                                    border_radius: Theme.radius_sm;
+                                    background: ign_touch.has_hover ? Theme.danger_hover : Theme.danger_bg;
+
+                                    ign_touch := TouchArea {
+                                        clicked => { root.ignore_user(item.user); }
+                                        mouse_cursor: pointer;
+                                    }
+                                    HorizontalLayout {
+                                        alignment: center;
+                                        Text { text: "🚫 Block"; color: Theme.danger; font_size: 10px; font_weight: 600; vertical_alignment: center; }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Quick Test Bar
+    Card {
+        height: 58px;
+        HorizontalLayout {
+            padding_left: 14px;
+            padding_right: 14px;
+            spacing: 10px;
+            alignment: center;
+
+            Text {
+                text: "Quick Test:";
+                color: Theme.text_secondary;
+                font_size: Theme.font_size_md;
+                font_weight: 600;
+                vertical_alignment: center;
+            }
+
+            LineEdit {
+                horizontal_stretch: 1;
+                placeholder_text: "Type a phrase to synthesize manually...";
+                text <=> root.quick_test_text;
+                accepted => {
+                    if root.quick_test_text != "" {
+                        root.quick_synthesize(root.quick_test_text);
+                        root.quick_test_text = "";
+                    }
+                }
+            }
+
+            PrimaryButton {
+                text: "🗣️ Synthesize";
+                enabled: root.quick_test_text != "";
+                clicked => {
+                    root.quick_synthesize(root.quick_test_text);
+                    root.quick_test_text = "";
+                }
+            }
+        }
+    }
+}

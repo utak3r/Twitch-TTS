@@ -1,0 +1,113 @@
+import { Theme, Card, PrimaryButton, SecondaryButton, ToggleSwitch } from "../theme.slint";
+import { LineEdit } from "std-widgets.slint";
+
+export component SettingsView inherits VerticalLayout {
+    in_out property <bool> hotkeys_enabled: false;
+    in_out property <string> mute_hotkey: "F9";
+    in_out property <string> skip_hotkey: "F10";
+    in_out property <bool> minimize_to_tray: false;
+    in property <string> save_status: "All changes saved automatically";
+
+    callback settings_changed();
+    callback save_config_now();
+
+    spacing: 16px;
+
+    Card {
+        VerticalLayout {
+            padding: 18px;
+            spacing: 14px;
+
+            Text {
+                text: "⌨️ Global Hotkeys (In-Game Controls)";
+                color: Theme.text_primary;
+                font_size: Theme.font_size_lg;
+                font_weight: 800;
+            }
+
+            Text {
+                text: "Global hotkeys allow you to control TTS playback instantly while playing full-screen games without switching windows.";
+                color: Theme.text_secondary;
+                font_size: Theme.font_size_base;
+            }
+
+            ToggleSwitch {
+                label: "Enable Global Hotkeys Listener";
+                description: "Registers system-wide Windows hooks for Mute and Skip";
+                checked <=> root.hotkeys_enabled;
+                toggled => { root.settings_changed(); }
+            }
+
+            if root.hotkeys_enabled : HorizontalLayout {
+                spacing: 20px;
+
+                VerticalLayout {
+                    horizontal_stretch: 1;
+                    spacing: 4px;
+                    Text { text: "Mute / Unmute TTS Key:"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                    LineEdit {
+                        text <=> root.mute_hotkey;
+                        placeholder_text: "F9, F11, Control+M, etc.";
+                        edited => { root.settings_changed(); }
+                    }
+                }
+
+                VerticalLayout {
+                    horizontal_stretch: 1;
+                    spacing: 4px;
+                    Text { text: "Skip Current Message Key:"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                    LineEdit {
+                        text <=> root.skip_hotkey;
+                        placeholder_text: "F10, F12, Control+K, etc.";
+                        edited => { root.settings_changed(); }
+                    }
+                }
+            }
+        }
+    }
+
+    Card {
+        VerticalLayout {
+            padding: 18px;
+            spacing: 14px;
+
+            Text {
+                text: "🪟 Application Window & Persistence";
+                color: Theme.text_primary;
+                font_size: Theme.font_size_lg;
+                font_weight: 800;
+            }
+
+            ToggleSwitch {
+                label: "Minimize to System Tray";
+                description: "Keep running in background when window is minimized or closed";
+                checked <=> root.minimize_to_tray;
+                toggled => { root.settings_changed(); }
+            }
+
+            HorizontalLayout {
+                spacing: 12px;
+                alignment: space_between;
+
+                HorizontalLayout {
+                    spacing: 6px;
+                    alignment: center;
+                    Rectangle {
+                        width: 8px; height: 8px; border_radius: 4px; background: Theme.success;
+                    }
+                    Text {
+                        text: root.save_status;
+                        color: Theme.text_secondary;
+                        font_size: Theme.font_size_sm;
+                        vertical_alignment: center;
+                    }
+                }
+
+                SecondaryButton {
+                    text: "💾 Force Save config.yaml";
+                    clicked => { root.save_config_now(); }
+                }
+            }
+        }
+    }
+}

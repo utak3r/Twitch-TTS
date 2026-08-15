@@ -1,0 +1,142 @@
+import { Theme, Card, PrimaryButton, SecondaryButton } from "../theme.slint";
+import { LineEdit, SpinBox, Slider, ComboBox, ScrollView } from "std-widgets.slint";
+
+export struct AudioDeviceInfo {
+    id: string,
+    name: string,
+}
+
+export component AudioView inherits VerticalLayout {
+    in_out property <string> model_path: "./models/voice.onnx";
+    in_out property <string> config_path: "./models/voice.onnx.json";
+    in_out property <int> speaker_id: 0;
+    in_out property <float> speech_rate: 1.0;
+    in_out property <string> selected_device_name: "Default";
+    in_out property <float> padding_sec: 0.3;
+    in property <[string]> available_devices: ["Default"];
+
+    callback browse_model();
+    callback browse_config();
+    callback refresh_devices();
+    callback audio_settings_changed();
+
+    spacing: 16px;
+
+    Card {
+        VerticalLayout {
+            padding: 18px;
+            spacing: 14px;
+
+            Text {
+                text: "🔊 Audio & Piper Voice Engine";
+                color: Theme.text_primary;
+                font_size: Theme.font_size_lg;
+                font_weight: 800;
+            }
+
+            // ONNX Model Path
+            VerticalLayout {
+                spacing: 4px;
+                Text { text: "Piper ONNX Model Path (.onnx):"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                HorizontalLayout {
+                    spacing: 8px;
+                    LineEdit { horizontal_stretch: 1; text <=> root.model_path; edited => { root.audio_settings_changed(); } }
+                    SecondaryButton { text: "📂 Browse..."; clicked => { root.browse_model(); } }
+                }
+            }
+
+            // ONNX Config Path
+            VerticalLayout {
+                spacing: 4px;
+                Text { text: "Piper Model Metadata (.onnx.json):"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                HorizontalLayout {
+                    spacing: 8px;
+                    LineEdit { horizontal_stretch: 1; text <=> root.config_path; edited => { root.audio_settings_changed(); } }
+                    SecondaryButton { text: "📂 Browse..."; clicked => { root.browse_config(); } }
+                }
+            }
+
+            HorizontalLayout {
+                spacing: 20px;
+
+                // Speaker ID
+                VerticalLayout {
+                    horizontal_stretch: 1;
+                    spacing: 4px;
+                    Text { text: "Speaker ID (for multi-voice models):"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                    SpinBox {
+                        minimum: 0;
+                        maximum: 100;
+                        value <=> root.speaker_id;
+                    }
+                }
+
+                // Speech Rate
+                VerticalLayout {
+                    horizontal_stretch: 2;
+                    spacing: 4px;
+                    HorizontalLayout {
+                        alignment: space_between;
+                        Text { text: "Default Speech Rate:"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                        Text { text: Math.round(root.speech_rate * 100) + "% (" + root.speech_rate + "x)"; color: Theme.primary_hover; font_size: Theme.font_size_sm; font_weight: 700; }
+                    }
+                    Slider {
+                        minimum: 0.5;
+                        maximum: 2.0;
+                        value <=> root.speech_rate;
+                        changed => { root.audio_settings_changed(); }
+                    }
+                }
+            }
+        }
+    }
+
+    Card {
+        VerticalLayout {
+            padding: 18px;
+            spacing: 14px;
+
+            Text {
+                text: "🎧 Audio Output & Hardware Buffers";
+                color: Theme.text_primary;
+                font_size: Theme.font_size_lg;
+                font_weight: 800;
+            }
+
+            // Audio Output Device
+            VerticalLayout {
+                spacing: 6px;
+                Text { text: "Playback Device (Speakers, Headphones, or VB-Cable / Voicemeeter):"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                HorizontalLayout {
+                    spacing: 8px;
+                    ComboBox {
+                        horizontal_stretch: 1;
+                        model: root.available_devices;
+                        current_value <=> root.selected_device_name;
+                        selected => { root.audio_settings_changed(); }
+                    }
+                    SecondaryButton {
+                        text: "🔄 Refresh Devices";
+                        clicked => { root.refresh_devices(); }
+                    }
+                }
+            }
+
+            // Silence padding
+            VerticalLayout {
+                spacing: 6px;
+                HorizontalLayout {
+                    alignment: space_between;
+                    Text { text: "Silence Padding Buffer (Prevents clipped speech endings on virtual audio cables):"; color: Theme.text_secondary; font_size: Theme.font_size_sm; font_weight: 600; }
+                    Text { text: Math.round(root.padding_sec * 1000) + " ms"; color: Theme.primary_hover; font_size: Theme.font_size_sm; font_weight: 700; }
+                }
+                Slider {
+                    minimum: 0.0;
+                    maximum: 1.0;
+                    value <=> root.padding_sec;
+                    changed => { root.audio_settings_changed(); }
+                }
+            }
+        }
+    }
+}
