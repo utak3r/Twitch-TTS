@@ -1,0 +1,1533 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="APPLICATIONFOLDER">
+            <Directory Id="dir_piper_32b0686596d8dc91" Name="piper">
+                <Component Id="cmp_piper_espeak_ng_dll_845132b41e9195ae" Guid="*">
+                    <File Id="fil_piper_espeak_ng_dll_845132b41e9195ae" Source="piper\espeak-ng.dll" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_piper_libtashkeel_model_ort_9875e38e903ea2ec" Guid="*">
+                    <File Id="fil_piper_libtashkeel_model_ort_9875e38e903ea2ec" Source="piper\libtashkeel_model.ort" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_piper_onnxruntime_dll_7c56f3739385d982" Guid="*">
+                    <File Id="fil_piper_onnxruntime_dll_7c56f3739385d982" Source="piper\onnxruntime.dll" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_nxruntime_providers_shared_dll_a9f7cc5403cbdb81" Guid="*">
+                    <File Id="fil_nxruntime_providers_shared_dll_a9f7cc5403cbdb81" Source="piper\onnxruntime_providers_shared.dll" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_piper_piper_exe_f3652c94eff20725" Guid="*">
+                    <File Id="fil_piper_piper_exe_f3652c94eff20725" Source="piper\piper.exe" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_piper_piper_phonemize_dll_83fb7eefd285ed5d" Guid="*">
+                    <File Id="fil_piper_piper_phonemize_dll_83fb7eefd285ed5d" Source="piper\piper_phonemize.dll" KeyPath="yes" />
+                </Component>
+                <Directory Id="dir_piper_espeak_ng_data_b848b15377669303" Name="espeak-ng-data">
+                    <Component Id="cmp_piper_espeak_ng_data_af_dict_9087deda73a69c4b" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_af_dict_9087deda73a69c4b" Source="piper\espeak-ng-data\af_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_am_dict_da5d343b68f6052c" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_am_dict_da5d343b68f6052c" Source="piper\espeak-ng-data\am_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_an_dict_72d8dca494682e33" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_an_dict_72d8dca494682e33" Source="piper\espeak-ng-data\an_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ar_dict_de6395f95ef1f8c7" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ar_dict_de6395f95ef1f8c7" Source="piper\espeak-ng-data\ar_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_as_dict_14d7211b286ff672" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_as_dict_14d7211b286ff672" Source="piper\espeak-ng-data\as_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_az_dict_ebac4d840e829faf" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_az_dict_ebac4d840e829faf" Source="piper\espeak-ng-data\az_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ba_dict_884f402e829f5215" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ba_dict_884f402e829f5215" Source="piper\espeak-ng-data\ba_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_be_dict_a297f41f63de6fc9" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_be_dict_a297f41f63de6fc9" Source="piper\espeak-ng-data\be_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_bg_dict_1ae76408b978e883" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_bg_dict_1ae76408b978e883" Source="piper\espeak-ng-data\bg_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_bn_dict_244094cc9c055bd6" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_bn_dict_244094cc9c055bd6" Source="piper\espeak-ng-data\bn_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_bpy_dict_bf4bcd049d9c557f" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_bpy_dict_bf4bcd049d9c557f" Source="piper\espeak-ng-data\bpy_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_bs_dict_52907b5ee65bf91f" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_bs_dict_52907b5ee65bf91f" Source="piper\espeak-ng-data\bs_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ca_dict_a905ed02b94bb10e" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ca_dict_a905ed02b94bb10e" Source="piper\espeak-ng-data\ca_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_chr_dict_b1cce246d5d6086d" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_chr_dict_b1cce246d5d6086d" Source="piper\espeak-ng-data\chr_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_cmn_dict_9ea40f4828ba3e0e" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_cmn_dict_9ea40f4828ba3e0e" Source="piper\espeak-ng-data\cmn_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_cs_dict_645f1ecd7bd9d59c" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_cs_dict_645f1ecd7bd9d59c" Source="piper\espeak-ng-data\cs_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_cv_dict_c47d32281ef2f935" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_cv_dict_c47d32281ef2f935" Source="piper\espeak-ng-data\cv_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_cy_dict_0beab14384de89f6" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_cy_dict_0beab14384de89f6" Source="piper\espeak-ng-data\cy_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_da_dict_167b3745d19b8553" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_da_dict_167b3745d19b8553" Source="piper\espeak-ng-data\da_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_de_dict_31d6c19dfa625cbf" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_de_dict_31d6c19dfa625cbf" Source="piper\espeak-ng-data\de_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_el_dict_bef6d86dfa76adad" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_el_dict_bef6d86dfa76adad" Source="piper\espeak-ng-data\el_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_en_dict_7c14115d630dea27" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_en_dict_7c14115d630dea27" Source="piper\espeak-ng-data\en_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_eo_dict_5e7c074087b9df52" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_eo_dict_5e7c074087b9df52" Source="piper\espeak-ng-data\eo_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_es_dict_42530d0b73fa25ce" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_es_dict_42530d0b73fa25ce" Source="piper\espeak-ng-data\es_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_et_dict_ae4800e34802a765" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_et_dict_ae4800e34802a765" Source="piper\espeak-ng-data\et_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_eu_dict_1a6e9ec6ba7688e8" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_eu_dict_1a6e9ec6ba7688e8" Source="piper\espeak-ng-data\eu_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_fa_dict_a0b4496318bba5a1" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_fa_dict_a0b4496318bba5a1" Source="piper\espeak-ng-data\fa_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_fi_dict_333862e1542e6409" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_fi_dict_333862e1542e6409" Source="piper\espeak-ng-data\fi_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_fr_dict_4d95ee2a0551b206" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_fr_dict_4d95ee2a0551b206" Source="piper\espeak-ng-data\fr_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ga_dict_8a0fe11b296857fa" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ga_dict_8a0fe11b296857fa" Source="piper\espeak-ng-data\ga_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_gd_dict_63b4962232640403" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_gd_dict_63b4962232640403" Source="piper\espeak-ng-data\gd_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_gn_dict_07c43737f0c12fe1" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_gn_dict_07c43737f0c12fe1" Source="piper\espeak-ng-data\gn_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_grc_dict_da49f89e89adb6a2" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_grc_dict_da49f89e89adb6a2" Source="piper\espeak-ng-data\grc_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_gu_dict_5e3497e3ee2fa6ee" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_gu_dict_5e3497e3ee2fa6ee" Source="piper\espeak-ng-data\gu_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_hak_dict_99b7b5a5fc2256b4" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_hak_dict_99b7b5a5fc2256b4" Source="piper\espeak-ng-data\hak_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_haw_dict_2c6555cb220c3e88" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_haw_dict_2c6555cb220c3e88" Source="piper\espeak-ng-data\haw_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_he_dict_ac81c83bab4f1f83" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_he_dict_ac81c83bab4f1f83" Source="piper\espeak-ng-data\he_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_hi_dict_3545a3d209a74cc7" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_hi_dict_3545a3d209a74cc7" Source="piper\espeak-ng-data\hi_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_hr_dict_27abc67a05e1f408" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_hr_dict_27abc67a05e1f408" Source="piper\espeak-ng-data\hr_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ht_dict_a701c9fd671ac26e" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ht_dict_a701c9fd671ac26e" Source="piper\espeak-ng-data\ht_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_hu_dict_c9baea7d3f1d8233" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_hu_dict_c9baea7d3f1d8233" Source="piper\espeak-ng-data\hu_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_hy_dict_8158b0949b998ff7" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_hy_dict_8158b0949b998ff7" Source="piper\espeak-ng-data\hy_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ia_dict_0f41b0225192d928" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ia_dict_0f41b0225192d928" Source="piper\espeak-ng-data\ia_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_id_dict_95568ca183ea5519" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_id_dict_95568ca183ea5519" Source="piper\espeak-ng-data\id_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_per_espeak_ng_data_intonations_43cbcbcf51640bc5" Guid="*">
+                        <File Id="fil_per_espeak_ng_data_intonations_43cbcbcf51640bc5" Source="piper\espeak-ng-data\intonations" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_io_dict_3b8df7bbb9f491e6" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_io_dict_3b8df7bbb9f491e6" Source="piper\espeak-ng-data\io_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_is_dict_686a9216adbc921a" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_is_dict_686a9216adbc921a" Source="piper\espeak-ng-data\is_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_it_dict_21316c7308d2f6e9" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_it_dict_21316c7308d2f6e9" Source="piper\espeak-ng-data\it_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ja_dict_05bd13588931b2fd" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ja_dict_05bd13588931b2fd" Source="piper\espeak-ng-data\ja_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_jbo_dict_74b7b2aceb771c33" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_jbo_dict_74b7b2aceb771c33" Source="piper\espeak-ng-data\jbo_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ka_dict_f8593dfe3afb4996" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ka_dict_f8593dfe3afb4996" Source="piper\espeak-ng-data\ka_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_kk_dict_552040cbc48d9abc" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_kk_dict_552040cbc48d9abc" Source="piper\espeak-ng-data\kk_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_kl_dict_31eea060513b316f" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_kl_dict_31eea060513b316f" Source="piper\espeak-ng-data\kl_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_kn_dict_b0ebbee2d50fb8d5" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_kn_dict_b0ebbee2d50fb8d5" Source="piper\espeak-ng-data\kn_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ko_dict_4861bebeb87f80d8" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ko_dict_4861bebeb87f80d8" Source="piper\espeak-ng-data\ko_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_kok_dict_c22d26a660cd5de5" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_kok_dict_c22d26a660cd5de5" Source="piper\espeak-ng-data\kok_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ku_dict_a80a5a97aa8416e2" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ku_dict_a80a5a97aa8416e2" Source="piper\espeak-ng-data\ku_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ky_dict_e77de483afb1ea2e" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ky_dict_e77de483afb1ea2e" Source="piper\espeak-ng-data\ky_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_la_dict_54058840b92f149b" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_la_dict_54058840b92f149b" Source="piper\espeak-ng-data\la_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_lb_dict_20499d6d0602de74" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_lb_dict_20499d6d0602de74" Source="piper\espeak-ng-data\lb_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_lfn_dict_8681327ab0deae24" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_lfn_dict_8681327ab0deae24" Source="piper\espeak-ng-data\lfn_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_lt_dict_f0d78cb1236f3262" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_lt_dict_f0d78cb1236f3262" Source="piper\espeak-ng-data\lt_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_lv_dict_f9e1c20488a5cfc0" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_lv_dict_f9e1c20488a5cfc0" Source="piper\espeak-ng-data\lv_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_mi_dict_a421a2d48568c38c" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_mi_dict_a421a2d48568c38c" Source="piper\espeak-ng-data\mi_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_mk_dict_c5d8957f3406244e" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_mk_dict_c5d8957f3406244e" Source="piper\espeak-ng-data\mk_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ml_dict_31cd8957080ea5e5" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ml_dict_31cd8957080ea5e5" Source="piper\espeak-ng-data\ml_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_mr_dict_41039c616c4bb1bb" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_mr_dict_41039c616c4bb1bb" Source="piper\espeak-ng-data\mr_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ms_dict_2c2359c0027c2636" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ms_dict_2c2359c0027c2636" Source="piper\espeak-ng-data\ms_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_mt_dict_427c60e1ba82ac2d" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_mt_dict_427c60e1ba82ac2d" Source="piper\espeak-ng-data\mt_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_mto_dict_2ed14f1cea30ff36" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_mto_dict_2ed14f1cea30ff36" Source="piper\espeak-ng-data\mto_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_my_dict_2e25fa1d7e9cb2dc" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_my_dict_2e25fa1d7e9cb2dc" Source="piper\espeak-ng-data\my_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_nci_dict_023ffb0817914442" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_nci_dict_023ffb0817914442" Source="piper\espeak-ng-data\nci_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ne_dict_5579aec7a1f53975" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ne_dict_5579aec7a1f53975" Source="piper\espeak-ng-data\ne_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_nl_dict_597edfe1ba3e3030" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_nl_dict_597edfe1ba3e3030" Source="piper\espeak-ng-data\nl_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_no_dict_c4e14376dbf905a7" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_no_dict_c4e14376dbf905a7" Source="piper\espeak-ng-data\no_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_nog_dict_9be99f1d6d1622e0" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_nog_dict_9be99f1d6d1622e0" Source="piper\espeak-ng-data\nog_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_om_dict_e1ba2057ae3ba56e" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_om_dict_e1ba2057ae3ba56e" Source="piper\espeak-ng-data\om_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_or_dict_af7bc13ce54f7d4d" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_or_dict_af7bc13ce54f7d4d" Source="piper\espeak-ng-data\or_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_pa_dict_aae334f74a697217" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_pa_dict_aae334f74a697217" Source="piper\espeak-ng-data\pa_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_pap_dict_559d668c22ab4dab" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_pap_dict_559d668c22ab4dab" Source="piper\espeak-ng-data\pap_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_phondata_065b7e7be969f5d0" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_phondata_065b7e7be969f5d0" Source="piper\espeak-ng-data\phondata" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_peak_ng_data_phondata_manifest_d6311fa4b82dd702" Guid="*">
+                        <File Id="fil_peak_ng_data_phondata_manifest_d6311fa4b82dd702" Source="piper\espeak-ng-data\phondata-manifest" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_phonindex_a956aa2f73f0fd24" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_phonindex_a956aa2f73f0fd24" Source="piper\espeak-ng-data\phonindex" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_phontab_efa7aaef85a2d657" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_phontab_efa7aaef85a2d657" Source="piper\espeak-ng-data\phontab" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_piqd_dict_b00f6367f0c21bc0" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_piqd_dict_b00f6367f0c21bc0" Source="piper\espeak-ng-data\piqd_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_pl_dict_ce9e56b64e8a5e8e" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_pl_dict_ce9e56b64e8a5e8e" Source="piper\espeak-ng-data\pl_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_pt_dict_31831af71a1d3776" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_pt_dict_31831af71a1d3776" Source="piper\espeak-ng-data\pt_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_py_dict_6f7fdfbf6aecb1cf" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_py_dict_6f7fdfbf6aecb1cf" Source="piper\espeak-ng-data\py_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_qdb_dict_2f92c99ef15c377b" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_qdb_dict_2f92c99ef15c377b" Source="piper\espeak-ng-data\qdb_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_qu_dict_0411aba7983c5d04" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_qu_dict_0411aba7983c5d04" Source="piper\espeak-ng-data\qu_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_quc_dict_3fb61a7f55373681" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_quc_dict_3fb61a7f55373681" Source="piper\espeak-ng-data\quc_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_qya_dict_ee90ae9857566607" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_qya_dict_ee90ae9857566607" Source="piper\espeak-ng-data\qya_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ro_dict_c14d373271c8f98b" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ro_dict_c14d373271c8f98b" Source="piper\espeak-ng-data\ro_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ru_dict_10039a7b7081f609" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ru_dict_10039a7b7081f609" Source="piper\espeak-ng-data\ru_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_sd_dict_d68c60dd5ca06a2f" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_sd_dict_d68c60dd5ca06a2f" Source="piper\espeak-ng-data\sd_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_shn_dict_3fa327771b17cf29" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_shn_dict_3fa327771b17cf29" Source="piper\espeak-ng-data\shn_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_si_dict_49d8fe8031440956" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_si_dict_49d8fe8031440956" Source="piper\espeak-ng-data\si_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_sjn_dict_f2299f9382a829ef" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_sjn_dict_f2299f9382a829ef" Source="piper\espeak-ng-data\sjn_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_sk_dict_28fc2bd5836082b4" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_sk_dict_28fc2bd5836082b4" Source="piper\espeak-ng-data\sk_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_sl_dict_c943a952ad0fc347" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_sl_dict_c943a952ad0fc347" Source="piper\espeak-ng-data\sl_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_smj_dict_e236235c64d18ada" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_smj_dict_e236235c64d18ada" Source="piper\espeak-ng-data\smj_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_sq_dict_3affcf7e0a8338ee" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_sq_dict_3affcf7e0a8338ee" Source="piper\espeak-ng-data\sq_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_sr_dict_41bea879dba1e679" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_sr_dict_41bea879dba1e679" Source="piper\espeak-ng-data\sr_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_sv_dict_f81298d88f230a85" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_sv_dict_f81298d88f230a85" Source="piper\espeak-ng-data\sv_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_sw_dict_bba9cbfaa94a6a88" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_sw_dict_bba9cbfaa94a6a88" Source="piper\espeak-ng-data\sw_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ta_dict_894cffd5c7a2b183" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ta_dict_894cffd5c7a2b183" Source="piper\espeak-ng-data\ta_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_te_dict_1f5992f6d58b85af" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_te_dict_1f5992f6d58b85af" Source="piper\espeak-ng-data\te_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_th_dict_92a63099aa2f24d6" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_th_dict_92a63099aa2f24d6" Source="piper\espeak-ng-data\th_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_tk_dict_2d5ca0eb85ffdd61" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_tk_dict_2d5ca0eb85ffdd61" Source="piper\espeak-ng-data\tk_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_tn_dict_5592a25453ac1f50" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_tn_dict_5592a25453ac1f50" Source="piper\espeak-ng-data\tn_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_tr_dict_0e0a79ae2ffeeb2c" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_tr_dict_0e0a79ae2ffeeb2c" Source="piper\espeak-ng-data\tr_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_tt_dict_f8962afbff07a1aa" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_tt_dict_f8962afbff07a1aa" Source="piper\espeak-ng-data\tt_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ug_dict_8e22a9de0a6f0d4a" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ug_dict_8e22a9de0a6f0d4a" Source="piper\espeak-ng-data\ug_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_uk_dict_18592f55d64823e6" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_uk_dict_18592f55d64823e6" Source="piper\espeak-ng-data\uk_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_ur_dict_1ed97eb7d30a1d23" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_ur_dict_1ed97eb7d30a1d23" Source="piper\espeak-ng-data\ur_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_uz_dict_8d2e6539984f4f7b" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_uz_dict_8d2e6539984f4f7b" Source="piper\espeak-ng-data\uz_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_vi_dict_7c76fed422c2c979" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_vi_dict_7c76fed422c2c979" Source="piper\espeak-ng-data\vi_dict" KeyPath="yes" />
+                    </Component>
+                    <Component Id="cmp_piper_espeak_ng_data_yue_dict_c33b67950ca5013f" Guid="*">
+                        <File Id="fil_piper_espeak_ng_data_yue_dict_c33b67950ca5013f" Source="piper\espeak-ng-data\yue_dict" KeyPath="yes" />
+                    </Component>
+                    <Directory Id="dir_piper_espeak_ng_data_lang_900b0066bc1740bd" Name="lang">
+                        <Component Id="cmp_piper_espeak_ng_data_lang_eu_21b5cb3dc49ac5f5" Guid="*">
+                            <File Id="fil_piper_espeak_ng_data_lang_eu_21b5cb3dc49ac5f5" Source="piper\espeak-ng-data\lang\eu" KeyPath="yes" />
+                        </Component>
+                        <Component Id="cmp_piper_espeak_ng_data_lang_ko_21bcc13dc4a0d3a5" Guid="*">
+                            <File Id="fil_piper_espeak_ng_data_lang_ko_21bcc13dc4a0d3a5" Source="piper\espeak-ng-data\lang\ko" KeyPath="yes" />
+                        </Component>
+                        <Component Id="cmp_piper_espeak_ng_data_lang_qu_2171cb3dc460f929" Guid="*">
+                            <File Id="fil_piper_espeak_ng_data_lang_qu_2171cb3dc460f929" Source="piper\espeak-ng-data\lang\qu" KeyPath="yes" />
+                        </Component>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_aav_beeb38f4fe6c5fb9" Name="aav">
+                            <Component Id="cmp_per_espeak_ng_data_lang_aav_vi_abe87f5f96013b66" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_aav_vi_abe87f5f96013b66" Source="piper\espeak-ng-data\lang\aav\vi" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__data_lang_aav_vi_VN_x_central_39740328bb4328b8" Guid="*">
+                                <File Id="fil__data_lang_aav_vi_VN_x_central_39740328bb4328b8" Source="piper\espeak-ng-data\lang\aav\vi-VN-x-central" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_ng_data_lang_aav_vi_VN_x_south_987c6daa3b7c768c" Guid="*">
+                                <File Id="fil_ng_data_lang_aav_vi_VN_x_south_987c6daa3b7c768c" Source="piper\espeak-ng-data\lang\aav\vi-VN-x-south" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_art_beaa44f4fe34dd28" Name="art">
+                            <Component Id="cmp_per_espeak_ng_data_lang_art_eo_92687c07e5c2219c" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_art_eo_92687c07e5c2219c" Source="piper\espeak-ng-data\lang\art\eo" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_art_ia_925a6a07e5b5c5aa" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_art_ia_925a6a07e5b5c5aa" Source="piper\espeak-ng-data\lang\art\ia" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_art_io_925a5c07e5b5ade0" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_art_io_925a5c07e5b5ade0" Source="piper\espeak-ng-data\lang\art\io" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_art_jbo_6fc1196b5a35dfbd" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_art_jbo_6fc1196b5a35dfbd" Source="piper\espeak-ng-data\lang\art\jbo" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_art_lfn_3a30226b3b6af744" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_art_lfn_3a30226b3b6af744" Source="piper\espeak-ng-data\lang\art\lfn" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_r_espeak_ng_data_lang_art_piqd_3a0e6317210cc062" Guid="*">
+                                <File Id="fil_r_espeak_ng_data_lang_art_piqd_3a0e6317210cc062" Source="piper\espeak-ng-data\lang\art\piqd" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_art_py_923c6e07e59ccee7" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_art_py_923c6e07e59ccee7" Source="piper\espeak-ng-data\lang\art\py" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_art_qdb_20ebad6b2d4fb1d1" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_art_qdb_20ebad6b2d4fb1d1" Source="piper\espeak-ng-data\lang\art\qdb" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_art_qya_20daae6b2d414051" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_art_qya_20daae6b2d414051" Source="piper\espeak-ng-data\lang\art\qya" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_art_sjn_33111b6b37d24d21" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_art_sjn_33111b6b37d24d21" Source="piper\espeak-ng-data\lang\art\sjn" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_azc_bec52bf4fe4b7a65" Name="azc">
+                            <Component Id="cmp_er_espeak_ng_data_lang_azc_nci_645423fa30ec8137" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_azc_nci_645423fa30ec8137" Source="piper\espeak-ng-data\lang\azc\nci" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_bat_b7140ff4fa36be76" Name="bat">
+                            <Component Id="cmp_per_espeak_ng_data_lang_bat_lt_92b48d43b2a4e1e6" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_bat_lt_92b48d43b2a4e1e6" Source="piper\espeak-ng-data\lang\bat\lt" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_bat_ltg_edad8b088e2b2e33" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_bat_ltg_edad8b088e2b2e33" Source="piper\espeak-ng-data\lang\bat\ltg" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_bat_lv_92b48b43b2a4de80" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_bat_lv_92b48b43b2a4de80" Source="piper\espeak-ng-data\lang\bat\lv" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_bnt_b73911f4fa55de19" Name="bnt">
+                            <Component Id="cmp_per_espeak_ng_data_lang_bnt_sw_306bcdf90e4cc709" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_bnt_sw_306bcdf90e4cc709" Source="piper\espeak-ng-data\lang\bnt\sw" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_bnt_tn_3067e6f90e4908ad" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_bnt_tn_3067e6f90e4908ad" Source="piper\espeak-ng-data\lang\bnt\tn" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_ccs_b02af1f4f6cb7cae" Name="ccs">
+                            <Component Id="cmp_per_espeak_ng_data_lang_ccs_ka_41f5ba1046b3ce52" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_ccs_ka_41f5ba1046b3ce52" Source="piper\espeak-ng-data\lang\ccs\ka" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_cel_b031e0f4f6d17e79" Name="cel">
+                            <Component Id="cmp_per_espeak_ng_data_lang_cel_cy_14fbbb8620153b17" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_cel_cy_14fbbb8620153b17" Source="piper\espeak-ng-data\lang\cel\cy" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_cel_ga_14eeab86200a958b" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_cel_ga_14eeab86200a958b" Source="piper\espeak-ng-data\lang\cel\ga" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_cel_gd_14eeae86200a9aa4" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_cel_gd_14eeae86200a9aa4" Source="piper\espeak-ng-data\lang\cel\gd" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_cus_affbf9f4f6a41984" Name="cus">
+                            <Component Id="cmp_per_espeak_ng_data_lang_cus_om_987c26d2443c87b8" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_cus_om_987c26d2443c87b8" Source="piper\espeak-ng-data\lang\cus\om" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_dra_ea06f6f516c7e04c" Name="dra">
+                            <Component Id="cmp_per_espeak_ng_data_lang_dra_kn_5afad02bf6bf00bd" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_dra_kn_5afad02bf6bf00bd" Source="piper\espeak-ng-data\lang\dra\kn" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_dra_ml_5b01d22bf6c522d1" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_dra_ml_5b01d22bf6c522d1" Source="piper\espeak-ng-data\lang\dra\ml" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_dra_ta_5aacd92bf67ceeb7" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_dra_ta_5aacd92bf67ceeb7" Source="piper\espeak-ng-data\lang\dra\ta" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_dra_te_5aacd52bf67ce7eb" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_dra_te_5aacd52bf67ce7eb" Source="piper\espeak-ng-data\lang\dra\te" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_esx_e299e2f512ecfec1" Name="esx">
+                            <Component Id="cmp_per_espeak_ng_data_lang_esx_kl_87081b4efc4ab3f8" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_esx_kl_87081b4efc4ab3f8" Source="piper\espeak-ng-data\lang\esx\kl" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_gmq_d0ee87f508d1dff6" Name="gmq">
+                            <Component Id="cmp_per_espeak_ng_data_lang_gmq_da_89aee34c9a19c59d" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_gmq_da_89aee34c9a19c59d" Source="piper\espeak-ng-data\lang\gmq\da" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_gmq_is_89a3e14c9a0fbab2" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_gmq_is_89a3e14c9a0fbab2" Source="piper\espeak-ng-data\lang\gmq\is" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_gmq_nb_898ce84c99fce7b6" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_gmq_nb_898ce84c99fce7b6" Source="piper\espeak-ng-data\lang\gmq\nb" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_gmq_sv_8981de4c99f2cf33" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_gmq_sv_8981de4c99f2cf33" Source="piper\espeak-ng-data\lang\gmq\sv" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_gmw_d0ee89f508d1e35c" Name="gmw">
+                            <Component Id="cmp_per_espeak_ng_data_lang_gmw_af_40d00a5cf984808f" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_gmw_af_40d00a5cf984808f" Source="piper\espeak-ng-data\lang\gmw\af" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_gmw_de_40d9f75cf98cb4cb" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_gmw_de_40d9f75cf98cb4cb" Source="piper\espeak-ng-data\lang\gmw\de" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_gmw_en_40de125cf990cb83" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_gmw_en_40de125cf990cb83" Source="piper\espeak-ng-data\lang\gmw\en" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_lang_gmw_en_029_60d17fc600e96c77" Guid="*">
+                                <File Id="fil_espeak_ng_data_lang_gmw_en_029_60d17fc600e96c77" Source="piper\espeak-ng-data\lang\gmw\en-029" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_g_data_lang_gmw_en_GB_scotland_df6e0c8e647ad892" Guid="*">
+                                <File Id="fil_g_data_lang_gmw_en_GB_scotland_df6e0c8e647ad892" Source="piper\espeak-ng-data\lang\gmw\en-GB-scotland" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_g_data_lang_gmw_en_GB_x_gbclan_87c5c1b98056d148" Guid="*">
+                                <File Id="fil_g_data_lang_gmw_en_GB_x_gbclan_87c5c1b98056d148" Source="piper\espeak-ng-data\lang\gmw\en-GB-x-gbclan" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_g_data_lang_gmw_en_GB_x_gbcwmd_6030cab9fae1d3c7" Guid="*">
+                                <File Id="fil_g_data_lang_gmw_en_GB_x_gbcwmd_6030cab9fae1d3c7" Source="piper\espeak-ng-data\lang\gmw\en-GB-x-gbcwmd" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_ak_ng_data_lang_gmw_en_GB_x_rp_8fb6ab6bb989326f" Guid="*">
+                                <File Id="fil_ak_ng_data_lang_gmw_en_GB_x_rp_8fb6ab6bb989326f" Source="piper\espeak-ng-data\lang\gmw\en-GB-x-rp" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_lang_gmw_en_US_28c8618ee069327a" Guid="*">
+                                <File Id="fil__espeak_ng_data_lang_gmw_en_US_28c8618ee069327a" Source="piper\espeak-ng-data\lang\gmw\en-US" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_eak_ng_data_lang_gmw_en_US_nyc_74d9112282e6c8f1" Guid="*">
+                                <File Id="fil_eak_ng_data_lang_gmw_en_US_nyc_74d9112282e6c8f1" Source="piper\espeak-ng-data\lang\gmw\en-US-nyc" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_gmw_lb_40f5ec5cf9a51cd2" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_gmw_lb_40f5ec5cf9a51cd2" Source="piper\espeak-ng-data\lang\gmw\lb" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_gmw_nl_40fbf25cf9a992b2" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_gmw_nl_40fbf25cf9a992b2" Source="piper\espeak-ng-data\lang\gmw\nl" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_grk_d0e47df508c97a73" Name="grk">
+                            <Component Id="cmp_per_espeak_ng_data_lang_grk_el_a815481ac1cd9a0c" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_grk_el_a815481ac1cd9a0c" Source="piper\espeak-ng-data\lang\grk\el" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_grk_grc_7c2d56775b19be55" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_grk_grc_7c2d56775b19be55" Source="piper\espeak-ng-data\lang\grk\grc" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_inc_06906bf527ab1b59" Name="inc">
+                            <Component Id="cmp_per_espeak_ng_data_lang_inc_as_1f6921eeb8842fcb" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_inc_as_1f6921eeb8842fcb" Source="piper\espeak-ng-data\lang\inc\as" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_inc_bn_1f660eeeb881d9ab" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_inc_bn_1f660eeeb881d9ab" Source="piper\espeak-ng-data\lang\inc\bn" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_inc_bpy_dc7435a384cc9764" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_inc_bpy_dc7435a384cc9764" Source="piper\espeak-ng-data\lang\inc\bpy" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_inc_gu_1f5523eeb8738a27" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_inc_gu_1f5523eeb8738a27" Source="piper\espeak-ng-data\lang\inc\gu" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_inc_hi_1f522feeb87168b4" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_inc_hi_1f522feeb87168b4" Source="piper\espeak-ng-data\lang\inc\hi" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_inc_kok_8d50aea357a41a46" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_inc_kok_8d50aea357a41a46" Source="piper\espeak-ng-data\lang\inc\kok" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_inc_mr_1f4118eeb862ce6c" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_inc_mr_1f4118eeb862ce6c" Source="piper\espeak-ng-data\lang\inc\mr" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_inc_ne_1f3d07eeb85ec8b2" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_inc_ne_1f3d07eeb85ec8b2" Source="piper\espeak-ng-data\lang\inc\ne" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_inc_or_1f3a10eeb85ca226" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_inc_or_1f3a10eeb85ca226" Source="piper\espeak-ng-data\lang\inc\or" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_inc_pa_1f3637eeb858fb94" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_inc_pa_1f3637eeb858fb94" Source="piper\espeak-ng-data\lang\inc\pa" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_inc_sd_1f2c02eeb8504d00" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_inc_sd_1f2c02eeb8504d00" Source="piper\espeak-ng-data\lang\inc\sd" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_inc_si_1f2c0feeb8506317" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_inc_si_1f2c0feeb8506317" Source="piper\espeak-ng-data\lang\inc\si" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_inc_ur_1f2528eeb84a6ee4" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_inc_ur_1f2528eeb84a6ee4" Source="piper\espeak-ng-data\lang\inc\ur" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_ine_06906df527ab1ebf" Name="ine">
+                            <Component Id="cmp_per_espeak_ng_data_lang_ine_hy_706c0001b30d84ee" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_ine_hy_706c0001b30d84ee" Source="piper\espeak-ng-data\lang\ine\hy" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_ine_hyw_15089be33ff84ffb" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_ine_hyw_15089be33ff84ffb" Source="piper\espeak-ng-data\lang\ine\hyw" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_ine_sq_70541001b2f90e3d" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_ine_sq_70541001b2f90e3d" Source="piper\espeak-ng-data\lang\ine\sq" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_ira_06ef91f527fbf06f" Name="ira">
+                            <Component Id="cmp_per_espeak_ng_data_lang_ira_fa_14438484380ef8d4" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_ira_fa_14438484380ef8d4" Source="piper\espeak-ng-data\lang\ira\fa" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_lang_ira_fa_Latn_28639c61de426942" Guid="*">
+                                <File Id="fil_speak_ng_data_lang_ira_fa_Latn_28639c61de426942" Source="piper\espeak-ng-data\lang\ira\fa-Latn" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_ira_ku_1417648437e98789" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_ira_ku_1417648437e98789" Source="piper\espeak-ng-data\lang\ira\ku" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_iro_06ef97f527fbfaa1" Name="iro">
+                            <Component Id="cmp_er_espeak_ng_data_lang_iro_chr_22fe8d9ac0414fba" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_iro_chr_22fe8d9ac0414fba" Source="piper\espeak-ng-data\lang\iro\chr" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_itc_06e883f527f5b9f7" Name="itc">
+                            <Component Id="cmp_per_espeak_ng_data_lang_itc_la_329b1808b5dedfb2" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_itc_la_329b1808b5dedfb2" Source="piper\espeak-ng-data\lang\itc\la" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_jpx_fc2d59f5214c1beb" Name="jpx">
+                            <Component Id="cmp_per_espeak_ng_data_lang_jpx_ja_063e51e29e7efa24" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_jpx_ja_063e51e29e7efa24" Source="piper\espeak-ng-data\lang\jpx\ja" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_map_27b61ef53a047a43" Name="map">
+                            <Component Id="cmp_er_espeak_ng_data_lang_map_haw_2ce9bd6d4ebc71d7" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_map_haw_2ce9bd6d4ebc71d7" Source="piper\espeak-ng-data\lang\map\haw" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_miz_279b28f539edc389" Name="miz">
+                            <Component Id="cmp_er_espeak_ng_data_lang_miz_mto_a3edee196cdc079b" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_miz_mto_a3edee196cdc079b" Source="piper\espeak-ng-data\lang\miz\mto" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_myn_27643cf539bea315" Name="myn">
+                            <Component Id="cmp_er_espeak_ng_data_lang_myn_quc_5de566ea296173c6" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_myn_quc_5de566ea296173c6" Source="piper\espeak-ng-data\lang\myn\quc" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_poz_3ceed3f4b4c7e4c8" Name="poz">
+                            <Component Id="cmp_per_espeak_ng_data_lang_poz_id_4d9fcdc4a6b350f1" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_poz_id_4d9fcdc4a6b350f1" Source="piper\espeak-ng-data\lang\poz\id" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_poz_mi_4d91c0c4a6a6fd7e" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_poz_mi_4d91c0c4a6a6fd7e" Source="piper\espeak-ng-data\lang\poz\mi" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_poz_ms_4d91c6c4a6a707b0" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_poz_ms_4d91c6c4a6a707b0" Source="piper\espeak-ng-data\lang\poz\ms" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_roa_2e5190f4ad45a1ef" Name="roa">
+                            <Component Id="cmp_per_espeak_ng_data_lang_roa_an_4a1140b688d0e4c2" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_roa_an_4a1140b688d0e4c2" Source="piper\espeak-ng-data\lang\roa\an" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_roa_ca_4a184fb688d71ced" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_roa_ca_4a184fb688d71ced" Source="piper\espeak-ng-data\lang\roa\ca" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_roa_es_4a1f2db688dd01d5" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_roa_es_4a1f2db688dd01d5" Source="piper\espeak-ng-data\lang\roa\es" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_lang_roa_es_419_fab23e1050496f12" Guid="*">
+                                <File Id="fil_espeak_ng_data_lang_roa_es_419_fab23e1050496f12" Source="piper\espeak-ng-data\lang\roa\es-419" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_roa_fr_4a293eb688e5733d" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_roa_fr_4a293eb688e5733d" Source="piper\espeak-ng-data\lang\roa\fr" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_lang_roa_fr_BE_9aeb35982d3faba9" Guid="*">
+                                <File Id="fil__espeak_ng_data_lang_roa_fr_BE_9aeb35982d3faba9" Source="piper\espeak-ng-data\lang\roa\fr-BE" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_lang_roa_fr_CH_9aef16982d435fd3" Guid="*">
+                                <File Id="fil__espeak_ng_data_lang_roa_fr_CH_9aef16982d435fd3" Source="piper\espeak-ng-data\lang\roa\fr-CH" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_roa_ht_49f92cb688bc30e5" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_roa_ht_49f92cb688bc30e5" Source="piper\espeak-ng-data\lang\roa\ht" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_roa_it_49f626b688b9f0dc" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_roa_it_49f626b688b9f0dc" Source="piper\espeak-ng-data\lang\roa\it" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_roa_pap_4053792acf17c47a" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_roa_pap_4053792acf17c47a" Source="piper\espeak-ng-data\lang\roa\pap" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_roa_pt_4a4b3cb68902563d" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_roa_pt_4a4b3cb68902563d" Source="piper\espeak-ng-data\lang\roa\pt" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_lang_roa_pt_BR_59b55e51bec5332c" Guid="*">
+                                <File Id="fil__espeak_ng_data_lang_roa_pt_BR_59b55e51bec5332c" Source="piper\espeak-ng-data\lang\roa\pt-BR" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_roa_ro_4a5221b68908470a" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_roa_ro_4a5221b68908470a" Source="piper\espeak-ng-data\lang\roa\ro" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_sai_23006bf4a61c356e" Name="sai">
+                            <Component Id="cmp_per_espeak_ng_data_lang_sai_gn_42f89f83b898f317" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_sai_gn_42f89f83b898f317" Source="piper\espeak-ng-data\lang\sai\gn" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_sem_230d6ff4a626c696" Name="sem">
+                            <Component Id="cmp_per_espeak_ng_data_lang_sem_am_c4b5d45dfdc7c400" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_sem_am_c4b5d45dfdc7c400" Source="piper\espeak-ng-data\lang\sem\am" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_sem_ar_c4b5f35dfdc7f8ad" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_sem_ar_c4b5f35dfdc7f8ad" Source="piper\espeak-ng-data\lang\sem\ar" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_sem_he_c497d05dfdaebfa5" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_sem_he_c497d05dfdaebfa5" Source="piper\espeak-ng-data\lang\sem\he" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_sem_mt_c48ded5dfda69c67" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_sem_mt_c48ded5dfda69c67" Source="piper\espeak-ng-data\lang\sem\mt" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_sit_231b68f4a632f80d" Name="sit">
+                            <Component Id="cmp_er_espeak_ng_data_lang_sit_cmn_278fd220be0f7f7b" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_sit_cmn_278fd220be0f7f7b" Source="piper\espeak-ng-data\lang\sit\cmn" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__data_lang_sit_cmn_Latn_pinyin_37d4ec2adc60a837" Guid="*">
+                                <File Id="fil__data_lang_sit_cmn_Latn_pinyin_37d4ec2adc60a837" Source="piper\espeak-ng-data\lang\sit\cmn-Latn-pinyin" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_sit_hak_85cf9020f3272321" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_sit_hak_85cf9020f3272321" Source="piper\espeak-ng-data\lang\sit\hak" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_sit_my_20271230ec001669" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_sit_my_20271230ec001669" Source="piper\espeak-ng-data\lang\sit\my" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_sit_yue_07ecd1213ce6944c" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_sit_yue_07ecd1213ce6944c" Source="piper\espeak-ng-data\lang\sit\yue" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_ata_lang_sit_yue_Latn_jyutping_e44605b915d44071" Guid="*">
+                                <File Id="fil_ata_lang_sit_yue_Latn_jyutping_e44605b915d44071" Source="piper\espeak-ng-data\lang\sit\yue-Latn-jyutping" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_tai_60756ef4c927183f" Name="tai">
+                            <Component Id="cmp_er_espeak_ng_data_lang_tai_shn_831c8fc0473a00a4" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_tai_shn_831c8fc0473a00a4" Source="piper\espeak-ng-data\lang\tai\shn" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_tai_th_dee48cbfb4de1a8d" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_tai_th_dee48cbfb4de1a8d" Source="piper\espeak-ng-data\lang\tai\th" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_trk_60b590f4c95d35fa" Name="trk">
+                            <Component Id="cmp_per_espeak_ng_data_lang_trk_az_c3c7ed3efe5f0a49" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_trk_az_c3c7ed3efe5f0a49" Source="piper\espeak-ng-data\lang\trk\az" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_trk_ba_c3bdf23efe56be43" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_trk_ba_c3bdf23efe56be43" Source="piper\espeak-ng-data\lang\trk\ba" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_trk_cv_c3c1e93efe5a97cf" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_trk_cv_c3c1e93efe5a97cf" Source="piper\espeak-ng-data\lang\trk\cv" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_trk_kk_c3dcfc3efe717fd0" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_trk_kk_c3dcfc3efe717fd0" Source="piper\espeak-ng-data\lang\trk\kk" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_trk_ky_c3dcee3efe716806" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_trk_ky_c3dcee3efe716806" Source="piper\espeak-ng-data\lang\trk\ky" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_trk_nog_5b60b10a690f97f2" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_trk_nog_5b60b10a690f97f2" Source="piper\espeak-ng-data\lang\trk\nog" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_trk_tk_c39bfc3efe39e8db" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_trk_tk_c39bfc3efe39e8db" Source="piper\espeak-ng-data\lang\trk\tk" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_trk_tr_c39be33efe39be60" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_trk_tr_c39be33efe39be60" Source="piper\espeak-ng-data\lang\trk\tr" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_trk_tt_c39be93efe39c892" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_trk_tt_c39be93efe39c892" Source="piper\espeak-ng-data\lang\trk\tt" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_trk_ug_c39fd83efe3d9486" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_trk_ug_c39fd83efe3d9486" Source="piper\espeak-ng-data\lang\trk\ug" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_trk_uz_c39ff53efe3dc5cd" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_trk_uz_c39ff53efe3dc5cd" Source="piper\espeak-ng-data\lang\trk\uz" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_urj_59453ef4c57fb53e" Name="urj">
+                            <Component Id="cmp_per_espeak_ng_data_lang_urj_et_22c05686d6c00c57" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_urj_et_22c05686d6c00c57" Source="piper\espeak-ng-data\lang\urj\et" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_urj_fi_22b63986d6b7868b" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_urj_fi_22b63986d6b7868b" Source="piper\espeak-ng-data\lang\urj\fi" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_urj_hu_22e55986d6df2dad" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_urj_hu_22e55986d6df2dad" Source="piper\espeak-ng-data\lang\urj\hu" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_lang_urj_smj_67ed041f3fe90644" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_lang_urj_smj_67ed041f3fe90644" Source="piper\espeak-ng-data\lang\urj\smj" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_zle_7297b4f4d3a739c0" Name="zle">
+                            <Component Id="cmp_per_espeak_ng_data_lang_zle_be_6f11c754b8bbe485" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_zle_be_6f11c754b8bbe485" Source="piper\espeak-ng-data\lang\zle\be" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_zle_ru_6edad754b88cbd45" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_zle_ru_6edad754b88cbd45" Source="piper\espeak-ng-data\lang\zle\ru" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_lang_zle_ru_LV_b730cca77318a4be" Guid="*">
+                                <File Id="fil__espeak_ng_data_lang_zle_ru_LV_b730cca77318a4be" Source="piper\espeak-ng-data\lang\zle\ru-LV" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_lang_zle_ru_cl_b748b4a7732d0dd7" Guid="*">
+                                <File Id="fil__espeak_ng_data_lang_zle_ru_cl_b748b4a7732d0dd7" Source="piper\espeak-ng-data\lang\zle\ru-cl" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_zle_uk_6ec9e954b87e68a8" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_zle_uk_6ec9e954b87e68a8" Source="piper\espeak-ng-data\lang\zle\uk" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_zls_7297caf4d3a75f22" Name="zls">
+                            <Component Id="cmp_per_espeak_ng_data_lang_zls_bg_834bba0e954c9efd" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_zls_bg_834bba0e954c9efd" Source="piper\espeak-ng-data\lang\zls\bg" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_zls_bs_834bc60e954cb361" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_zls_bs_834bc60e954cb361" Source="piper\espeak-ng-data\lang\zls\bs" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_zls_hr_8337bd0e953bfb0c" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_zls_hr_8337bd0e953bfb0c" Source="piper\espeak-ng-data\lang\zls\hr" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_zls_mk_8348d60e954a98ba" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_zls_mk_8348d60e954a98ba" Source="piper\espeak-ng-data\lang\zls\mk" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_zls_sl_8318b50e95213ce5" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_zls_sl_8318b50e95213ce5" Source="piper\espeak-ng-data\lang\zls\sl" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_zls_sr_8318c70e95215b7b" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_zls_sr_8318c70e95215b7b" Source="piper\espeak-ng-data\lang\zls\sr" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                        <Directory Id="dir_piper_espeak_ng_data_lang_zlw_7297c6f4d3a75856" Name="zlw">
+                            <Component Id="cmp_per_espeak_ng_data_lang_zlw_cs_519f7dea020f87dc" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_zlw_cs_519f7dea020f87dc" Source="piper\espeak-ng-data\lang\zlw\cs" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_zlw_pl_516c72ea01e41b92" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_zlw_pl_516c72ea01e41b92" Source="piper\espeak-ng-data\lang\zlw\pl" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_per_espeak_ng_data_lang_zlw_sk_516995ea01e22134" Guid="*">
+                                <File Id="fil_per_espeak_ng_data_lang_zlw_sk_516995ea01e22134" Source="piper\espeak-ng-data\lang\zlw\sk" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                    </Directory>
+                    <Directory Id="dir_piper_espeak_ng_data_voices_732ea45e03cbc766" Name="voices">
+                        <Directory Id="dir_piper_espeak_ng_data_voices__v_3e94808e667e9311" Name="!v">
+                            <Component Id="cmp__espeak_ng_data_voices__v_Alex_604d8b0c9b11873f" Guid="*">
+                                <File Id="fil__espeak_ng_data_voices__v_Alex_604d8b0c9b11873f" Source="piper\espeak-ng-data\voices\!v\Alex" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_Alicia_060dca43a65e7dec" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_Alicia_060dca43a65e7dec" Source="piper\espeak-ng-data\voices\!v\Alicia" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_Andrea_36e448f13a643f98" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_Andrea_36e448f13a643f98" Source="piper\espeak-ng-data\voices\!v\Andrea" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_voices__v_Andy_4e02300c906e3cfb" Guid="*">
+                                <File Id="fil__espeak_ng_data_voices__v_Andy_4e02300c906e3cfb" Source="piper\espeak-ng-data\voices\!v\Andy" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_Annie_52ffc9599cbd4ab0" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_Annie_52ffc9599cbd4ab0" Source="piper\espeak-ng-data\voices\!v\Annie" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__ng_data_voices__v_AnxiousAndy_7a5c2e0374610b5c" Guid="*">
+                                <File Id="fil__ng_data_voices__v_AnxiousAndy_7a5c2e0374610b5c" Source="piper\espeak-ng-data\voices\!v\AnxiousAndy" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_peak_ng_data_voices__v_Demonic_b6746728662a597a" Guid="*">
+                                <File Id="fil_peak_ng_data_voices__v_Demonic_b6746728662a597a" Source="piper\espeak-ng-data\voices\!v\Demonic" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_Denis_f6fbe3b6917ed892" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_Denis_f6fbe3b6917ed892" Source="piper\espeak-ng-data\voices\!v\Denis" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_Diogo_9a0700517875ea53" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_Diogo_9a0700517875ea53" Source="piper\espeak-ng-data\voices\!v\Diogo" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_voices__v_Gene_b76eeedce6876f02" Guid="*">
+                                <File Id="fil__espeak_ng_data_voices__v_Gene_b76eeedce6876f02" Source="piper\espeak-ng-data\voices\!v\Gene" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_Gene2_38ef115bb821ee90" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_Gene2_38ef115bb821ee90" Source="piper\espeak-ng-data\voices\!v\Gene2" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_eak_ng_data_voices__v_Henrique_a494aa6a5bc3f73c" Guid="*">
+                                <File Id="fil_eak_ng_data_voices__v_Henrique_a494aa6a5bc3f73c" Source="piper\espeak-ng-data\voices\!v\Henrique" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_voices__v_Hugo_4a84f55a109fed96" Guid="*">
+                                <File Id="fil__espeak_ng_data_voices__v_Hugo_4a84f55a109fed96" Source="piper\espeak-ng-data\voices\!v\Hugo" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_Jacky_62fc763b861c9f53" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_Jacky_62fc763b861c9f53" Source="piper\espeak-ng-data\voices\!v\Jacky" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_r_espeak_ng_data_voices__v_Lee_eca19304d51b958b" Guid="*">
+                                <File Id="fil_r_espeak_ng_data_voices__v_Lee_eca19304d51b958b" Source="piper\espeak-ng-data\voices\!v\Lee" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_Marco_8c9021e5b85effcf" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_Marco_8c9021e5b85effcf" Source="piper\espeak-ng-data\voices\!v\Marco" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_Mario_8c6e21e5b8421969" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_Mario_8c6e21e5b8421969" Source="piper\espeak-ng-data\voices\!v\Mario" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_peak_ng_data_voices__v_Michael_df87a8fa0ad27c4c" Guid="*">
+                                <File Id="fil_peak_ng_data_voices__v_Michael_df87a8fa0ad27c4c" Source="piper\espeak-ng-data\voices\!v\Michael" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_voices__v_Mike_91484f300b7396fd" Guid="*">
+                                <File Id="fil__espeak_ng_data_voices__v_Mike_91484f300b7396fd" Source="piper\espeak-ng-data\voices\!v\Mike" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_k_ng_data_voices__v_Mr_serious_89d4942b14cd0246" Guid="*">
+                                <File Id="fil_k_ng_data_voices__v_Mr_serious_89d4942b14cd0246" Source="piper\espeak-ng-data\voices\!v\Mr serious" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_Nguyen_662af87af0a9463d" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_Nguyen_662af87af0a9463d" Source="piper\espeak-ng-data\voices\!v\Nguyen" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_voices__v_Reed_2e251f7e8eb98c0f" Guid="*">
+                                <File Id="fil__espeak_ng_data_voices__v_Reed_2e251f7e8eb98c0f" Source="piper\espeak-ng-data\voices\!v\Reed" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__ng_data_voices__v_RicishayMax_b77960d4e525593f" Guid="*">
+                                <File Id="fil__ng_data_voices__v_RicishayMax_b77960d4e525593f" Source="piper\espeak-ng-data\voices\!v\RicishayMax" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_ng_data_voices__v_RicishayMax2_e89896c15e765117" Guid="*">
+                                <File Id="fil_ng_data_voices__v_RicishayMax2_e89896c15e765117" Source="piper\espeak-ng-data\voices\!v\RicishayMax2" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_ng_data_voices__v_RicishayMax3_e89895c15e764f64" Guid="*">
+                                <File Id="fil_ng_data_voices__v_RicishayMax3_e89895c15e764f64" Source="piper\espeak-ng-data\voices\!v\RicishayMax3" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_Storm_c777cb855a647688" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_Storm_c777cb855a647688" Source="piper\espeak-ng-data\voices\!v\Storm" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_Tweaky_c4e7b359d8be903c" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_Tweaky_c4e7b359d8be903c" Source="piper\espeak-ng-data\voices\!v\Tweaky" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_eak_ng_data_voices__v_UniRobot_9349744f8a3950e9" Guid="*">
+                                <File Id="fil_eak_ng_data_voices__v_UniRobot_9349744f8a3950e9" Source="piper\espeak-ng-data\voices\!v\UniRobot" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_voices__v_adam_1bcd2e0c747e164c" Guid="*">
+                                <File Id="fil__espeak_ng_data_voices__v_adam_1bcd2e0c747e164c" Source="piper\espeak-ng-data\voices\!v\adam" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_anika_6c4c4859aae072cf" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_anika_6c4c4859aae072cf" Source="piper\espeak-ng-data\voices\!v\anika" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_k_ng_data_voices__v_anikaRobot_172481cc404e7345" Guid="*">
+                                <File Id="fil_k_ng_data_voices__v_anikaRobot_172481cc404e7345" Source="piper\espeak-ng-data\voices\!v\anikaRobot" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_ak_ng_data_voices__v_announcer_6e487455e8d11316" Guid="*">
+                                <File Id="fil_ak_ng_data_voices__v_announcer_6e487455e8d11316" Source="piper\espeak-ng-data\voices\!v\announcer" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_peak_ng_data_voices__v_antonio_ffabe0b31c8cd6ed" Guid="*">
+                                <File Id="fil_peak_ng_data_voices__v_antonio_ffabe0b31c8cd6ed" Source="piper\espeak-ng-data\voices\!v\antonio" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_aunty_07e93bb416a2d322" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_aunty_07e93bb416a2d322" Source="piper\espeak-ng-data\voices\!v\aunty" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_peak_ng_data_voices__v_belinda_d9963c9df0527432" Guid="*">
+                                <File Id="fil_peak_ng_data_voices__v_belinda_d9963c9df0527432" Source="piper\espeak-ng-data\voices\!v\belinda" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_eak_ng_data_voices__v_benjamin_7e071820b3b6bd0f" Guid="*">
+                                <File Id="fil_eak_ng_data_voices__v_benjamin_7e071820b3b6bd0f" Source="piper\espeak-ng-data\voices\!v\benjamin" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_boris_36b3d78b441bf79a" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_boris_36b3d78b441bf79a" Source="piper\espeak-ng-data\voices\!v\boris" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_caleb_b22643bac9cea37a" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_caleb_b22643bac9cea37a" Source="piper\espeak-ng-data\voices\!v\caleb" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_croak_0626b93d91e771a3" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_croak_0626b93d91e771a3" Source="piper\espeak-ng-data\voices\!v\croak" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_david_c21ad693b0287127" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_david_c21ad693b0287127" Source="piper\espeak-ng-data\voices\!v\david" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_ed_d4f47c542ac24b96" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_ed_d4f47c542ac24b96" Source="piper\espeak-ng-data\voices\!v\ed" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_edward_c7fd7ad19029fcf8" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_edward_c7fd7ad19029fcf8" Source="piper\espeak-ng-data\voices\!v\edward" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_peak_ng_data_voices__v_edward2_fdb47c17f7588b3e" Guid="*">
+                                <File Id="fil_peak_ng_data_voices__v_edward2_fdb47c17f7588b3e" Source="piper\espeak-ng-data\voices\!v\edward2" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_f1_d4f1a9542ac06236" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_f1_d4f1a9542ac06236" Source="piper\espeak-ng-data\voices\!v\f1" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_f2_d4f1a8542ac06083" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_f2_d4f1a8542ac06083" Source="piper\espeak-ng-data\voices\!v\f2" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_f3_d4f1a7542ac05ed0" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_f3_d4f1a7542ac05ed0" Source="piper\espeak-ng-data\voices\!v\f3" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_f4_d4f1ae542ac06ab5" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_f4_d4f1ae542ac06ab5" Source="piper\espeak-ng-data\voices\!v\f4" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_f5_d4f1ad542ac06902" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_f5_d4f1ad542ac06902" Source="piper\espeak-ng-data\voices\!v\f5" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_voices__v_fast_cf15cfe2aba1a901" Guid="*">
+                                <File Id="fil__espeak_ng_data_voices__v_fast_cf15cfe2aba1a901" Source="piper\espeak-ng-data\voices\!v\fast" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_peak_ng_data_voices__v_grandma_a4b74a4660057f85" Guid="*">
+                                <File Id="fil_peak_ng_data_voices__v_grandma_a4b74a4660057f85" Source="piper\espeak-ng-data\voices\!v\grandma" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_peak_ng_data_voices__v_grandpa_a519564660585e44" Guid="*">
+                                <File Id="fil_peak_ng_data_voices__v_grandpa_a519564660585e44" Source="piper\espeak-ng-data\voices\!v\grandpa" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_peak_ng_data_voices__v_gustave_e16aa2bf5518d51e" Guid="*">
+                                <File Id="fil_peak_ng_data_voices__v_gustave_e16aa2bf5518d51e" Source="piper\espeak-ng-data\voices\!v\gustave" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_r_espeak_ng_data_voices__v_ian_06970904e3cd7b5d" Guid="*">
+                                <File Id="fil_r_espeak_ng_data_voices__v_ian_06970904e3cd7b5d" Source="piper\espeak-ng-data\voices\!v\ian" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_voices__v_iven_7df81f4ecc605167" Guid="*">
+                                <File Id="fil__espeak_ng_data_voices__v_iven_7df81f4ecc605167" Source="piper\espeak-ng-data\voices\!v\iven" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_iven2_6cee87e547aa336f" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_iven2_6cee87e547aa336f" Source="piper\espeak-ng-data\voices\!v\iven2" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_iven3_6cee86e547aa31bc" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_iven3_6cee86e547aa31bc" Source="piper\espeak-ng-data\voices\!v\iven3" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_iven4_6cee85e547aa3009" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_iven4_6cee85e547aa3009" Source="piper\espeak-ng-data\voices\!v\iven4" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_voices__v_john_8a396e47f9b3c29a" Guid="*">
+                                <File Id="fil__espeak_ng_data_voices__v_john_8a396e47f9b3c29a" Source="piper\espeak-ng-data\voices\!v\john" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_k_ng_data_voices__v_kaukovalta_61de6f0d523f1c50" Guid="*">
+                                <File Id="fil_k_ng_data_voices__v_kaukovalta_61de6f0d523f1c50" Source="piper\espeak-ng-data\voices\!v\kaukovalta" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_klatt_b673fe10e2671c7b" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_klatt_b673fe10e2671c7b" Source="piper\espeak-ng-data\voices\!v\klatt" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_klatt2_6e34ffb0b535100b" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_klatt2_6e34ffb0b535100b" Source="piper\espeak-ng-data\voices\!v\klatt2" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_klatt3_6e34feb0b5350e58" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_klatt3_6e34feb0b5350e58" Source="piper\espeak-ng-data\voices\!v\klatt3" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_klatt4_6e3505b0b5351a3d" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_klatt4_6e3505b0b5351a3d" Source="piper\espeak-ng-data\voices\!v\klatt4" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_klatt5_6e3504b0b535188a" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_klatt5_6e3504b0b535188a" Source="piper\espeak-ng-data\voices\!v\klatt5" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_klatt6_6e3503b0b53516d7" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_klatt6_6e3503b0b53516d7" Source="piper\espeak-ng-data\voices\!v\klatt6" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_linda_421c0513aad16509" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_linda_421c0513aad16509" Source="piper\espeak-ng-data\voices\!v\linda" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_m1_d51041542ada620d" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_m1_d51041542ada620d" Source="piper\espeak-ng-data\voices\!v\m1" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_m2_d5103e542ada5cf4" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_m2_d5103e542ada5cf4" Source="piper\espeak-ng-data\voices\!v\m2" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_m3_d5103f542ada5ea7" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_m3_d5103f542ada5ea7" Source="piper\espeak-ng-data\voices\!v\m3" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_m4_d5103c542ada598e" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_m4_d5103c542ada598e" Source="piper\espeak-ng-data\voices\!v\m4" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_m5_d5103d542ada5b41" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_m5_d5103d542ada5b41" Source="piper\espeak-ng-data\voices\!v\m5" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_m6_d5103a542ada5628" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_m6_d5103a542ada5628" Source="piper\espeak-ng-data\voices\!v\m6" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_m7_d5103b542ada57db" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_m7_d5103b542ada57db" Source="piper\espeak-ng-data\voices\!v\m7" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_er_espeak_ng_data_voices__v_m8_d51038542ada52c2" Guid="*">
+                                <File Id="fil_er_espeak_ng_data_voices__v_m8_d51038542ada52c2" Source="piper\espeak-ng-data\voices\!v\m8" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_peak_ng_data_voices__v_marcelo_c452ba04f43b1f34" Guid="*">
+                                <File Id="fil_peak_ng_data_voices__v_marcelo_c452ba04f43b1f34" Source="piper\espeak-ng-data\voices\!v\marcelo" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_r_espeak_ng_data_voices__v_max_e5a47704d19fae1f" Guid="*">
+                                <File Id="fil_r_espeak_ng_data_voices__v_max_e5a47704d19fae1f" Source="piper\espeak-ng-data\voices\!v\max" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_michel_1a0df87f1a75aba7" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_michel_1a0df87f1a75aba7" Source="piper\espeak-ng-data\voices\!v\michel" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_miguel_17b7cb604c0c8218" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_miguel_17b7cb604c0c8218" Source="piper\espeak-ng-data\voices\!v\miguel" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_mike2_51755da3756941bd" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_mike2_51755da3756941bd" Source="piper\espeak-ng-data\voices\!v\mike2" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_peak_ng_data_voices__v_norbert_458206fc8f33b861" Guid="*">
+                                <File Id="fil_peak_ng_data_voices__v_norbert_458206fc8f33b861" Source="piper\espeak-ng-data\voices\!v\norbert" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_pablo_be716b81b8a16aa7" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_pablo_be716b81b8a16aa7" Source="piper\espeak-ng-data\voices\!v\pablo" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp__espeak_ng_data_voices__v_paul_901d7b8f4e3ac755" Guid="*">
+                                <File Id="fil__espeak_ng_data_voices__v_paul_901d7b8f4e3ac755" Source="piper\espeak-ng-data\voices\!v\paul" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_pedro_f9b3e55df468f60f" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_pedro_f9b3e55df468f60f" Source="piper\espeak-ng-data\voices\!v\pedro" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_quincy_aee3c10efdcbb57a" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_quincy_aee3c10efdcbb57a" Source="piper\espeak-ng-data\voices\!v\quincy" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_r_espeak_ng_data_voices__v_rob_2dd41a0468f82f36" Guid="*">
+                                <File Id="fil_r_espeak_ng_data_voices__v_rob_2dd41a0468f82f36" Source="piper\espeak-ng-data\voices\!v\rob" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_robert_b0281ac85deae3cf" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_robert_b0281ac85deae3cf" Source="piper\espeak-ng-data\voices\!v\robert" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_eak_ng_data_voices__v_robosoft_602fefe62ac3dea7" Guid="*">
+                                <File Id="fil_eak_ng_data_voices__v_robosoft_602fefe62ac3dea7" Source="piper\espeak-ng-data\voices\!v\robosoft" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_ak_ng_data_voices__v_robosoft2_3553391aaad3372f" Guid="*">
+                                <File Id="fil_ak_ng_data_voices__v_robosoft2_3553391aaad3372f" Source="piper\espeak-ng-data\voices\!v\robosoft2" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_ak_ng_data_voices__v_robosoft3_3553381aaad3357c" Guid="*">
+                                <File Id="fil_ak_ng_data_voices__v_robosoft3_3553381aaad3357c" Source="piper\espeak-ng-data\voices\!v\robosoft3" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_ak_ng_data_voices__v_robosoft4_3553371aaad333c9" Guid="*">
+                                <File Id="fil_ak_ng_data_voices__v_robosoft4_3553371aaad333c9" Source="piper\espeak-ng-data\voices\!v\robosoft4" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_ak_ng_data_voices__v_robosoft5_3553361aaad33216" Guid="*">
+                                <File Id="fil_ak_ng_data_voices__v_robosoft5_3553361aaad33216" Source="piper\espeak-ng-data\voices\!v\robosoft5" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_ak_ng_data_voices__v_robosoft6_3553351aaad33063" Guid="*">
+                                <File Id="fil_ak_ng_data_voices__v_robosoft6_3553351aaad33063" Source="piper\espeak-ng-data\voices\!v\robosoft6" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_ak_ng_data_voices__v_robosoft7_3553341aaad32eb0" Guid="*">
+                                <File Id="fil_ak_ng_data_voices__v_robosoft7_3553341aaad32eb0" Source="piper\espeak-ng-data\voices\!v\robosoft7" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_ak_ng_data_voices__v_robosoft8_3553431aaad3482d" Guid="*">
+                                <File Id="fil_ak_ng_data_voices__v_robosoft8_3553431aaad3482d" Source="piper\espeak-ng-data\voices\!v\robosoft8" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_sandro_df25adb0664351c6" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_sandro_df25adb0664351c6" Source="piper\espeak-ng-data\voices\!v\sandro" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_shelby_d802c33206b1c994" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_shelby_d802c33206b1c994" Source="piper\espeak-ng-data\voices\!v\shelby" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_espeak_ng_data_voices__v_steph_fa23a68576b98157" Guid="*">
+                                <File Id="fil_espeak_ng_data_voices__v_steph_fa23a68576b98157" Source="piper\espeak-ng-data\voices\!v\steph" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_steph2_c41559c8bd36de9f" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_steph2_c41559c8bd36de9f" Source="piper\espeak-ng-data\voices\!v\steph2" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_steph3_c41558c8bd36dcec" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_steph3_c41558c8bd36dcec" Source="piper\espeak-ng-data\voices\!v\steph3" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_travis_66fe2ebc84414a56" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_travis_66fe2ebc84414a56" Source="piper\espeak-ng-data\voices\!v\travis" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_speak_ng_data_voices__v_victor_e6bb8d9b2d88b750" Guid="*">
+                                <File Id="fil_speak_ng_data_voices__v_victor_e6bb8d9b2d88b750" Source="piper\espeak-ng-data\voices\!v\victor" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_peak_ng_data_voices__v_whisper_1e86dfb54d1fd317" Guid="*">
+                                <File Id="fil_peak_ng_data_voices__v_whisper_1e86dfb54d1fd317" Source="piper\espeak-ng-data\voices\!v\whisper" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_eak_ng_data_voices__v_whisperf_ff0192120d144903" Guid="*">
+                                <File Id="fil_eak_ng_data_voices__v_whisperf_ff0192120d144903" Source="piper\espeak-ng-data\voices\!v\whisperf" KeyPath="yes" />
+                            </Component>
+                            <Component Id="cmp_r_espeak_ng_data_voices__v_zac_727543048fa67b33" Guid="*">
+                                <File Id="fil_r_espeak_ng_data_voices__v_zac_727543048fa67b33" Source="piper\espeak-ng-data\voices\!v\zac" KeyPath="yes" />
+                            </Component>
+                        </Directory>
+                    </Directory>
+                </Directory>
+                <Directory Id="dir_piper_pkgconfig_df2bf2ed22e252b5" Name="pkgconfig">
+                </Directory>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="PiperFiles">
+            <ComponentRef Id="cmp_piper_espeak_ng_dll_845132b41e9195ae" />
+            <ComponentRef Id="cmp_piper_libtashkeel_model_ort_9875e38e903ea2ec" />
+            <ComponentRef Id="cmp_piper_onnxruntime_dll_7c56f3739385d982" />
+            <ComponentRef Id="cmp_nxruntime_providers_shared_dll_a9f7cc5403cbdb81" />
+            <ComponentRef Id="cmp_piper_piper_exe_f3652c94eff20725" />
+            <ComponentRef Id="cmp_piper_piper_phonemize_dll_83fb7eefd285ed5d" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_af_dict_9087deda73a69c4b" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_am_dict_da5d343b68f6052c" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_an_dict_72d8dca494682e33" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ar_dict_de6395f95ef1f8c7" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_as_dict_14d7211b286ff672" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_az_dict_ebac4d840e829faf" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ba_dict_884f402e829f5215" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_be_dict_a297f41f63de6fc9" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_bg_dict_1ae76408b978e883" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_bn_dict_244094cc9c055bd6" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_bpy_dict_bf4bcd049d9c557f" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_bs_dict_52907b5ee65bf91f" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ca_dict_a905ed02b94bb10e" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_chr_dict_b1cce246d5d6086d" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_cmn_dict_9ea40f4828ba3e0e" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_cs_dict_645f1ecd7bd9d59c" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_cv_dict_c47d32281ef2f935" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_cy_dict_0beab14384de89f6" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_da_dict_167b3745d19b8553" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_de_dict_31d6c19dfa625cbf" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_el_dict_bef6d86dfa76adad" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_en_dict_7c14115d630dea27" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_eo_dict_5e7c074087b9df52" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_es_dict_42530d0b73fa25ce" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_et_dict_ae4800e34802a765" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_eu_dict_1a6e9ec6ba7688e8" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_fa_dict_a0b4496318bba5a1" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_fi_dict_333862e1542e6409" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_fr_dict_4d95ee2a0551b206" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ga_dict_8a0fe11b296857fa" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_gd_dict_63b4962232640403" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_gn_dict_07c43737f0c12fe1" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_grc_dict_da49f89e89adb6a2" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_gu_dict_5e3497e3ee2fa6ee" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_hak_dict_99b7b5a5fc2256b4" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_haw_dict_2c6555cb220c3e88" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_he_dict_ac81c83bab4f1f83" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_hi_dict_3545a3d209a74cc7" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_hr_dict_27abc67a05e1f408" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ht_dict_a701c9fd671ac26e" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_hu_dict_c9baea7d3f1d8233" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_hy_dict_8158b0949b998ff7" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ia_dict_0f41b0225192d928" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_id_dict_95568ca183ea5519" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_intonations_43cbcbcf51640bc5" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_io_dict_3b8df7bbb9f491e6" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_is_dict_686a9216adbc921a" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_it_dict_21316c7308d2f6e9" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ja_dict_05bd13588931b2fd" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_jbo_dict_74b7b2aceb771c33" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ka_dict_f8593dfe3afb4996" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_kk_dict_552040cbc48d9abc" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_kl_dict_31eea060513b316f" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_kn_dict_b0ebbee2d50fb8d5" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ko_dict_4861bebeb87f80d8" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_kok_dict_c22d26a660cd5de5" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ku_dict_a80a5a97aa8416e2" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ky_dict_e77de483afb1ea2e" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_la_dict_54058840b92f149b" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_lb_dict_20499d6d0602de74" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_lfn_dict_8681327ab0deae24" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_lt_dict_f0d78cb1236f3262" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_lv_dict_f9e1c20488a5cfc0" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_mi_dict_a421a2d48568c38c" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_mk_dict_c5d8957f3406244e" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ml_dict_31cd8957080ea5e5" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_mr_dict_41039c616c4bb1bb" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ms_dict_2c2359c0027c2636" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_mt_dict_427c60e1ba82ac2d" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_mto_dict_2ed14f1cea30ff36" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_my_dict_2e25fa1d7e9cb2dc" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_nci_dict_023ffb0817914442" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ne_dict_5579aec7a1f53975" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_nl_dict_597edfe1ba3e3030" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_no_dict_c4e14376dbf905a7" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_nog_dict_9be99f1d6d1622e0" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_om_dict_e1ba2057ae3ba56e" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_or_dict_af7bc13ce54f7d4d" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_pa_dict_aae334f74a697217" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_pap_dict_559d668c22ab4dab" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_phondata_065b7e7be969f5d0" />
+            <ComponentRef Id="cmp_peak_ng_data_phondata_manifest_d6311fa4b82dd702" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_phonindex_a956aa2f73f0fd24" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_phontab_efa7aaef85a2d657" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_piqd_dict_b00f6367f0c21bc0" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_pl_dict_ce9e56b64e8a5e8e" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_pt_dict_31831af71a1d3776" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_py_dict_6f7fdfbf6aecb1cf" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_qdb_dict_2f92c99ef15c377b" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_qu_dict_0411aba7983c5d04" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_quc_dict_3fb61a7f55373681" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_qya_dict_ee90ae9857566607" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ro_dict_c14d373271c8f98b" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ru_dict_10039a7b7081f609" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_sd_dict_d68c60dd5ca06a2f" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_shn_dict_3fa327771b17cf29" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_si_dict_49d8fe8031440956" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_sjn_dict_f2299f9382a829ef" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_sk_dict_28fc2bd5836082b4" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_sl_dict_c943a952ad0fc347" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_smj_dict_e236235c64d18ada" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_sq_dict_3affcf7e0a8338ee" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_sr_dict_41bea879dba1e679" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_sv_dict_f81298d88f230a85" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_sw_dict_bba9cbfaa94a6a88" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ta_dict_894cffd5c7a2b183" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_te_dict_1f5992f6d58b85af" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_th_dict_92a63099aa2f24d6" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_tk_dict_2d5ca0eb85ffdd61" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_tn_dict_5592a25453ac1f50" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_tr_dict_0e0a79ae2ffeeb2c" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_tt_dict_f8962afbff07a1aa" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ug_dict_8e22a9de0a6f0d4a" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_uk_dict_18592f55d64823e6" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_ur_dict_1ed97eb7d30a1d23" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_uz_dict_8d2e6539984f4f7b" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_vi_dict_7c76fed422c2c979" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_yue_dict_c33b67950ca5013f" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_lang_eu_21b5cb3dc49ac5f5" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_lang_ko_21bcc13dc4a0d3a5" />
+            <ComponentRef Id="cmp_piper_espeak_ng_data_lang_qu_2171cb3dc460f929" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_aav_vi_abe87f5f96013b66" />
+            <ComponentRef Id="cmp__data_lang_aav_vi_VN_x_central_39740328bb4328b8" />
+            <ComponentRef Id="cmp_ng_data_lang_aav_vi_VN_x_south_987c6daa3b7c768c" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_art_eo_92687c07e5c2219c" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_art_ia_925a6a07e5b5c5aa" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_art_io_925a5c07e5b5ade0" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_art_jbo_6fc1196b5a35dfbd" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_art_lfn_3a30226b3b6af744" />
+            <ComponentRef Id="cmp_r_espeak_ng_data_lang_art_piqd_3a0e6317210cc062" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_art_py_923c6e07e59ccee7" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_art_qdb_20ebad6b2d4fb1d1" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_art_qya_20daae6b2d414051" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_art_sjn_33111b6b37d24d21" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_azc_nci_645423fa30ec8137" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_bat_lt_92b48d43b2a4e1e6" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_bat_ltg_edad8b088e2b2e33" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_bat_lv_92b48b43b2a4de80" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_bnt_sw_306bcdf90e4cc709" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_bnt_tn_3067e6f90e4908ad" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_ccs_ka_41f5ba1046b3ce52" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_cel_cy_14fbbb8620153b17" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_cel_ga_14eeab86200a958b" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_cel_gd_14eeae86200a9aa4" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_cus_om_987c26d2443c87b8" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_dra_kn_5afad02bf6bf00bd" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_dra_ml_5b01d22bf6c522d1" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_dra_ta_5aacd92bf67ceeb7" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_dra_te_5aacd52bf67ce7eb" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_esx_kl_87081b4efc4ab3f8" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_gmq_da_89aee34c9a19c59d" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_gmq_is_89a3e14c9a0fbab2" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_gmq_nb_898ce84c99fce7b6" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_gmq_sv_8981de4c99f2cf33" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_gmw_af_40d00a5cf984808f" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_gmw_de_40d9f75cf98cb4cb" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_gmw_en_40de125cf990cb83" />
+            <ComponentRef Id="cmp_espeak_ng_data_lang_gmw_en_029_60d17fc600e96c77" />
+            <ComponentRef Id="cmp_g_data_lang_gmw_en_GB_scotland_df6e0c8e647ad892" />
+            <ComponentRef Id="cmp_g_data_lang_gmw_en_GB_x_gbclan_87c5c1b98056d148" />
+            <ComponentRef Id="cmp_g_data_lang_gmw_en_GB_x_gbcwmd_6030cab9fae1d3c7" />
+            <ComponentRef Id="cmp_ak_ng_data_lang_gmw_en_GB_x_rp_8fb6ab6bb989326f" />
+            <ComponentRef Id="cmp__espeak_ng_data_lang_gmw_en_US_28c8618ee069327a" />
+            <ComponentRef Id="cmp_eak_ng_data_lang_gmw_en_US_nyc_74d9112282e6c8f1" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_gmw_lb_40f5ec5cf9a51cd2" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_gmw_nl_40fbf25cf9a992b2" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_grk_el_a815481ac1cd9a0c" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_grk_grc_7c2d56775b19be55" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_inc_as_1f6921eeb8842fcb" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_inc_bn_1f660eeeb881d9ab" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_inc_bpy_dc7435a384cc9764" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_inc_gu_1f5523eeb8738a27" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_inc_hi_1f522feeb87168b4" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_inc_kok_8d50aea357a41a46" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_inc_mr_1f4118eeb862ce6c" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_inc_ne_1f3d07eeb85ec8b2" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_inc_or_1f3a10eeb85ca226" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_inc_pa_1f3637eeb858fb94" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_inc_sd_1f2c02eeb8504d00" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_inc_si_1f2c0feeb8506317" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_inc_ur_1f2528eeb84a6ee4" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_ine_hy_706c0001b30d84ee" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_ine_hyw_15089be33ff84ffb" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_ine_sq_70541001b2f90e3d" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_ira_fa_14438484380ef8d4" />
+            <ComponentRef Id="cmp_speak_ng_data_lang_ira_fa_Latn_28639c61de426942" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_ira_ku_1417648437e98789" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_iro_chr_22fe8d9ac0414fba" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_itc_la_329b1808b5dedfb2" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_jpx_ja_063e51e29e7efa24" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_map_haw_2ce9bd6d4ebc71d7" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_miz_mto_a3edee196cdc079b" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_myn_quc_5de566ea296173c6" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_poz_id_4d9fcdc4a6b350f1" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_poz_mi_4d91c0c4a6a6fd7e" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_poz_ms_4d91c6c4a6a707b0" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_roa_an_4a1140b688d0e4c2" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_roa_ca_4a184fb688d71ced" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_roa_es_4a1f2db688dd01d5" />
+            <ComponentRef Id="cmp_espeak_ng_data_lang_roa_es_419_fab23e1050496f12" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_roa_fr_4a293eb688e5733d" />
+            <ComponentRef Id="cmp__espeak_ng_data_lang_roa_fr_BE_9aeb35982d3faba9" />
+            <ComponentRef Id="cmp__espeak_ng_data_lang_roa_fr_CH_9aef16982d435fd3" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_roa_ht_49f92cb688bc30e5" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_roa_it_49f626b688b9f0dc" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_roa_pap_4053792acf17c47a" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_roa_pt_4a4b3cb68902563d" />
+            <ComponentRef Id="cmp__espeak_ng_data_lang_roa_pt_BR_59b55e51bec5332c" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_roa_ro_4a5221b68908470a" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_sai_gn_42f89f83b898f317" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_sem_am_c4b5d45dfdc7c400" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_sem_ar_c4b5f35dfdc7f8ad" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_sem_he_c497d05dfdaebfa5" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_sem_mt_c48ded5dfda69c67" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_sit_cmn_278fd220be0f7f7b" />
+            <ComponentRef Id="cmp__data_lang_sit_cmn_Latn_pinyin_37d4ec2adc60a837" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_sit_hak_85cf9020f3272321" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_sit_my_20271230ec001669" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_sit_yue_07ecd1213ce6944c" />
+            <ComponentRef Id="cmp_ata_lang_sit_yue_Latn_jyutping_e44605b915d44071" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_tai_shn_831c8fc0473a00a4" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_tai_th_dee48cbfb4de1a8d" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_trk_az_c3c7ed3efe5f0a49" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_trk_ba_c3bdf23efe56be43" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_trk_cv_c3c1e93efe5a97cf" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_trk_kk_c3dcfc3efe717fd0" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_trk_ky_c3dcee3efe716806" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_trk_nog_5b60b10a690f97f2" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_trk_tk_c39bfc3efe39e8db" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_trk_tr_c39be33efe39be60" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_trk_tt_c39be93efe39c892" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_trk_ug_c39fd83efe3d9486" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_trk_uz_c39ff53efe3dc5cd" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_urj_et_22c05686d6c00c57" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_urj_fi_22b63986d6b7868b" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_urj_hu_22e55986d6df2dad" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_lang_urj_smj_67ed041f3fe90644" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_zle_be_6f11c754b8bbe485" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_zle_ru_6edad754b88cbd45" />
+            <ComponentRef Id="cmp__espeak_ng_data_lang_zle_ru_LV_b730cca77318a4be" />
+            <ComponentRef Id="cmp__espeak_ng_data_lang_zle_ru_cl_b748b4a7732d0dd7" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_zle_uk_6ec9e954b87e68a8" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_zls_bg_834bba0e954c9efd" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_zls_bs_834bc60e954cb361" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_zls_hr_8337bd0e953bfb0c" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_zls_mk_8348d60e954a98ba" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_zls_sl_8318b50e95213ce5" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_zls_sr_8318c70e95215b7b" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_zlw_cs_519f7dea020f87dc" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_zlw_pl_516c72ea01e41b92" />
+            <ComponentRef Id="cmp_per_espeak_ng_data_lang_zlw_sk_516995ea01e22134" />
+            <ComponentRef Id="cmp__espeak_ng_data_voices__v_Alex_604d8b0c9b11873f" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_Alicia_060dca43a65e7dec" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_Andrea_36e448f13a643f98" />
+            <ComponentRef Id="cmp__espeak_ng_data_voices__v_Andy_4e02300c906e3cfb" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_Annie_52ffc9599cbd4ab0" />
+            <ComponentRef Id="cmp__ng_data_voices__v_AnxiousAndy_7a5c2e0374610b5c" />
+            <ComponentRef Id="cmp_peak_ng_data_voices__v_Demonic_b6746728662a597a" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_Denis_f6fbe3b6917ed892" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_Diogo_9a0700517875ea53" />
+            <ComponentRef Id="cmp__espeak_ng_data_voices__v_Gene_b76eeedce6876f02" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_Gene2_38ef115bb821ee90" />
+            <ComponentRef Id="cmp_eak_ng_data_voices__v_Henrique_a494aa6a5bc3f73c" />
+            <ComponentRef Id="cmp__espeak_ng_data_voices__v_Hugo_4a84f55a109fed96" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_Jacky_62fc763b861c9f53" />
+            <ComponentRef Id="cmp_r_espeak_ng_data_voices__v_Lee_eca19304d51b958b" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_Marco_8c9021e5b85effcf" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_Mario_8c6e21e5b8421969" />
+            <ComponentRef Id="cmp_peak_ng_data_voices__v_Michael_df87a8fa0ad27c4c" />
+            <ComponentRef Id="cmp__espeak_ng_data_voices__v_Mike_91484f300b7396fd" />
+            <ComponentRef Id="cmp_k_ng_data_voices__v_Mr_serious_89d4942b14cd0246" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_Nguyen_662af87af0a9463d" />
+            <ComponentRef Id="cmp__espeak_ng_data_voices__v_Reed_2e251f7e8eb98c0f" />
+            <ComponentRef Id="cmp__ng_data_voices__v_RicishayMax_b77960d4e525593f" />
+            <ComponentRef Id="cmp_ng_data_voices__v_RicishayMax2_e89896c15e765117" />
+            <ComponentRef Id="cmp_ng_data_voices__v_RicishayMax3_e89895c15e764f64" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_Storm_c777cb855a647688" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_Tweaky_c4e7b359d8be903c" />
+            <ComponentRef Id="cmp_eak_ng_data_voices__v_UniRobot_9349744f8a3950e9" />
+            <ComponentRef Id="cmp__espeak_ng_data_voices__v_adam_1bcd2e0c747e164c" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_anika_6c4c4859aae072cf" />
+            <ComponentRef Id="cmp_k_ng_data_voices__v_anikaRobot_172481cc404e7345" />
+            <ComponentRef Id="cmp_ak_ng_data_voices__v_announcer_6e487455e8d11316" />
+            <ComponentRef Id="cmp_peak_ng_data_voices__v_antonio_ffabe0b31c8cd6ed" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_aunty_07e93bb416a2d322" />
+            <ComponentRef Id="cmp_peak_ng_data_voices__v_belinda_d9963c9df0527432" />
+            <ComponentRef Id="cmp_eak_ng_data_voices__v_benjamin_7e071820b3b6bd0f" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_boris_36b3d78b441bf79a" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_caleb_b22643bac9cea37a" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_croak_0626b93d91e771a3" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_david_c21ad693b0287127" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_ed_d4f47c542ac24b96" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_edward_c7fd7ad19029fcf8" />
+            <ComponentRef Id="cmp_peak_ng_data_voices__v_edward2_fdb47c17f7588b3e" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_f1_d4f1a9542ac06236" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_f2_d4f1a8542ac06083" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_f3_d4f1a7542ac05ed0" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_f4_d4f1ae542ac06ab5" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_f5_d4f1ad542ac06902" />
+            <ComponentRef Id="cmp__espeak_ng_data_voices__v_fast_cf15cfe2aba1a901" />
+            <ComponentRef Id="cmp_peak_ng_data_voices__v_grandma_a4b74a4660057f85" />
+            <ComponentRef Id="cmp_peak_ng_data_voices__v_grandpa_a519564660585e44" />
+            <ComponentRef Id="cmp_peak_ng_data_voices__v_gustave_e16aa2bf5518d51e" />
+            <ComponentRef Id="cmp_r_espeak_ng_data_voices__v_ian_06970904e3cd7b5d" />
+            <ComponentRef Id="cmp__espeak_ng_data_voices__v_iven_7df81f4ecc605167" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_iven2_6cee87e547aa336f" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_iven3_6cee86e547aa31bc" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_iven4_6cee85e547aa3009" />
+            <ComponentRef Id="cmp__espeak_ng_data_voices__v_john_8a396e47f9b3c29a" />
+            <ComponentRef Id="cmp_k_ng_data_voices__v_kaukovalta_61de6f0d523f1c50" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_klatt_b673fe10e2671c7b" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_klatt2_6e34ffb0b535100b" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_klatt3_6e34feb0b5350e58" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_klatt4_6e3505b0b5351a3d" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_klatt5_6e3504b0b535188a" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_klatt6_6e3503b0b53516d7" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_linda_421c0513aad16509" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_m1_d51041542ada620d" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_m2_d5103e542ada5cf4" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_m3_d5103f542ada5ea7" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_m4_d5103c542ada598e" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_m5_d5103d542ada5b41" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_m6_d5103a542ada5628" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_m7_d5103b542ada57db" />
+            <ComponentRef Id="cmp_er_espeak_ng_data_voices__v_m8_d51038542ada52c2" />
+            <ComponentRef Id="cmp_peak_ng_data_voices__v_marcelo_c452ba04f43b1f34" />
+            <ComponentRef Id="cmp_r_espeak_ng_data_voices__v_max_e5a47704d19fae1f" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_michel_1a0df87f1a75aba7" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_miguel_17b7cb604c0c8218" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_mike2_51755da3756941bd" />
+            <ComponentRef Id="cmp_peak_ng_data_voices__v_norbert_458206fc8f33b861" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_pablo_be716b81b8a16aa7" />
+            <ComponentRef Id="cmp__espeak_ng_data_voices__v_paul_901d7b8f4e3ac755" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_pedro_f9b3e55df468f60f" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_quincy_aee3c10efdcbb57a" />
+            <ComponentRef Id="cmp_r_espeak_ng_data_voices__v_rob_2dd41a0468f82f36" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_robert_b0281ac85deae3cf" />
+            <ComponentRef Id="cmp_eak_ng_data_voices__v_robosoft_602fefe62ac3dea7" />
+            <ComponentRef Id="cmp_ak_ng_data_voices__v_robosoft2_3553391aaad3372f" />
+            <ComponentRef Id="cmp_ak_ng_data_voices__v_robosoft3_3553381aaad3357c" />
+            <ComponentRef Id="cmp_ak_ng_data_voices__v_robosoft4_3553371aaad333c9" />
+            <ComponentRef Id="cmp_ak_ng_data_voices__v_robosoft5_3553361aaad33216" />
+            <ComponentRef Id="cmp_ak_ng_data_voices__v_robosoft6_3553351aaad33063" />
+            <ComponentRef Id="cmp_ak_ng_data_voices__v_robosoft7_3553341aaad32eb0" />
+            <ComponentRef Id="cmp_ak_ng_data_voices__v_robosoft8_3553431aaad3482d" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_sandro_df25adb0664351c6" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_shelby_d802c33206b1c994" />
+            <ComponentRef Id="cmp_espeak_ng_data_voices__v_steph_fa23a68576b98157" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_steph2_c41559c8bd36de9f" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_steph3_c41558c8bd36dcec" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_travis_66fe2ebc84414a56" />
+            <ComponentRef Id="cmp_speak_ng_data_voices__v_victor_e6bb8d9b2d88b750" />
+            <ComponentRef Id="cmp_peak_ng_data_voices__v_whisper_1e86dfb54d1fd317" />
+            <ComponentRef Id="cmp_eak_ng_data_voices__v_whisperf_ff0192120d144903" />
+            <ComponentRef Id="cmp_r_espeak_ng_data_voices__v_zac_727543048fa67b33" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

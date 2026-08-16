@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="APPLICATIONFOLDER">
+            <Directory Id="dir_models_bb021c3315a8cc0b" Name="models">
+                <Component Id="cmp_models_pl_meski_1_onnx_e90f2de4fbcca822" Guid="*">
+                    <File Id="fil_models_pl_meski_1_onnx_e90f2de4fbcca822" Source="models\pl_meski_1.onnx" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_models_pl_meski_1_onnx_json_a13ebe308b87cff6" Guid="*">
+                    <File Id="fil_models_pl_meski_1_onnx_json_a13ebe308b87cff6" Source="models\pl_meski_1.onnx.json" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_models_pl_meski_2_onnx_0aeec18c5611bef9" Guid="*">
+                    <File Id="fil_models_pl_meski_2_onnx_0aeec18c5611bef9" Source="models\pl_meski_2.onnx" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_models_pl_meski_2_onnx_json_108bb922440a7993" Guid="*">
+                    <File Id="fil_models_pl_meski_2_onnx_json_108bb922440a7993" Source="models\pl_meski_2.onnx.json" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_models_pl_zenski_1_onnx_945c20ff71a80909" Guid="*">
+                    <File Id="fil_models_pl_zenski_1_onnx_945c20ff71a80909" Source="models\pl_zenski_1.onnx" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_models_pl_zenski_1_onnx_json_ca8232d916e6ce23" Guid="*">
+                    <File Id="fil_models_pl_zenski_1_onnx_json_ca8232d916e6ce23" Source="models\pl_zenski_1.onnx.json" KeyPath="yes" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="ModelsFiles">
+            <ComponentRef Id="cmp_models_pl_meski_1_onnx_e90f2de4fbcca822" />
+            <ComponentRef Id="cmp_models_pl_meski_1_onnx_json_a13ebe308b87cff6" />
+            <ComponentRef Id="cmp_models_pl_meski_2_onnx_0aeec18c5611bef9" />
+            <ComponentRef Id="cmp_models_pl_meski_2_onnx_json_108bb922440a7993" />
+            <ComponentRef Id="cmp_models_pl_zenski_1_onnx_945c20ff71a80909" />
+            <ComponentRef Id="cmp_models_pl_zenski_1_onnx_json_ca8232d916e6ce23" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
