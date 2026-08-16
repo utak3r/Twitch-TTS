@@ -1,10 +1,11 @@
 use regex::Regex;
+use std::borrow::Cow;
 use std::fs;
 use std::path::Path;
 use tracing::warn;
 
 pub struct ProfanityFilter {
-    regexes: Vec<Regex>,
+    regex: Option<Regex>,
 }
 
 impl ProfanityFilter {
@@ -14,18 +15,44 @@ impl ProfanityFilter {
     }
 
     pub fn from_words(words: &[String]) -> Self {
-        let mut regexes = Vec::new();
+        let mut patterns = Vec::new();
         for word in words {
             let trimmed = word.trim();
             if trimmed.is_empty() || trimmed.starts_with('#') {
                 continue;
             }
-            let pattern = format!(r"(?i)\b{}\b", regex::escape(trimmed));
-            if let Ok(re) = Regex::new(&pattern) {
-                regexes.push(re);
-            }
+            let left_boundary = if trimmed.chars().next().map_or(false, is_word_char) {
+                r"\b"
+            } else {
+                ""
+            };
+            let right_boundary = if trimmed.chars().next_back().map_or(false, is_word_char) {
+                r"\b"
+            } else {
+                ""
+            };
+            patterns.push(format!(
+                "(?:{}{}{})",
+                left_boundary,
+                regex::escape(trimmed),
+                right_boundary
+            ));
         }
-        Self { regexes }
+
+        let regex = if patterns.is_empty() {
+            None
+        } else {
+            let combined = format!(r"(?i)(?:{})", patterns.join("|"));
+            match Regex::new(&combined) {
+                Ok(re) => Some(re),
+                Err(err) => {
+                    warn!("Failed to compile profanity regex: {}", err);
+                    None
+                }
+            }
+        };
+
+        Self { regex }
     }
 
     pub fn load_words(file_path: &str) -> Vec<String> {
@@ -47,20 +74,22 @@ impl ProfanityFilter {
     }
 
     pub fn censor(&self, input: &str) -> (String, bool) {
-        if self.regexes.is_empty() || input.is_empty() {
+        if input.is_empty() {
             return (input.to_string(), false);
         }
 
-        let mut result = input.to_string();
-        let mut censored = false;
+        let Some(ref re) = self.regex else {
+            return (input.to_string(), false);
+        };
 
-        for re in &self.regexes {
-            if re.is_match(&result) {
-                censored = true;
-                result = re.replace_all(&result, "piiiiiip").to_string();
-            }
+        match re.replace_all(input, "piiiiiip") {
+            Cow::Borrowed(_) => (input.to_string(), false),
+            Cow::Owned(s) => (s, true),
         }
-
-        (result, censored)
     }
 }
+
+fn is_word_char(c: char) -> bool {
+    c.is_alphanumeric() || c == '_'
+}
+

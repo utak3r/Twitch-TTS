@@ -30,7 +30,13 @@ fn test_alias_replacement() {
 
 #[test]
 fn test_profanity_censorship() {
-    let words = vec!["kurwa".to_string(), "chuj".to_string(), "fuck".to_string()];
+    let words = vec![
+        "kurwa".to_string(),
+        "chuj".to_string(),
+        "fuck".to_string(),
+        "# comment".to_string(),
+        "".to_string(),
+    ];
     let filter = ProfanityFilter::from_words(&words);
 
     let (res1, censored1) = filter.censor("O kurwa, co za akcja!");
@@ -40,6 +46,11 @@ fn test_profanity_censorship() {
     let (res2, censored2) = filter.censor("Wszystko w porządku.");
     assert!(!censored2);
     assert_eq!(res2, "Wszystko w porządku.");
+
+    // Multiple profanities in single message
+    let (res3, censored3) = filter.censor("O kurwa, fuck that chuj!");
+    assert!(censored3);
+    assert_eq!(res3, "O piiiiiip, piiiiiip that piiiiiip!");
 }
 
 #[test]
