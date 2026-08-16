@@ -228,9 +228,15 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
     // Replay Item
     let state_c = state.clone();
     ui.on_replay_item(move |id_str| {
-        let history = state_c.activity_history.lock().unwrap();
-        if let Some(item) = history.iter().find(|i| i.id.to_string() == id_str.as_str()) {
-            let mut replay_item = item.clone();
+        let item_opt = {
+            let history = state_c.activity_history.lock().unwrap();
+            history.iter().find(|i| i.id.to_string() == id_str.as_str()).cloned()
+        };
+
+        if let Some(item) = item_opt {
+            let mut replay_item = item;
+            replay_item.id = uuid::Uuid::new_v4();
+            replay_item.timestamp = chrono::Local::now();
             replay_item.status = MessageStatus::Queued;
             let dropped = state_c.queue.push(replay_item.clone());
             if let Some(d) = dropped {
@@ -700,10 +706,14 @@ fn reload_tts_engine(state: &Arc<AppState>) {
 
 pub fn add_activity_row(state: &Arc<AppState>, item: SpokenItem) {
     let mut history = state.activity_history.lock().unwrap();
-    // Prepend to history (newest first) and limit to 100 items
-    history.insert(0, item);
-    if history.len() > 100 {
-        history.truncate(100);
+    if let Some(existing) = history.iter_mut().find(|i| i.id == item.id) {
+        existing.status = item.status;
+    } else {
+        // Prepend to history (newest first) and limit to 100 items
+        history.insert(0, item);
+        if history.len() > 100 {
+            history.truncate(100);
+        }
     }
 
     let items: Vec<ActivityItem> = history
