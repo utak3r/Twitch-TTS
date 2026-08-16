@@ -11,11 +11,18 @@ fn test_alias_replacement() {
     let mut aliases = HashMap::new();
     aliases.insert("utak3r".to_string(), "utaker".to_string());
     aliases.insert("Dr3gu".to_string(), "Dregu".to_string());
+    aliases.insert("@streamer".to_string(), "Piotr".to_string());
+    aliases.insert(":smile:".to_string(), "uśmiech".to_string());
+    aliases.insert("c++".to_string(), "cpp".to_string());
 
     let filter = AliasFilter::new(aliases);
     assert_eq!(filter.apply("Hej utak3r! Co tam?"), "Hej utaker! Co tam?");
     assert_eq!(filter.apply("UTAK3R jest super"), "utaker jest super");
     assert_eq!(filter.apply("Dr3gu pozdrawia"), "Dregu pozdrawia");
+    assert_eq!(filter.apply("Pozdrawiam @streamer"), "Pozdrawiam Piotr");
+    assert_eq!(filter.apply("Wysyłam :smile: dla was"), "Wysyłam uśmiech dla was");
+    assert_eq!(filter.apply("Lubię c++ bardzo"), "Lubię cpp bardzo");
+    assert_eq!(filter.apply("abc++def"), "abc++def"); // 'c' has word boundary on left, so inside 'abc' it shouldn't match
 }
 
 #[test]
