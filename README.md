@@ -299,14 +299,19 @@ cargo build --release
 Plik wykonywalny znajduje się w ścieżce `target\release\twitch-tts.exe`.
 
 ### 5.4. Generowanie Instalatora MSI (WiX Toolset)
-> Sekcja instalatora WiX jest jeszcze w trakcie rozwoju.
 
-Projekt zawiera dedykowane pliki definicji WiX w katalogu `wix/`:
-1. Uaktualnij listę plików pomocniczych:
-   ```powershell
-   .\update_wix_compfolders.cmd
-   ```
-2. Zbuduj instalator przy użyciu `cargo-wix`:
+Aplikacja wykorzystuje narzędzie **WiX Toolset** oraz wtyczkę `cargo-wix` do generowania instalatora `.msi`.
+
+#### Automatyczne mapowanie zasobów w `build.rs`
+Skrypt budowania [`build.rs`](build.rs) zawiera wbudowany mechanizm (`WixGenerator`), który automatycznie:
+* Rekurencyjnie skanuje katalogi `piper/` (pliki binarne silnika, biblioteki, katalog `espeak-ng-data`) oraz `models/` (modele głosowe `.onnx` i pliki `.json`).
+* Dynamicznie generuje fragmenty WiX XML (`wix/piper_files.wxs` oraz `wix/models_files.wxs`) z unikalnymi identyfikatorami komponentów i sumami kontrolnymi.
+* Tworzy grupy komponentów `PiperFiles` i `ModelsFiles`, włączane bezpośrednio do definicji instalatora w [`wix/main.wxs`](wix/main.wxs).
+* Dzięki dyrektywom `cargo:rerun-if-changed`, dodanie lub aktualizacja plików w `piper/` lub `models/` automatycznie odświeża manifesty instalatora przy budowaniu. Nie są wymagane żadne zewnętrzne skrypty pomocnicze.
+
+#### Kroki budowania instalatora:
+1. Upewnij się, że pliki silnika Piper znajdują się w katalogu `piper/`, a wybrane modele w katalogu `models/`.
+2. Uruchom polecenie budowania instalatora:
    ```powershell
    cargo wix --nocapture
    ```
