@@ -25,8 +25,8 @@ fn test_mock_tts_and_wav_export() {
 fn test_piper_tts_synthesis() {
     use twitch_tts::tts::piper::PiperEngine;
 
-    let model_path = "models/voice.onnx";
-    let config_path = "models/voice.onnx.json";
+    let model_path = "models/pl_zenski_1.onnx";
+    let config_path = "models/pl_zenski_1.onnx.json";
 
     if std::path::Path::new(model_path).exists() && std::path::Path::new(config_path).exists() {
         let mut engine = PiperEngine::new(model_path, config_path, 0);

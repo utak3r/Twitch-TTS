@@ -92,10 +92,10 @@ pub struct TTSConfig {
 }
 
 fn default_model_path() -> String {
-    "./models/voice.onnx".to_string()
+    "./models/pl_zenski_1.onnx".to_string()
 }
 fn default_config_path() -> String {
-    "./models/voice.onnx.json".to_string()
+    "./models/pl_zenski_1.onnx.json".to_string()
 }
 fn default_speech_rate() -> f32 {
     1.0

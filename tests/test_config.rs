@@ -4,8 +4,8 @@ use twitch_tts::config::AppConfig;
 #[test]
 fn test_default_config() {
     let cfg = AppConfig::default();
-    assert_eq!(cfg.tts.model_path, "./models/voice.onnx");
-    assert_eq!(cfg.tts.config_path, "./models/voice.onnx.json");
+    assert_eq!(cfg.tts.model_path, "./models/pl_zenski_1.onnx");
+    assert_eq!(cfg.tts.config_path, "./models/pl_zenski_1.onnx.json");
     assert_eq!(cfg.tts.max_queue_size, 5);
     assert_eq!(cfg.filters.max_characters, 150);
     assert!(cfg.filters.username_aliases.contains_key("utak3r"));
