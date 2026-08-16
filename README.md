@@ -1,10 +1,11 @@
 # Dokumentacja Techniczna i Podręcznik Użytkownika: Twitch TTS
+
 ![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)
 ![Slint](https://img.shields.io/badge/Slint-e10098?style=for-the-badge&logo=slint&logoColor=white)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Data aktualizacji:** 15 sierpnia 2026 r.  
-**Wersja aplikacji:** 1.0.1 
+**Data aktualizacji:** 16 sierpnia 2026 r.  
+**Wersja aplikacji:** 1.0.2 
 **Autor:** Piotr „utak3r” Borys  
 **Licencja:** MIT  
 
@@ -19,6 +20,7 @@
 Aplikacja została w całości napisana w języku **Rust** z wykorzystaniem deklaratywnego frameworka graficznego **Slint** oraz lokalnego silnika neuronowej syntezy mowy **Piper TTS**.
 
 ### Główne zalety i właściwości:
+
 * **Zero chmury i pełna prywatność:** Synteza mowy odbywa się w 100% lokalnie na maszynie streamera, bez konieczności opłacania zewnętrznych API (np. Amazon Polly, Google Cloud TTS) czy przesyłania danych na zewnętrzne serwery.
 * **Minimalne opóźnienia:** Bezpośrednie dekodowanie i generowanie próbek PCM 16-bit / f32 w pamięci procesu.
 * **Nowoczesny interfejs GUI (Dark Theme):** Lekki, estetyczny interfejs stworzony w technologii Slint, zużywający minimalne zasoby procesora i pamięci RAM.
@@ -77,6 +79,7 @@ Aplikacja oparta jest na architekturze sterowanej zdarzeniami (Event-Driven Arch
 ### 2.1. Kluczowe komponenty backendu
 
 1. **Klient Twitch EventSub WebSocket (`src/twitch/eventsub.rs`):**
+   
    * Nawiązuje bezpieczne połączenie WebSocket z `wss://eventsub.wss.twitch.tv/ws`.
    * Rejestruje subskrypcje zdarzeń:
      * `channel.chat.message` (wiadomości z czatu w czasie rzeczywistym),
@@ -85,6 +88,7 @@ Aplikacja oparta jest na architekturze sterowanej zdarzeniami (Event-Driven Arch
    * Filtruje zduplikowane komunikaty po identyfikatorze `message_id`.
 
 2. **Automatyczna autoryzacja 1-Click OAuth (`src/twitch/auth.rs`):**
+   
    * Uruchamia lokalny serwer HTTP na porcie `17563` (`http://localhost:17563/callback`).
    * Automatycznie otwiera domyślną przeglądarkę systemową z adresem autoryzacji Twitch.
    * Osadzony skrypt JavaScript w stronie callbacku przechwytuje token z fragmentu adresu (`#access_token=...`) i przekazuje go do wewnętrznego endpointu `/token?access_token=...`.
@@ -92,6 +96,7 @@ Aplikacja oparta jest na architekturze sterowanej zdarzeniami (Event-Driven Arch
    * Statyczny identyfikator klienta (`CLIENT_ID`) jest wkompilowany w aplikację z pliku `.client_id`.
 
 3. **Pipeline Przetwarzania Tekstu (`src/filter/mod.rs`):**
+   
    * **Ignorowanie botów:** Natychmiastowe odrzucenie wiadomości od użytkowników zdefiniowanych na liście `ignore_users` (np. Nightbot, StreamElements).
    * **Czyszczenie adresów URL:** Wykrywanie i usuwanie odnośników `http://`, `https://`, `www.` przed przekazaniem do syntezy.
    * **Aliasy fonetyczne:** Zamiana trudnych do wymówienia nicków i słów (np. `utak3r` $\rightarrow$ `utaker`, `Dr3gu` $\rightarrow$ `Dregu`) zarówno w nazwie nadawcy, jak i w treści wypowiedzi.
@@ -101,11 +106,13 @@ Aplikacja oparta jest na architekturze sterowanej zdarzeniami (Event-Driven Arch
    * **Zapowiedź nadawcy:** Opcjonalne dodanie formatki, np. `"{nick} mówi: {message}"`.
 
 4. **Kolejka Bezpieczeństwa (`src/domain/queue.rs`):**
+   
    * Implementuje bufor FIFO o konfigurowalnej maksymalnej pojemności (`max_queue_size`, domyślnie 5).
    * Zastosowanie strategii **Drop Oldest** chroni stream przed zjawiskiem narastającej kolejki i wielominutowego opóźnienia podczas tzw. raidu lub wzmożonej aktywności na czacie.
    * Usunięte elementy są raportowane w UI ze statusem `Dropped [Overflow]`.
 
 5. **Silnik Syntezy Piper TTS (`src/tts/piper.rs`):**
+   
    * Wywołuje zoptymalizowany, przenośny proces `piper.exe` w tle, ukrywając okno konsoli za pomocą flagi `CREATE_NO_WINDOW` (0x08000000).
    * Przesyła tekst strumieniowo na standardowe wejście (`stdin`) i odczytuje surowy strumień bajtów 16-bit PCM z wyjścia (`stdout`).
    * Konwertuje surowe próbki całkowitoliczbowe na znormalizowane wartości zmiennoprzecinkowe `f32` w przedziale `[-1.0, 1.0]`.
@@ -116,6 +123,7 @@ Aplikacja oparta jest na architekturze sterowanej zdarzeniami (Event-Driven Arch
    * W przypadku braku modelu lub pliku binarnego aplikacja płynnie przełącza się na generator testowy (`MockTTSEngine` - ton 440 Hz), informując o tym w logach.
 
 6. **Moduł Odtwarzania Audio (`src/audio/player.rs`, `src/audio/devices.rs`):**
+   
    * Wykorzystuje biblioteki `rodio` oraz `cpal`.
    * **Dopełnienie ciszą (Padding):** Dodaje na końcu wygenerowanego bufora konfigurowalną liczbę próbek ciszy (`0.0f32`), co zapobiega nagłemu ucinaniu ostatnich głosek przez bufory wirtualnych kart dźwiękowych (np. VB-Cable).
    * **Zarządzanie urządzeniami:** Umożliwia dynamiczne pobieranie listy urządzeń wyjściowych WASAPI/DirectSound i wybór konkretnej karty dźwiękowej.
@@ -124,6 +132,7 @@ Aplikacja oparta jest na architekturze sterowanej zdarzeniami (Event-Driven Arch
      * *Mute:* Blokada pobierania kolejnych próbek z jednoczesnym wyciszeniem strumienia.
 
 7. **Zarządzanie Skrótami Klawiszowymi (`src/hotkeys/manager.rs`):**
+   
    * Rejestruje globalne skróty klawiszowe w systemie Windows przy użyciu biblioteki `global-hotkey`.
    * Pozwala na wyciszanie/odciszanie oraz pomijanie wiadomości bez konieczności przełączania okien (działa podczas gry w pełnym oknie).
 
@@ -213,6 +222,7 @@ Zakładka **🧪 Test Lab** umożliwia precyzyjne testowanie i strojenie transfo
 ---
 
 ### 3.6. Konfiguracja Skrótów Klawiszowych (Hotkeys)
+
 > Sekcja globalnych skrótów klawiszowych jest jeszcze w trakcie rozwoju.
 
 1. Przejdź do zakładki **⚙️ Settings**.
@@ -279,11 +289,13 @@ hotkeys:
 ## 5. Kompilacja, Budowanie i Dystrybucja
 
 ### 5.1. Wymagania systemowe i narzędziowe
+
 * **System operacyjny:** Windows 10 / 11 (64-bit).
 * **Rust Toolchain:** Wersja 1.84+ (edycja 2024).
 * **WiX Toolset v3.11 / v4+:** (Opcjonalnie, do tworzenia instalatora `.msi`).
 
 ### 5.2. Kompilacja w trybie developerskim
+
 ```powershell
 # Szybka kompilacja z oknem konsoli
 cargo build
@@ -293,9 +305,11 @@ cargo run
 ```
 
 ### 5.3. Kompilacja w trybie produkcyjnym (Release)
+
 ```powershell
 cargo build --release
 ```
+
 Plik wykonywalny znajduje się w ścieżce `target\release\twitch-tts.exe`.
 
 ### 5.4. Generowanie Instalatora MSI (WiX Toolset)
@@ -303,19 +317,24 @@ Plik wykonywalny znajduje się w ścieżce `target\release\twitch-tts.exe`.
 Aplikacja wykorzystuje narzędzie **WiX Toolset** oraz wtyczkę `cargo-wix` do generowania instalatora `.msi`.
 
 #### Automatyczne mapowanie zasobów w `build.rs`
+
 Skrypt budowania [`build.rs`](build.rs) zawiera wbudowany mechanizm (`WixGenerator`), który automatycznie:
+
 * Rekurencyjnie skanuje katalogi `piper/` (pliki binarne silnika, biblioteki, katalog `espeak-ng-data`) oraz `models/` (modele głosowe `.onnx` i pliki `.json`).
 * Dynamicznie generuje fragmenty WiX XML (`wix/piper_files.wxs` oraz `wix/models_files.wxs`) z unikalnymi identyfikatorami komponentów i sumami kontrolnymi.
 * Tworzy grupy komponentów `PiperFiles` i `ModelsFiles`, włączane bezpośrednio do definicji instalatora w [`wix/main.wxs`](wix/main.wxs).
 * Dzięki dyrektywom `cargo:rerun-if-changed`, dodanie lub aktualizacja plików w `piper/` lub `models/` automatycznie odświeża manifesty instalatora przy budowaniu. Nie są wymagane żadne zewnętrzne skrypty pomocnicze.
 
 #### Kroki budowania instalatora:
+
 1. Upewnij się, że pliki silnika Piper znajdują się w katalogu `piper/`, a wybrane modele w katalogu `models/`.
 2. Uruchom polecenie budowania instalatora:
+   
    ```powershell
    cargo wix --nocapture
    ```
-Gotowy instalator `.msi` zostanie wygenerowany w katalogu `target/wix/`.
+   
+   Gotowy instalator `.msi` zostanie wygenerowany w katalogu `target/wix/`.
 
 ---
 
