@@ -2,18 +2,18 @@ use super::devices::AudioDeviceManager;
 use rodio::buffer::SamplesBuffer;
 use rodio::{OutputStream, OutputStreamHandle, Sink};
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::{Arc, Mutex};
+use std::sync::Mutex;
 use std::time::Duration;
 use tracing::{error, info};
 
 pub struct AudioPlayer {
-    _stream: Option<OutputStream>,
-    stream_handle: Option<OutputStreamHandle>,
-    sink: Arc<Mutex<Option<Sink>>>,
-    device_name: Arc<Mutex<String>>,
-    volume: Arc<Mutex<f32>>,
-    is_muted: Arc<AtomicBool>,
-    is_speaking: Arc<AtomicBool>,
+    _stream: Mutex<Option<OutputStream>>,
+    stream_handle: Mutex<Option<OutputStreamHandle>>,
+    sink: Mutex<Option<Sink>>,
+    device_name: Mutex<String>,
+    volume: Mutex<f32>,
+    is_muted: AtomicBool,
+    is_speaking: AtomicBool,
 }
 
 impl AudioPlayer {
@@ -27,13 +27,13 @@ impl AudioPlayer {
         };
 
         Self {
-            _stream: stream,
-            stream_handle,
-            sink: Arc::new(Mutex::new(sink)),
-            device_name: Arc::new(Mutex::new(device_name.to_string())),
-            volume: Arc::new(Mutex::new(initial_volume)),
-            is_muted: Arc::new(AtomicBool::new(false)),
-            is_speaking: Arc::new(AtomicBool::new(false)),
+            _stream: Mutex::new(stream),
+            stream_handle: Mutex::new(stream_handle),
+            sink: Mutex::new(sink),
+            device_name: Mutex::new(device_name.to_string()),
+            volume: Mutex::new(initial_volume),
+            is_muted: AtomicBool::new(false),
+            is_speaking: AtomicBool::new(false),
         }
     }
 
@@ -64,7 +64,7 @@ impl AudioPlayer {
         }
     }
 
-    pub fn set_device(&mut self, device_name: &str) {
+    pub fn set_device(&self, device_name: &str) {
         let mut current_name = self.device_name.lock().unwrap();
         if *current_name == device_name {
             return;
@@ -74,11 +74,16 @@ impl AudioPlayer {
 
         self.stop();
         let (stream, handle) = Self::init_device(device_name);
-        self._stream = stream;
-        self.stream_handle = handle;
+
+        let mut stream_lock = self._stream.lock().unwrap();
+        let mut handle_lock = self.stream_handle.lock().unwrap();
+        *stream_lock = stream;
+        *handle_lock = handle.clone();
+        drop(stream_lock);
+        drop(handle_lock);
 
         let mut sink_lock = self.sink.lock().unwrap();
-        if let Some(ref h) = self.stream_handle {
+        if let Some(ref h) = handle {
             *sink_lock = Sink::try_new(h).ok();
         } else {
             *sink_lock = None;
@@ -104,7 +109,8 @@ impl AudioPlayer {
         let vol = *self.volume.lock().unwrap();
 
         // Create fresh sink if needed or reuse
-        let sink = if let Some(ref handle) = self.stream_handle {
+        let stream_handle_opt = self.stream_handle.lock().unwrap().clone();
+        let sink = if let Some(ref handle) = stream_handle_opt {
             match Sink::try_new(handle) {
                 Ok(s) => s,
                 Err(e) => return Err(format!("Failed to create Rodio Sink: {}", e)),
@@ -156,9 +162,12 @@ impl AudioPlayer {
     pub fn set_volume(&self, volume: f32) {
         let mut vol_lock = self.volume.lock().unwrap();
         *vol_lock = volume.clamp(0.0, 1.5);
+        let vol = *vol_lock;
+        drop(vol_lock);
+
         let sink_lock = self.sink.lock().unwrap();
         if let Some(ref sink) = *sink_lock {
-            sink.set_volume(*vol_lock);
+            sink.set_volume(vol);
         }
     }
 

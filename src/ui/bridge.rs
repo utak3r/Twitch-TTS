@@ -22,7 +22,7 @@ pub struct AppState {
     pub config_manager: ConfigManager,
     pub filter: Arc<Mutex<TextFilter>>,
     pub tts: Arc<Mutex<Box<dyn TTSEngine>>>,
-    pub audio_player: Arc<Mutex<AudioPlayer>>,
+    pub audio_player: Arc<AudioPlayer>,
     pub queue: OverflowQueue,
     pub twitch: Arc<Mutex<TwitchCoordinator>>,
     pub hotkeys: Arc<Mutex<HotkeysManager>>,
@@ -49,10 +49,10 @@ pub fn setup_ui_bridge(
         cfg.tts.speaker_id,
     ));
     let tts = Arc::new(Mutex::new(tts_engine));
-    let audio_player = Arc::new(Mutex::new(AudioPlayer::new(
+    let audio_player = Arc::new(AudioPlayer::new(
         &cfg.tts.audio_device_name,
         cfg.tts.volume,
-    )));
+    ));
     let queue = OverflowQueue::new(cfg.tts.max_queue_size);
     let twitch = Arc::new(Mutex::new(TwitchCoordinator::new(cfg.twitch.clone())));
     let hotkeys = Arc::new(Mutex::new(HotkeysManager::new()));
@@ -166,10 +166,8 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
     // Mute Toggle
     let state_c = state.clone();
     ui.on_toggle_mute(move || {
-        let player = state_c.audio_player.lock().unwrap();
-        let new_muted = !player.is_muted();
-        player.set_muted(new_muted);
-        drop(player);
+        let new_muted = !state_c.audio_player.is_muted();
+        state_c.audio_player.set_muted(new_muted);
 
         if let Some(w) = state_c.main_window.upgrade() {
             w.set_is_muted(new_muted);
@@ -179,8 +177,7 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
     // Skip Current
     let state_c = state.clone();
     ui.on_skip_current(move || {
-        let player = state_c.audio_player.lock().unwrap();
-        player.stop();
+        state_c.audio_player.stop();
     });
 
     // Clear Queue
@@ -222,8 +219,7 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
     // Volume Changed
     let state_c = state.clone();
     ui.on_volume_changed(move |vol| {
-        let player = state_c.audio_player.lock().unwrap();
-        player.set_volume(vol);
+        state_c.audio_player.set_volume(vol);
         let _ = state_c.config_manager.update(|cfg| {
             cfg.tts.volume = vol;
         });
@@ -335,8 +331,7 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
 
             if let Some(Ok((sample_rate, samples))) = synth_res {
                 let padding = state_t.config_manager.get().tts.padding_sec;
-                let player = state_t.audio_player.lock().unwrap();
-                let _ = player.play_samples(sample_rate, &samples, padding);
+                let _ = state_t.audio_player.play_samples(sample_rate, &samples, padding);
             }
         });
     });
@@ -565,9 +560,7 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
                 cfg.tts.padding_sec = pad;
             });
 
-            let mut player = state_c.audio_player.lock().unwrap();
-            player.set_device(&dev);
-            drop(player);
+            state_c.audio_player.set_device(&dev);
 
             reload_tts_engine(&state_c);
         }
@@ -760,9 +753,7 @@ fn spawn_playback_worker(state: Arc<AppState>) {
                 match synth_res {
                     Ok((sample_rate, samples)) => {
                         let padding = state.config_manager.get().tts.padding_sec;
-                        let player = state.audio_player.lock().unwrap();
-                        let _ = player.play_samples(sample_rate, &samples, padding);
-                        drop(player);
+                        let _ = state.audio_player.play_samples(sample_rate, &samples, padding);
 
                         item.status = MessageStatus::Spoken;
                         add_activity_row(&state, item);
@@ -852,10 +843,8 @@ fn spawn_hotkey_handler(state: Arc<AppState>, mut rx: mpsc::UnboundedReceiver<Ho
         while let Some(action) = rx.recv().await {
             match action {
                 HotkeyAction::ToggleMute => {
-                    let player = state_t.audio_player.lock().unwrap();
-                    let new_muted = !player.is_muted();
-                    player.set_muted(new_muted);
-                    drop(player);
+                    let new_muted = !state_t.audio_player.is_muted();
+                    state_t.audio_player.set_muted(new_muted);
 
                     let main_window = state_t.main_window.clone();
                     let _ = slint::invoke_from_event_loop(move || {
@@ -865,8 +854,7 @@ fn spawn_hotkey_handler(state: Arc<AppState>, mut rx: mpsc::UnboundedReceiver<Ho
                     });
                 }
                 HotkeyAction::SkipCurrent => {
-                    let player = state_t.audio_player.lock().unwrap();
-                    player.stop();
+                    state_t.audio_player.stop();
                 }
             }
         }
