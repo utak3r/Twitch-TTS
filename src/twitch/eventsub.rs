@@ -44,6 +44,7 @@ impl EventSubClient {
 
         let handle = tokio::spawn(async move {
             let mut ws_url = EVENTSUB_WS_URL.to_string();
+            let mut is_reconnect = false;
 
             while running_flag.load(Ordering::SeqCst) {
                 let _ = status_tx.send("reconnecting".to_string());
@@ -55,6 +56,9 @@ impl EventSubClient {
                         info!("Connected to Twitch EventSub WebSocket!");
 
                         let (mut write, mut read) = ws_stream.split();
+                        let is_reconnect_session = is_reconnect;
+                        is_reconnect = false;
+                        ws_url = EVENTSUB_WS_URL.to_string();
 
                         while running_flag.load(Ordering::SeqCst) {
                             tokio::select! {
@@ -68,7 +72,9 @@ impl EventSubClient {
                                                     "session_welcome" => {
                                                         if let Some(session_id) = json["payload"]["session"]["id"].as_str() {
                                                             info!("Received EventSub session ID: {}", session_id);
-                                                            if let Err(e) = Self::create_subscriptions(&config, session_id).await {
+                                                            if is_reconnect_session {
+                                                                info!("Seamless reconnect welcome received for session: {}; skipping duplicate subscription creation", session_id);
+                                                            } else if let Err(e) = Self::create_subscriptions(&config, session_id).await {
                                                                 error!("Failed to subscribe to Twitch events: {}", e);
                                                             }
                                                         }
@@ -83,6 +89,7 @@ impl EventSubClient {
                                                         if let Some(reconnect_url) = json["payload"]["session"]["reconnect_url"].as_str() {
                                                             info!("EventSub server requested reconnect to: {}", reconnect_url);
                                                             ws_url = reconnect_url.to_string();
+                                                            is_reconnect = true;
                                                             break;
                                                         }
                                                     }
@@ -116,6 +123,8 @@ impl EventSubClient {
                     }
                     Err(err) => {
                         error!("Failed to connect to Twitch EventSub: {}", err);
+                        is_reconnect = false;
+                        ws_url = EVENTSUB_WS_URL.to_string();
                     }
                 }
 
