@@ -17,8 +17,11 @@ fn test_alias_replacement() {
 
     let filter = AliasFilter::new(aliases);
     assert_eq!(filter.apply("Hej utak3r! Co tam?"), "Hej utaker! Co tam?");
+    assert_eq!(filter.apply("Hej @utak3r! Co tam?"), "Hej utaker! Co tam?");
     assert_eq!(filter.apply("UTAK3R jest super"), "utaker jest super");
+    assert_eq!(filter.apply("@UTAK3R jest super"), "utaker jest super");
     assert_eq!(filter.apply("Dr3gu pozdrawia"), "Dregu pozdrawia");
+    assert_eq!(filter.apply("Pozdrawiam @Dr3gu"), "Pozdrawiam Dregu");
     assert_eq!(filter.apply("Pozdrawiam @streamer"), "Pozdrawiam Piotr");
     assert_eq!(filter.apply("Wysyłam :smile: dla was"), "Wysyłam uśmiech dla was");
     assert_eq!(filter.apply("Lubię c++ bardzo"), "Lubię cpp bardzo");
@@ -56,6 +59,11 @@ fn test_spam_reduction() {
     // 4. Truncation
     let res_trunc = SpamFilter::truncate_with_ellipsis("Długa wiadomość powyżej limitu", 15);
     assert_eq!(res_trunc, "Długa wiadom...");
+
+    // 5. Mention prefixes stripping
+    assert_eq!(SpamFilter::remove_mention_prefixes("@unknownusername"), "unknownusername");
+    assert_eq!(SpamFilter::remove_mention_prefixes("Hej @unknown_123, jak tam?"), "Hej unknown_123, jak tam?");
+    assert_eq!(SpamFilter::remove_mention_prefixes("Kontakt: email@domain.com tutaj"), "Kontakt: email@domain.com tutaj");
 }
 
 #[test]
@@ -91,6 +99,15 @@ fn test_full_filter_pipeline() {
             assert!(!item.spoken_text.contains("Kappa")); // Emote filtered
         }
         _ => panic!("Expected Ready result"),
+    }
+
+    // 3. Message with unaliased mention and @ in raw_user
+    let unaliased_res = filter.process("@Viewer_99", "Cześć @unknownusername co słychać?", false);
+    match unaliased_res {
+        FilterResult::Ready(item) => {
+            assert_eq!(item.spoken_text, "Viewer_99 mówi: Cześć unknownusername co słychać?");
+        }
+        _ => panic!("Expected Ready result for unaliased mention"),
     }
 }
 

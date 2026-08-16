@@ -5,6 +5,10 @@ static URL_REGEX: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(?i)\b(?:https?://|www\.)\S+\b").unwrap()
 });
 
+static MENTION_REGEX: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(^|[^\w])@(\w+)").unwrap()
+});
+
 static COMMON_EMOTES: &[&str] = &[
     // Global & Popular Twitch / BTTV / 7TV / FFZ Emotes
     "Kappa", "KappaPride", "KappaRoss", "Keepo", "PogChamp", "Pog", "PogBones", "POGGERS",
@@ -68,6 +72,10 @@ pub struct SpamFilter;
 impl SpamFilter {
     pub fn remove_urls(input: &str) -> String {
         URL_REGEX.replace_all(input, "").to_string()
+    }
+
+    pub fn remove_mention_prefixes(input: &str) -> String {
+        MENTION_REGEX.replace_all(input, "${1}${2}").to_string()
     }
 
     pub fn filter_emotes(input: &str) -> String {

@@ -86,11 +86,13 @@ impl TextFilter {
         }
 
         // 4. Apply phonetic aliases
-        let aliased_user = self.alias_filter.apply(raw_user);
+        let clean_user = raw_user.trim_start_matches('@');
+        let aliased_user = self.alias_filter.apply(clean_user);
         let aliased_text = self.alias_filter.apply(&no_emotes);
+        let no_mentions = SpamFilter::remove_mention_prefixes(&aliased_text);
 
         // 5. Reduce repeated characters & duplicate words
-        let reduced_chars = SpamFilter::reduce_repeated_chars(&aliased_text, self.config.max_repeated_chars);
+        let reduced_chars = SpamFilter::reduce_repeated_chars(&no_mentions, self.config.max_repeated_chars);
         let unspammed = SpamFilter::reduce_consecutive_words(&reduced_chars, 2);
 
         // 6. Profanity censorship
@@ -134,7 +136,8 @@ impl TextFilter {
             no_urls
         };
         let aliased = self.alias_filter.apply(&no_emotes);
-        let reduced = SpamFilter::reduce_repeated_chars(&aliased, self.config.max_repeated_chars);
+        let no_mentions = SpamFilter::remove_mention_prefixes(&aliased);
+        let reduced = SpamFilter::reduce_repeated_chars(&no_mentions, self.config.max_repeated_chars);
         let unspammed = SpamFilter::reduce_consecutive_words(&reduced, 2);
         let (censored, _) = if self.config.enable_profanity_filter {
             self.profanity_filter.censor(&unspammed)
