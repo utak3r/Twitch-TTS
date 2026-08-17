@@ -14,7 +14,7 @@ pub mod tts;
 pub mod twitch;
 pub mod ui;
 
-use config::persistence::{ConfigManager, DEFAULT_CONFIG_PATH};
+use config::persistence::{default_config_path, ConfigManager};
 use hotkeys::manager::HotkeyAction;
 use tokio::sync::mpsc;
 use tracing::{error, info};
@@ -36,7 +36,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     info!("Starting Twitch TTS Desktop App...");
 
-    let config_manager = ConfigManager::new(DEFAULT_CONFIG_PATH);
+    let config_manager = ConfigManager::new(default_config_path());
     let cfg = config_manager.get();
 
     let main_window = MainWindow::new()?;

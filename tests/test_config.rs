@@ -1,4 +1,4 @@
-use twitch_tts::config::persistence::ConfigManager;
+use twitch_tts::config::persistence::{default_config_path, get_app_dir, ConfigManager};
 use twitch_tts::config::AppConfig;
 
 #[test]
@@ -9,6 +9,15 @@ fn test_default_config() {
     assert_eq!(cfg.tts.max_queue_size, 5);
     assert_eq!(cfg.filters.max_characters, 150);
     assert!(cfg.filters.username_aliases.contains_key("utak3r"));
+}
+
+#[test]
+fn test_app_dir_and_default_config_path() {
+    let app_dir = get_app_dir();
+    assert!(app_dir.ends_with(".twitch-tts"));
+
+    let config_path = default_config_path();
+    assert_eq!(config_path, app_dir.join("config.yaml"));
 }
 
 #[test]
