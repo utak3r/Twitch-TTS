@@ -556,6 +556,7 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
             let rate = w.get_speech_rate();
             let dev = w.get_selected_device_name().to_string();
             let pad = w.get_padding_sec();
+            let vol = w.get_volume();
 
             let _ = state_c.config_manager.update(|cfg| {
                 cfg.tts.model_path = mp;
@@ -564,8 +565,10 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
                 cfg.tts.speech_rate = rate;
                 cfg.tts.audio_device_name = dev.clone();
                 cfg.tts.padding_sec = pad;
+                cfg.tts.volume = vol;
             });
 
+            state_c.audio_player.set_volume(vol);
             state_c.audio_player.set_device(&dev);
 
             reload_tts_engine(&state_c);

@@ -358,12 +358,14 @@ export component MainWindow inherits Window {
                     speaker_id <=> root.speaker_id;
                     speech_rate <=> root.speech_rate;
                     selected_device_name <=> root.selected_device_name;
+                    volume <=> root.volume;
                     padding_sec <=> root.padding_sec;
                     available_devices: root.available_devices;
 
                     browse_model => { root.browse_model(); }
                     browse_config => { root.browse_config(); }
                     refresh_devices => { root.refresh_devices(); }
+                    volume_changed(v) => { root.volume_changed(v); }
                     audio_settings_changed => { root.audio_settings_changed(); }
                 }
 

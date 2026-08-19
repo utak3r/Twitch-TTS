@@ -18,6 +18,7 @@ export component AudioView inherits VerticalLayout {
     in_out property <int> speaker_id: 0;
     in_out property <float> speech_rate: 1.0;
     in_out property <string> selected_device_name: "Default";
+    in_out property <float> volume: 1.0;
     in_out property <float> padding_sec: 0.3;
     in property <[string]> available_devices: ["Default"];
 
@@ -25,6 +26,7 @@ export component AudioView inherits VerticalLayout {
     callback browse_config();
     callback refresh_devices();
     callback audio_settings_changed();
+    callback volume_changed(float);
 
     spacing: 16px;
 
@@ -178,6 +180,34 @@ export component AudioView inherits VerticalLayout {
                         text: "🔄 Refresh Devices";
                         clicked => { root.refresh_devices(); }
                     }
+                }
+            }
+
+            // Volume
+            VerticalLayout {
+                spacing: 6px;
+                HorizontalLayout {
+                    alignment: space_between;
+                    Text {
+                        text: "Audio Volume:";
+                        color: Theme.text_secondary;
+                        font_size: Theme.font_size_sm;
+                        font_weight: 600;
+                    }
+
+                    Text {
+                        text: Math.round(root.volume * 100) + "%";
+                        color: Theme.primary_hover;
+                        font_size: Theme.font_size_sm;
+                        font_weight: 700;
+                    }
+                }
+
+                Slider {
+                    minimum: 0.0;
+                    maximum: 1.5;
+                    value <=> root.volume;
+                    changed(val) => { root.volume_changed(val); }
                 }
             }
 
