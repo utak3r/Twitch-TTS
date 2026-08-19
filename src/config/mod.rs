@@ -178,6 +178,8 @@ fn default_aliases() -> HashMap<String, String> {
     map.insert("utak3r".to_string(), "utaker".to_string());
     map.insert("Dr3gu".to_string(), "Dregu".to_string());
     map.insert("masi4m".to_string(), "masiam".to_string());
+    map.insert("ok".to_string(), "okej".to_string());
+    map.insert("stream".to_string(), "strim".to_string());
     map
 }
 
