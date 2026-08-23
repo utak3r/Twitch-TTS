@@ -16,6 +16,7 @@ export component AudioView inherits VerticalLayout {
     in_out property <string> model_path: "./models/pl_zenski_1.onnx";
     in_out property <string> config_path: "./models/pl_zenski_1.onnx.json";
     in_out property <int> speaker_id: 0;
+    changed speaker_id => { root.audio_settings_changed(); }
     in_out property <float> speech_rate: 1.0;
     in_out property <string> selected_device_name: "Default";
     in_out property <float> volume: 1.0;

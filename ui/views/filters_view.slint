@@ -18,6 +18,9 @@ export component FiltersView inherits VerticalLayout {
     in_out property <int> max_characters: 150;
     in_out property <int> max_repeated_chars: 3;
 
+    changed max_characters => { root.filter_settings_changed(); }
+    changed max_repeated_chars => { root.filter_settings_changed(); }
+
     in property <[AliasItem]> aliases: [];
     in property <[IgnoredUserItem]> ignored_users: [];
     in_out property <string> profanity_words_raw: "";
