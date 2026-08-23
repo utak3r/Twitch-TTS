@@ -1,6 +1,6 @@
 [package]
 name = "twitch-tts"
-version = "1.0.3"
+version = "1.0.4"
 edition = "2024"
 authors = ["Piotr <utak3r> Borys"]
 description = "Natywny, lokalny serwer i interfejs TTS dla streamerów Twitcha"
