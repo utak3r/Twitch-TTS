@@ -29,7 +29,12 @@ export component FiltersView inherits VerticalLayout {
     in_out property <string> new_alias_val: "";
     in_out property <string> new_ignored_user: "";
 
+    in_out property <string> editing_alias_key: "";
+    in_out property <string> edit_alias_key: "";
+    in_out property <string> edit_alias_val: "";
+
     callback add_alias(string, string);
+    callback edit_alias(string, string, string);
     callback remove_alias(string);
     callback add_ignored_user(string);
     callback remove_ignored_user(string);
@@ -157,15 +162,94 @@ export component FiltersView inherits VerticalLayout {
                     VerticalLayout {
                         spacing: 4px;
                         for a in root.aliases : Rectangle {
-                            height: 32px;
-                            background: Theme.surface_light;
+                            min_height: 32px;
+                            background: root.editing_alias_key == a.key ? Theme.surface : Theme.surface_light;
                             border_radius: Theme.radius_sm;
-                            HorizontalLayout {
+                            border_width: root.editing_alias_key == a.key ? 1px : 0px;
+                            border_color: root.editing_alias_key == a.key ? Theme.primary : transparent;
+
+                            if root.editing_alias_key == a.key : HorizontalLayout {
+                                padding_left: 4px; padding_right: 4px;
+                                spacing: 6px;
+                                alignment: center;
+
+                                LineEdit {
+                                    width: 110px;
+                                    text <=> root.edit_alias_key;
+                                    placeholder_text: "Target";
+                                    accepted => {
+                                        if root.edit_alias_key != "" && root.edit_alias_val != "" {
+                                            root.edit_alias(a.key, root.edit_alias_key, root.edit_alias_val);
+                                            root.editing_alias_key = "";
+                                            root.edit_alias_key = "";
+                                            root.edit_alias_val = "";
+                                        }
+                                    }
+                                }
+
+                                Text { text: "➔"; color: Theme.text_muted; vertical_alignment: center; }
+
+                                LineEdit {
+                                    horizontal_stretch: 1;
+                                    text <=> root.edit_alias_val;
+                                    placeholder_text: "Replacement";
+                                    accepted => {
+                                        if root.edit_alias_key != "" && root.edit_alias_val != "" {
+                                            root.edit_alias(a.key, root.edit_alias_key, root.edit_alias_val);
+                                            root.editing_alias_key = "";
+                                            root.edit_alias_key = "";
+                                            root.edit_alias_val = "";
+                                        }
+                                    }
+                                }
+
+                                PrimaryButton {
+                                    text: "✓";
+                                    enabled: root.edit_alias_key != "" && root.edit_alias_val != "";
+                                    clicked => {
+                                        root.edit_alias(a.key, root.edit_alias_key, root.edit_alias_val);
+                                        root.editing_alias_key = "";
+                                        root.edit_alias_key = "";
+                                        root.edit_alias_val = "";
+                                    }
+                                }
+
+                                SecondaryButton {
+                                    text: "✕";
+                                    clicked => {
+                                        root.editing_alias_key = "";
+                                        root.edit_alias_key = "";
+                                        root.edit_alias_val = "";
+                                    }
+                                }
+                            }
+
+                            if root.editing_alias_key != a.key : HorizontalLayout {
                                 padding_left: 8px; padding_right: 8px;
                                 spacing: 8px;
-                                Text { width: 110px; text: a.key; color: #60a5fa; font_weight: 700; overflow: elide; vertical_alignment: center; }
-                                Text { text: "➔"; color: Theme.text_muted; vertical_alignment: center; }
-                                Text { horizontal_stretch: 1; text: a.value; color: Theme.text_primary; overflow: elide; vertical_alignment: center; }
+
+                                Rectangle {
+                                    horizontal_stretch: 1;
+                                    background: row_touch.has_hover ? Theme.surface_hover : transparent;
+                                    border_radius: Theme.radius_sm;
+
+                                    row_touch := TouchArea {
+                                        mouse_cursor: pointer;
+                                        double-clicked => {
+                                            root.editing_alias_key = a.key;
+                                            root.edit_alias_key = a.key;
+                                            root.edit_alias_val = a.value;
+                                        }
+                                    }
+
+                                    HorizontalLayout {
+                                        spacing: 8px;
+                                        Text { width: 110px; text: a.key; color: #60a5fa; font_weight: 700; overflow: elide; vertical_alignment: center; }
+                                        Text { text: "➔"; color: Theme.text_muted; vertical_alignment: center; }
+                                        Text { horizontal_stretch: 1; text: a.value; color: Theme.text_primary; overflow: elide; vertical_alignment: center; }
+                                    }
+                                }
+
                                 DangerButton {
                                     text: "✕";
                                     clicked => { root.remove_alias(a.key); }

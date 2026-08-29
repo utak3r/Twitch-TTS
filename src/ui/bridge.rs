@@ -106,7 +106,7 @@ fn populate_ui_from_config(ui: &MainWindow, cfg: &AppConfig) {
     ui.set_max_repeated_chars(cfg.filters.max_repeated_chars as i32);
 
     // Aliases Model
-    let alias_items: Vec<AliasItem> = cfg
+    let mut alias_items: Vec<AliasItem> = cfg
         .filters
         .username_aliases
         .iter()
@@ -115,6 +115,7 @@ fn populate_ui_from_config(ui: &MainWindow, cfg: &AppConfig) {
             value: v.clone().into(),
         })
         .collect();
+    alias_items.sort_by(|a, b| a.key.to_lowercase().cmp(&b.key.to_lowercase()));
     ui.set_aliases(ModelRc::new(VecModel::from(alias_items)));
 
     // Ignored Users Model
@@ -260,10 +261,11 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
         filter.update_config(state_c.config_manager.get().filters);
         if let Some(w) = state_c.main_window.upgrade() {
             let aliases = state_c.config_manager.get().filters.username_aliases;
-            let alias_items: Vec<AliasItem> = aliases
+            let mut alias_items: Vec<AliasItem> = aliases
                 .into_iter()
                 .map(|(k, v)| AliasItem { key: k.into(), value: v.into() })
                 .collect();
+            alias_items.sort_by(|a, b| a.key.to_lowercase().cmp(&b.key.to_lowercase()));
             w.set_aliases(ModelRc::new(VecModel::from(alias_items)));
         }
     });
@@ -378,18 +380,62 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
     // Filters: Add Alias
     let state_c = state.clone();
     ui.on_add_alias(move |k, v| {
+        let k_str = k.trim().to_string();
+        let v_str = v.trim().to_string();
+        if k_str.is_empty() || v_str.is_empty() {
+            return;
+        }
         let _ = state_c.config_manager.update(|cfg| {
-            cfg.filters.username_aliases.insert(k.to_string(), v.to_string());
+            cfg.filters.username_aliases.insert(k_str, v_str);
         });
         let mut filter = state_c.filter.lock().unwrap();
         filter.update_config(state_c.config_manager.get().filters);
         if let Some(w) = state_c.main_window.upgrade() {
             let aliases = state_c.config_manager.get().filters.username_aliases;
-            let items: Vec<AliasItem> = aliases
+            let mut items: Vec<AliasItem> = aliases
                 .into_iter()
                 .map(|(k, v)| AliasItem { key: k.into(), value: v.into() })
                 .collect();
+            items.sort_by(|a, b| a.key.to_lowercase().cmp(&b.key.to_lowercase()));
             w.set_aliases(ModelRc::new(VecModel::from(items)));
+
+            let (aliased, censored, truncated) = filter.inspect_stages(&w.get_test_text());
+            w.set_transformed_aliases(aliased.into());
+            w.set_transformed_censored(censored.into());
+            w.set_transformed_final(truncated.into());
+        }
+    });
+
+    // Filters: Edit Alias
+    let state_c = state.clone();
+    ui.on_edit_alias(move |old_k, new_k, new_v| {
+        let old_k_str = old_k.to_string();
+        let new_k_str = new_k.trim().to_string();
+        let new_v_str = new_v.trim().to_string();
+        if new_k_str.is_empty() || new_v_str.is_empty() {
+            return;
+        }
+        let _ = state_c.config_manager.update(|cfg| {
+            if old_k_str != new_k_str {
+                cfg.filters.username_aliases.remove(old_k_str.as_str());
+            }
+            cfg.filters.username_aliases.insert(new_k_str, new_v_str);
+        });
+        let mut filter = state_c.filter.lock().unwrap();
+        filter.update_config(state_c.config_manager.get().filters);
+        if let Some(w) = state_c.main_window.upgrade() {
+            let aliases = state_c.config_manager.get().filters.username_aliases;
+            let mut items: Vec<AliasItem> = aliases
+                .into_iter()
+                .map(|(k, v)| AliasItem { key: k.into(), value: v.into() })
+                .collect();
+            items.sort_by(|a, b| a.key.to_lowercase().cmp(&b.key.to_lowercase()));
+            w.set_aliases(ModelRc::new(VecModel::from(items)));
+
+            let (aliased, censored, truncated) = filter.inspect_stages(&w.get_test_text());
+            w.set_transformed_aliases(aliased.into());
+            w.set_transformed_censored(censored.into());
+            w.set_transformed_final(truncated.into());
         }
     });
 
@@ -403,11 +449,17 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
         filter.update_config(state_c.config_manager.get().filters);
         if let Some(w) = state_c.main_window.upgrade() {
             let aliases = state_c.config_manager.get().filters.username_aliases;
-            let items: Vec<AliasItem> = aliases
+            let mut items: Vec<AliasItem> = aliases
                 .into_iter()
                 .map(|(k, v)| AliasItem { key: k.into(), value: v.into() })
                 .collect();
+            items.sort_by(|a, b| a.key.to_lowercase().cmp(&b.key.to_lowercase()));
             w.set_aliases(ModelRc::new(VecModel::from(items)));
+
+            let (aliased, censored, truncated) = filter.inspect_stages(&w.get_test_text());
+            w.set_transformed_aliases(aliased.into());
+            w.set_transformed_censored(censored.into());
+            w.set_transformed_final(truncated.into());
         }
     });
 

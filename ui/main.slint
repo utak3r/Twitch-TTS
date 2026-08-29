@@ -136,6 +136,7 @@ export component MainWindow inherits Window {
     callback test_export_to_wav(string, float);
 
     callback add_alias(string, string);
+    callback edit_alias(string, string, string);
     callback remove_alias(string);
     callback add_ignored_user(string);
     callback remove_ignored_user(string);
@@ -345,6 +346,7 @@ export component MainWindow inherits Window {
                     profanity_words_raw <=> root.profanity_words_raw;
 
                     add_alias(k, v) => { root.add_alias(k, v); }
+                    edit_alias(old_k, new_k, new_v) => { root.edit_alias(old_k, new_k, new_v); }
                     remove_alias(k) => { root.remove_alias(k); }
                     add_ignored_user(u) => { root.add_ignored_user(u); }
                     remove_ignored_user(u) => { root.remove_ignored_user(u); }
