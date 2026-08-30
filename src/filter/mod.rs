@@ -68,11 +68,18 @@ impl TextFilter {
         // 2. Remove URLs
         let no_urls = SpamFilter::remove_urls(raw_text);
 
-        // 3. Emotes stripping
-        let no_emotes = if self.config.filter_emotes {
-            SpamFilter::filter_emotes_with_extra(&no_urls, extra_emotes)
+        // 3. Filter !commands
+        let no_commands = if self.config.filter_commands {
+            SpamFilter::filter_commands(&no_urls)
         } else {
             no_urls
+        };
+
+        // 4. Emotes stripping
+        let no_emotes = if self.config.filter_emotes {
+            SpamFilter::filter_emotes_with_extra(&no_commands, extra_emotes)
+        } else {
+            no_commands
         };
 
         if no_emotes.trim().is_empty() {
@@ -85,27 +92,27 @@ impl TextFilter {
             return FilterResult::Filtered(item);
         }
 
-        // 4. Apply phonetic aliases
+        // 5. Apply phonetic aliases
         let clean_user = raw_user.trim_start_matches('@');
         let aliased_user = self.alias_filter.apply(clean_user);
         let aliased_text = self.alias_filter.apply(&no_emotes);
         let no_mentions = SpamFilter::remove_mention_prefixes(&aliased_text);
 
-        // 5. Reduce repeated characters & duplicate words
+        // 6. Reduce repeated characters & duplicate words
         let reduced_chars = SpamFilter::reduce_repeated_chars(&no_mentions, self.config.max_repeated_chars);
         let unspammed = SpamFilter::reduce_consecutive_words(&reduced_chars, 2);
 
-        // 6. Profanity censorship
+        // 7. Profanity censorship
         let (censored, was_profane) = if self.config.enable_profanity_filter {
             self.profanity_filter.censor(&unspammed)
         } else {
             (unspammed, false)
         };
 
-        // 7. Truncate to max characters
+        // 8. Truncate to max characters
         let truncated = SpamFilter::truncate_with_ellipsis(&censored, self.config.max_characters);
 
-        // 8. Username announcement template
+        // 9. Username announcement template
         let final_text = if self.config.announce_username {
             self.format_template(&aliased_user, &truncated)
         } else {
@@ -130,10 +137,15 @@ impl TextFilter {
 
     pub fn inspect_stages(&self, input: &str) -> (String, String, String) {
         let no_urls = SpamFilter::remove_urls(input);
-        let no_emotes = if self.config.filter_emotes {
-            SpamFilter::filter_emotes(&no_urls)
+        let no_commands = if self.config.filter_commands {
+            SpamFilter::filter_commands(&no_urls)
         } else {
             no_urls
+        };
+        let no_emotes = if self.config.filter_emotes {
+            SpamFilter::filter_emotes(&no_commands)
+        } else {
+            no_commands
         };
         let aliased = self.alias_filter.apply(&no_emotes);
         let no_mentions = SpamFilter::remove_mention_prefixes(&aliased);

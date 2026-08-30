@@ -100,6 +100,7 @@ fn populate_ui_from_config(ui: &MainWindow, cfg: &AppConfig) {
     // Filters
     ui.set_enable_profanity(cfg.filters.enable_profanity_filter);
     ui.set_filter_emotes(cfg.filters.filter_emotes);
+    ui.set_filter_commands(cfg.filters.filter_commands);
     ui.set_announce_username(cfg.filters.announce_username);
     ui.set_username_template(cfg.filters.username_template.clone().into());
     ui.set_max_characters(cfg.filters.max_characters as i32);
@@ -528,6 +529,7 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
         if let Some(w) = state_c.main_window.upgrade() {
             let ep = w.get_enable_profanity();
             let fe = w.get_filter_emotes();
+            let fc = w.get_filter_commands();
             let au = w.get_announce_username();
             let ut = w.get_username_template().to_string();
             let mc = w.get_max_characters() as usize;
@@ -536,6 +538,7 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
             let _ = state_c.config_manager.update(|cfg| {
                 cfg.filters.enable_profanity_filter = ep;
                 cfg.filters.filter_emotes = fe;
+                cfg.filters.filter_commands = fc;
                 cfg.filters.announce_username = au;
                 cfg.filters.username_template = ut;
                 cfg.filters.max_characters = mc;

@@ -178,3 +178,123 @@ fn test_inspect_stages_with_emotes() {
     let (aliased, _, _) = filter.inspect_stages("Cześć Kappa https://twitch.tv/test");
     assert_eq!(aliased, "Cześć");
 }
+
+#[test]
+fn test_command_filtering_basic() {
+    // 1. Basic bot commands
+    assert_eq!(SpamFilter::filter_commands("!mycommand"), "");
+    assert_eq!(SpamFilter::filter_commands("!points"), "");
+    assert_eq!(SpamFilter::filter_commands("!mycommand i jeszcze !points"), "i jeszcze");
+
+    // 2. Command at different positions
+    assert_eq!(SpamFilter::filter_commands("!sr gramy dalej"), "gramy dalej");
+    assert_eq!(SpamFilter::filter_commands("gramy dalej !sr"), "gramy dalej");
+    assert_eq!(SpamFilter::filter_commands("gramy !sr dalej"), "gramy dalej");
+
+    // 3. Multiple consecutive commands
+    assert_eq!(SpamFilter::filter_commands("!points !rank !uptime"), "");
+    assert_eq!(SpamFilter::filter_commands("!cmd1 !cmd2 tekst !cmd3"), "tekst");
+
+    // 4. Underscores, hyphens, numbers
+    assert_eq!(SpamFilter::filter_commands("!drop_item !song-request !123 !a !A"), "");
+    assert_eq!(SpamFilter::filter_commands("!giveaway_2026"), "");
+
+    // 5. Unicode command names
+    assert_eq!(SpamFilter::filter_commands("!żółw !cześć !привет"), "");
+    assert_eq!(SpamFilter::filter_commands("sprawdź !żółw teraz"), "sprawdź teraz");
+}
+
+#[test]
+fn test_command_filtering_punctuation_and_wrappers() {
+    // 1. Commands with trailing punctuation
+    assert_eq!(SpamFilter::filter_commands("Wpisz !points, aby sprawdzić stan."), "Wpisz aby sprawdzić stan.");
+    assert_eq!(SpamFilter::filter_commands("Sprawdź !help!"), "Sprawdź");
+    assert_eq!(SpamFilter::filter_commands("Czy to !komenda?"), "Czy to");
+    assert_eq!(SpamFilter::filter_commands("Uruchom !run;"), "Uruchom");
+
+    // 2. Commands wrapped in brackets or quotes
+    assert_eq!(SpamFilter::filter_commands("Zobacz to (!points) teraz"), "Zobacz to teraz");
+    assert_eq!(SpamFilter::filter_commands("Zobacz to [!points]"), "Zobacz to");
+    assert_eq!(SpamFilter::filter_commands("Wpisz \"!komenda\" w czacie"), "Wpisz w czacie");
+    assert_eq!(SpamFilter::filter_commands("Wpisz '!komenda' w czacie"), "Wpisz w czacie");
+}
+
+#[test]
+fn test_command_filtering_non_commands_preserved() {
+    // 1. Standalone exclamation marks and spaces
+    assert_eq!(SpamFilter::filter_commands("!"), "!");
+    assert_eq!(SpamFilter::filter_commands("Uwaga ! Sprawdź to"), "Uwaga ! Sprawdź to");
+    assert_eq!(SpamFilter::filter_commands("! mycommand"), "! mycommand");
+
+    // 2. Exclamation marks at end or inside words
+    assert_eq!(SpamFilter::filter_commands("Cześć! Jak leci?"), "Cześć! Jak leci?");
+    assert_eq!(SpamFilter::filter_commands("Niesamowite!! Super!!!"), "Niesamowite!! Super!!!");
+    assert_eq!(SpamFilter::filter_commands("Hello!World"), "Hello!World");
+
+    // 3. Punctuation combinations
+    assert_eq!(SpamFilter::filter_commands("Co to jest?!"), "Co to jest?!");
+    assert_eq!(SpamFilter::filter_commands("!!"), "!!");
+    assert_eq!(SpamFilter::filter_commands("!??"), "!?\?");
+    assert_eq!(SpamFilter::filter_commands("!..."), "!...");
+
+    // 4. Comparison operators
+    assert_eq!(SpamFilter::filter_commands("x != 5"), "x != 5");
+}
+
+#[test]
+fn test_command_filtering_edge_cases_and_bad_input() {
+    // 1. Empty strings and whitespace variations
+    assert_eq!(SpamFilter::filter_commands(""), "");
+    assert_eq!(SpamFilter::filter_commands("   "), "");
+    assert_eq!(SpamFilter::filter_commands("\t\n\r"), "");
+    assert_eq!(SpamFilter::filter_commands("  !cmd   !test   "), "");
+
+    // 2. Control characters and special tokens
+    assert_eq!(SpamFilter::filter_commands("! \0 !cmd \u{200B}"), "! \0 \u{200B}");
+
+    // 3. Only exclamation marks / symbols
+    assert_eq!(SpamFilter::filter_commands("! ! !"), "! ! !");
+    assert_eq!(SpamFilter::filter_commands("!@#$"), "!@#$");
+}
+
+#[test]
+fn test_full_pipeline_with_command_filtering() {
+    let mut config = FiltersConfig::default();
+    config.announce_username = false;
+    config.filter_commands = true;
+    let filter = TextFilter::new(config);
+
+    // 1. Command filtered in message
+    let res = filter.process("Viewer", "Siemanko !punkty co słychać?", false);
+    match res {
+        FilterResult::Ready(item) => {
+            assert_eq!(item.spoken_text, "Siemanko co słychać?");
+        }
+        _ => panic!("Expected Ready result"),
+    }
+
+    // 2. Message consisting only of commands is filtered as empty
+    let res_cmd_only = filter.process("Viewer", "!points !rank !uptime", false);
+    match res_cmd_only {
+        FilterResult::Filtered(item) => {
+            assert_eq!(item.status, MessageStatus::FilteredEmote);
+            assert_eq!(item.spoken_text, "[Filtered Emotes/Empty]");
+        }
+        _ => panic!("Expected Filtered result for command-only message"),
+    }
+
+    // 3. When filter_commands is disabled, commands are preserved
+    let mut config_disabled = FiltersConfig::default();
+    config_disabled.announce_username = false;
+    config_disabled.filter_commands = false;
+    let filter_disabled = TextFilter::new(config_disabled);
+
+    let res_disabled = filter_disabled.process("Viewer", "Siemanko !punkty", false);
+    match res_disabled {
+        FilterResult::Ready(item) => {
+            assert_eq!(item.spoken_text, "Siemanko !punkty");
+        }
+        _ => panic!("Expected Ready result when filter_commands is false"),
+    }
+}
+
