@@ -131,6 +131,37 @@ impl SpamFilter {
         false
     }
 
+    pub fn filter_commands(input: &str) -> String {
+        let words: Vec<&str> = input.split_whitespace().collect();
+        let mut filtered_words = Vec::new();
+
+        for word in words {
+            if !Self::is_command_token(word) {
+                filtered_words.push(word);
+            }
+        }
+
+        filtered_words.join(" ")
+    }
+
+    pub fn is_command_token(word: &str) -> bool {
+        let trimmed = word.trim_start_matches(|c: char| {
+            c == '(' || c == '[' || c == '{' || c == '<' || c == '"' || c == '\'' || c == '«' || c == '“'
+        });
+
+        if let Some(rest) = trimmed.strip_prefix('!') {
+            if let Some(first_char) = rest.chars().next() {
+                // Must start with an alphanumeric char, underscore, or dash (e.g. !mycommand, !123, !drop-item, !_)
+                // and not be punctuation/operator sequences like '!!', '!?', '!=', '!...'
+                if first_char.is_alphanumeric() || first_char == '_' {
+                    return true;
+                }
+            }
+        }
+
+        false
+    }
+
     pub fn reduce_repeated_chars(input: &str, max_repeat: usize) -> String {
         if max_repeat == 0 || input.is_empty() {
             return input.to_string();

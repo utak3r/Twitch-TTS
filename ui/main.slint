@@ -89,6 +89,7 @@ export component MainWindow inherits Window {
     // Filters properties
     in_out property <bool> enable_profanity: true;
     in_out property <bool> filter_emotes: true;
+    in_out property <bool> filter_commands: true;
     in_out property <bool> announce_username: true;
     in_out property <string> username_template: "{nick} mówi: {message}";
     in_out property <int> max_characters: 150;
@@ -337,6 +338,7 @@ export component MainWindow inherits Window {
                 if root.active_tab == 2: FiltersView {
                     enable_profanity <=> root.enable_profanity;
                     filter_emotes <=> root.filter_emotes;
+                    filter_commands <=> root.filter_commands;
                     announce_username <=> root.announce_username;
                     username_template <=> root.username_template;
                     max_characters <=> root.max_characters;

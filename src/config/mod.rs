@@ -144,6 +144,8 @@ pub struct FiltersConfig {
     pub profanity_words_file: String,
     #[serde(default = "default_true")]
     pub filter_emotes: bool,
+    #[serde(default = "default_true")]
+    pub filter_commands: bool,
     #[serde(default = "default_ignore_users")]
     pub ignore_users: Vec<String>,
     #[serde(default = "default_max_characters")]
@@ -191,6 +193,7 @@ impl Default for FiltersConfig {
             enable_profanity_filter: true,
             profanity_words_file: default_profanity_words_file(),
             filter_emotes: true,
+            filter_commands: true,
             ignore_users: default_ignore_users(),
             max_characters: default_max_characters(),
             max_repeated_chars: default_max_repeated_chars(),
