@@ -89,6 +89,14 @@ pub struct TTSConfig {
     pub padding_sec: f32,
     #[serde(default = "default_volume")]
     pub volume: f32,
+
+    // Chatterbox settings
+    #[serde(default = "default_language")]
+    pub language: String,
+    #[serde(default = "default_voice_sample")]
+    pub voice_sample: String,
+    #[serde(default = "default_exaggeration")]
+    pub exaggeration: f32,
 }
 
 fn default_model_path() -> String {
@@ -115,6 +123,15 @@ fn default_padding_sec() -> f32 {
 fn default_volume() -> f32 {
     1.0
 }
+fn default_language() -> String {
+    "pl".to_string()
+}
+fn default_voice_sample() -> String {
+    "./voices/utak3r.wav".to_string()
+}
+fn default_exaggeration() -> f32 {
+    0.5
+}
 
 impl Default for TTSConfig {
     fn default() -> Self {
@@ -128,6 +145,9 @@ impl Default for TTSConfig {
             audio_device_name: default_audio_device(),
             padding_sec: default_padding_sec(),
             volume: default_volume(),
+            language: default_language(),
+            voice_sample: default_voice_sample(),
+            exaggeration: default_exaggeration(),
         }
     }
 }

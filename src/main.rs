@@ -1,9 +1,13 @@
-//#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-#![windows_subsystem = "windows"]
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 #[cfg(windows)]
 #[link(name = "resource")]
 unsafe extern "C" {}
+
+#[cfg(windows)]
+unsafe extern "system" {
+    fn AttachConsole(dwProcessId: u32) -> i32;
+}
 
 pub mod audio;
 pub mod config;
@@ -24,6 +28,10 @@ slint::include_modules!();
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    #[cfg(windows)]
+    unsafe {
+        AttachConsole(u32::MAX);
+    }
 
     let filter_layer = tracing_subscriber::EnvFilter::try_from_default_env()
         .unwrap_or_else(|_| "twitch_tts=info,warn,error".into());

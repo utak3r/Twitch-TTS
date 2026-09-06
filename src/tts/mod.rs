@@ -1,12 +1,34 @@
+#[cfg(all(feature = "chatterbox", feature = "piper"))]
+compile_error!("Features 'chatterbox' and 'piper' are mutually exclusive. Please select only one TTS engine.");
+
+#[cfg(not(any(feature = "chatterbox", feature = "piper")))]
+compile_error!("At least one TTS engine feature must be enabled: 'chatterbox' or 'piper'.");
+
 pub mod mock;
+
+#[cfg(feature = "piper")]
 pub mod piper;
 
+#[cfg(feature = "chatterbox")]
+pub mod chatterbox;
+
+use crate::config::TTSConfig;
 use std::path::Path;
 
 pub trait TTSEngine: Send + Sync {
     /// Synthesizes text to PCM f32 audio samples and returns (sample_rate, samples)
     fn synthesize(&mut self, text: &str, speed: f32) -> Result<(u32, Vec<f32>), String>;
-    fn reload(&mut self, model_path: &str, config_path: &str, speaker_id: i64) -> Result<(), String>;
+    fn reload(&mut self, config: &TTSConfig) -> Result<(), String>;
+    fn reload_with_progress(
+        &mut self,
+        config: &TTSConfig,
+        _progress: Box<dyn FnMut(&str) + Send>,
+    ) -> Result<(), String> {
+        self.reload(config)
+    }
+    fn is_ready(&self) -> bool {
+        true
+    }
 }
 
 /// Helper function to export PCM samples to a standard 16-bit PCM WAV file

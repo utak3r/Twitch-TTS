@@ -129,6 +129,7 @@ fn main() {
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=piper");
     println!("cargo:rerun-if-changed=models");
+    println!("cargo:rerun-if-changed=voices");
 
     // 1. Generate WiX fragments for data folders if they exist
     if Path::new("piper").exists() {
@@ -150,6 +151,17 @@ fn main() {
             "APPLICATIONFOLDER",
         ) {
             eprintln!("Warning: Failed to generate models_files.wxs: {}", e);
+        }
+    }
+
+    if Path::new("voices").exists() {
+        if let Err(e) = WixGenerator::generate_fragment(
+            Path::new("wix/voices_files.wxs"),
+            "voices",
+            "VoicesFiles",
+            "APPLICATIONFOLDER",
+        ) {
+            eprintln!("Warning: Failed to generate voices_files.wxs: {}", e);
         }
     }
 

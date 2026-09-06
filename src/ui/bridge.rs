@@ -7,7 +7,10 @@ use crate::domain::queue::OverflowQueue;
 use crate::filter::profanity::ProfanityFilter;
 use crate::filter::TextFilter;
 use crate::hotkeys::manager::{HotkeyAction, HotkeysManager};
+#[cfg(feature = "piper")]
 use crate::tts::piper::PiperEngine;
+#[cfg(feature = "chatterbox")]
+use crate::tts::chatterbox::ChatterboxEngine;
 use crate::tts::{export_wav_file, TTSEngine};
 use crate::twitch::auth::OAuthServer;
 use crate::twitch::TwitchCoordinator;
@@ -30,6 +33,7 @@ pub struct AppState {
     pub main_window: slint::Weak<MainWindow>,
     pub chat_tx: mpsc::UnboundedSender<ChatEvent>,
     pub status_tx: mpsc::UnboundedSender<String>,
+    pub is_loading_models: Arc<std::sync::atomic::AtomicBool>,
 }
 
 pub fn setup_ui_bridge(
@@ -43,11 +47,10 @@ pub fn setup_ui_bridge(
     let (status_tx, status_rx) = mpsc::unbounded_channel::<String>();
 
     let filter = Arc::new(Mutex::new(TextFilter::new(cfg.filters.clone())));
-    let tts_engine: Box<dyn TTSEngine> = Box::new(PiperEngine::new(
-        &cfg.tts.model_path,
-        &cfg.tts.config_path,
-        cfg.tts.speaker_id,
-    ));
+    #[cfg(all(feature = "piper", not(feature = "chatterbox")))]
+    let tts_engine: Box<dyn TTSEngine> = Box::new(PiperEngine::new(&cfg.tts));
+    #[cfg(feature = "chatterbox")]
+    let tts_engine: Box<dyn TTSEngine> = Box::new(ChatterboxEngine::new_uninitialized(&cfg.tts));
     let tts = Arc::new(Mutex::new(tts_engine));
     let audio_player = Arc::new(AudioPlayer::new(
         &cfg.tts.audio_device_name,
@@ -57,6 +60,7 @@ pub fn setup_ui_bridge(
     let twitch = Arc::new(Mutex::new(TwitchCoordinator::new(cfg.twitch.clone())));
     let hotkeys = Arc::new(Mutex::new(HotkeysManager::new()));
     let activity_history = Arc::new(Mutex::new(Vec::new()));
+    let is_loading_models = Arc::new(std::sync::atomic::AtomicBool::new(false));
 
     let app_state = Arc::new(AppState {
         config_manager: config_manager.clone(),
@@ -70,6 +74,7 @@ pub fn setup_ui_bridge(
         main_window: main_window.as_weak(),
         chat_tx: chat_tx.clone(),
         status_tx: status_tx.clone(),
+        is_loading_models,
     });
 
     // Populate initial UI properties from config
@@ -80,6 +85,9 @@ pub fn setup_ui_bridge(
 
     // Spawn Background Audio Processing Worker
     spawn_playback_worker(app_state.clone());
+
+    // Spawn Background Model Loader Worker
+    spawn_model_loader(app_state.clone());
 
     // Spawn Twitch Event Handler Worker
     spawn_twitch_event_handler(app_state.clone(), chat_rx);
@@ -96,6 +104,8 @@ fn populate_ui_from_config(ui: &MainWindow, cfg: &AppConfig) {
     ui.set_volume(cfg.tts.volume);
     ui.set_queue_count(0);
     ui.set_is_muted(false);
+    ui.set_engine_status("loading".into());
+    ui.set_engine_status_message("Preparing TTS engine...".into());
 
     // Filters
     ui.set_enable_profanity(cfg.filters.enable_profanity_filter);
@@ -133,6 +143,18 @@ fn populate_ui_from_config(ui: &MainWindow, cfg: &AppConfig) {
     ui.set_profanity_words_raw(words.join("\n").into());
 
     // Audio View
+    ui.set_is_chatterbox(cfg!(feature = "chatterbox"));
+    ui.set_selected_language(cfg.tts.language.clone().into());
+    ui.set_selected_voice_sample(cfg.tts.voice_sample.clone().into());
+    ui.set_exaggeration(cfg.tts.exaggeration);
+
+    let mut voices = list_available_voices();
+    if !voices.iter().any(|v| v == &cfg.tts.voice_sample) && !cfg.tts.voice_sample.is_empty() {
+        voices.push(cfg.tts.voice_sample.clone());
+    }
+    let voice_models: Vec<SharedString> = voices.into_iter().map(|v| v.into()).collect();
+    ui.set_available_voices(ModelRc::new(VecModel::from(voice_models)));
+
     ui.set_model_path(cfg.tts.model_path.clone().into());
     ui.set_config_path(cfg.tts.config_path.clone().into());
     ui.set_speaker_id(cfg.tts.speaker_id as i32);
@@ -324,9 +346,14 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
 
             let synth_res = if let Some(ref text) = spoken_text {
                 let mut tts = state_t.tts.lock().unwrap();
-                let r = tts.synthesize(text, speed);
-                drop(tts);
-                Some(r)
+                if !tts.is_ready() {
+                    tracing::warn!("TTS models not ready yet.");
+                    None
+                } else {
+                    let r = tts.synthesize(text, speed);
+                    drop(tts);
+                    Some(r)
+                }
             } else {
                 None
             };
@@ -366,6 +393,10 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
 
                 if let Some(ref text) = spoken_text {
                     let mut tts = state_t.tts.lock().unwrap();
+                    if !tts.is_ready() {
+                        tracing::warn!("TTS models not ready yet.");
+                        return;
+                    }
                     if let Ok((sample_rate, samples)) = tts.synthesize(text, speed) {
                         if let Err(e) = export_wav_file(file_path, sample_rate, &samples) {
                             error!("Failed to export WAV file: {}", e);
@@ -591,6 +622,30 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
         }
     });
 
+    // Audio: Browse Voice Sample
+    let state_c = state.clone();
+    ui.on_browse_voice_sample(move || {
+        if let Some(path) = rfd::FileDialog::new()
+            .add_filter("WAV Audio", &["wav"])
+            .pick_file()
+        {
+            let path_str = path.to_string_lossy().replace('\\', "/");
+            if let Some(w) = state_c.main_window.upgrade() {
+                w.set_selected_voice_sample(path_str.clone().into());
+                let mut voices = list_available_voices();
+                if !voices.contains(&path_str) {
+                    voices.push(path_str.clone());
+                }
+                let voice_models: Vec<SharedString> = voices.into_iter().map(|v| v.into()).collect();
+                w.set_available_voices(ModelRc::new(VecModel::from(voice_models)));
+            }
+            let _ = state_c.config_manager.update(|cfg| {
+                cfg.tts.voice_sample = path_str;
+            });
+            reload_tts_engine(&state_c);
+        }
+    });
+
     // Audio: Refresh Devices
     let state_c = state.clone();
     ui.on_refresh_devices(move || {
@@ -612,6 +667,9 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
             let dev = w.get_selected_device_name().to_string();
             let pad = w.get_padding_sec();
             let vol = w.get_volume();
+            let lang = w.get_selected_language().to_string();
+            let vs = w.get_selected_voice_sample().to_string();
+            let exag = w.get_exaggeration();
 
             let _ = state_c.config_manager.update(|cfg| {
                 cfg.tts.model_path = mp;
@@ -621,6 +679,9 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
                 cfg.tts.audio_device_name = dev.clone();
                 cfg.tts.padding_sec = pad;
                 cfg.tts.volume = vol;
+                cfg.tts.language = lang;
+                cfg.tts.voice_sample = vs;
+                cfg.tts.exaggeration = exag;
             });
 
             state_c.audio_player.set_volume(vol);
@@ -757,9 +818,104 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
 }
 
 fn reload_tts_engine(state: &Arc<AppState>) {
-    let cfg = state.config_manager.get().tts;
-    let mut tts = state.tts.lock().unwrap();
-    let _ = tts.reload(&cfg.model_path, &cfg.config_path, cfg.speaker_id);
+    spawn_model_loader(state.clone());
+}
+
+fn spawn_model_loader(state: Arc<AppState>) {
+    if state
+        .is_loading_models
+        .compare_exchange(
+            false,
+            true,
+            std::sync::atomic::Ordering::SeqCst,
+            std::sync::atomic::Ordering::SeqCst,
+        )
+        .is_err()
+    {
+        tracing::debug!("[TTS] Model loader is already in progress. Skipping redundant spawn.");
+        return;
+    }
+
+    let main_window = state.main_window.clone();
+    let _ = slint::invoke_from_event_loop(move || {
+        if let Some(w) = main_window.upgrade() {
+            w.set_engine_status("loading".into());
+            w.set_engine_status_message("Preparing models...".into());
+        }
+    });
+
+    let state_thread = state.clone();
+    std::thread::spawn(move || {
+        struct LoaderGuard(Arc<AppState>);
+        impl Drop for LoaderGuard {
+            fn drop(&mut self) {
+                self.0.is_loading_models.store(false, std::sync::atomic::Ordering::SeqCst);
+            }
+        }
+        let _guard = LoaderGuard(state_thread.clone());
+
+        let cfg = state_thread.config_manager.get().tts;
+        let main_window_progress = state_thread.main_window.clone();
+
+        let progress = Box::new(move |msg: &str| {
+            let mw = main_window_progress.clone();
+            let msg_str = msg.to_string();
+            let _ = slint::invoke_from_event_loop(move || {
+                if let Some(w) = mw.upgrade() {
+                    w.set_engine_status("loading".into());
+                    w.set_engine_status_message(msg_str.into());
+                }
+            });
+        });
+
+        let mut tts = state_thread.tts.lock().unwrap();
+        let res = tts.reload_with_progress(&cfg, progress);
+        drop(tts);
+
+        let main_window_done = state_thread.main_window.clone();
+        match res {
+            Ok(()) => {
+                info!("[TTS] Ready to synthesize speech.");
+                let _ = slint::invoke_from_event_loop(move || {
+                    if let Some(w) = main_window_done.upgrade() {
+                        w.set_engine_status("ready".into());
+                        w.set_engine_status_message("Ready to synthesize".into());
+                    }
+                });
+            }
+            Err(err) => {
+                error!("[TTS] Failed to initialize/reload models: {}", err);
+                let err_msg = err.clone();
+                let _ = slint::invoke_from_event_loop(move || {
+                    if let Some(w) = main_window_done.upgrade() {
+                        w.set_engine_status("error".into());
+                        w.set_engine_status_message(format!("Error: {}", err_msg).into());
+                    }
+                });
+            }
+        }
+    });
+}
+
+
+fn list_available_voices() -> Vec<String> {
+    let mut voices = Vec::new();
+    let voices_dir = std::path::Path::new("voices");
+    if let Ok(entries) = std::fs::read_dir(voices_dir) {
+        for entry in entries.filter_map(Result::ok) {
+            let path = entry.path();
+            if path.is_file() && path.extension().and_then(|e| e.to_str()) == Some("wav") {
+                let p_str = path.to_string_lossy().replace('\\', "/");
+                voices.push(p_str);
+            }
+        }
+    }
+    if voices.is_empty() {
+        voices.push("./voices/utak3r.wav".to_string());
+        voices.push("./voices/default.wav".to_string());
+    }
+    voices.sort();
+    voices
 }
 
 pub fn add_activity_row(state: &Arc<AppState>, item: SpokenItem) {
@@ -798,6 +954,13 @@ fn spawn_playback_worker(state: Arc<AppState>) {
     std::thread::spawn(move || {
         info!("Audio playback worker thread started.");
         loop {
+            // Wait if engine is still loading models
+            let is_ready = state.tts.lock().unwrap().is_ready();
+            if !is_ready {
+                std::thread::sleep(std::time::Duration::from_millis(100));
+                continue;
+            }
+
             // Check for next queued speech item
             if let Some(mut item) = state.queue.pop() {
                 item.status = MessageStatus::Playing;

@@ -234,7 +234,7 @@ fn test_command_filtering_non_commands_preserved() {
     // 3. Punctuation combinations
     assert_eq!(SpamFilter::filter_commands("Co to jest?!"), "Co to jest?!");
     assert_eq!(SpamFilter::filter_commands("!!"), "!!");
-    assert_eq!(SpamFilter::filter_commands("!??"), "!?\?");
+    assert_eq!(SpamFilter::filter_commands("!??"), "!??");
     assert_eq!(SpamFilter::filter_commands("!..."), "!...");
 
     // 4. Comparison operators

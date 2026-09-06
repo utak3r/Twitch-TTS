@@ -71,6 +71,8 @@ export component MainWindow inherits Window {
 
     // Shared State & Properties
     in_out property <string> connection_status: "offline"; // "connected", "reconnecting", "offline"
+    in_out property <string> engine_status: "loading"; // "loading", "ready", "error"
+    in_out property <string> engine_status_message: "Initializing TTS engine...";
     in_out property <string> channel_name: "utak3r";
     in_out property <bool> is_muted: false;
     in_out property <int> queue_count: 0;
@@ -99,13 +101,20 @@ export component MainWindow inherits Window {
     in_out property <string> profanity_words_raw: "";
 
     // Audio properties
+    in property <bool> is_chatterbox: true;
+    in_out property <string> selected_language: "pl";
+    in property <[string]> available_languages: ["pl", "en", "de", "es", "fr", "it", "pt", "ru", "uk"];
+    in_out property <string> selected_voice_sample: "./voices/utak3r.wav";
+    in property <[string]> available_voices: ["./voices/utak3r.wav", "./voices/default.wav"];
+    in_out property <float> exaggeration: 0.5;
+
     in_out property <string> model_path: "./models/pl_zenski_1.onnx";
     in_out property <string> config_path: "./models/pl_zenski_1.onnx.json";
     in_out property <int> speaker_id: 0;
     in_out property <float> speech_rate: 1.0;
     in_out property <string> selected_device_name: "Default";
     in_out property <float> padding_sec: 0.3;
-    in_out property <[string]> available_devices: ["Default"];
+    in property <[string]> available_devices: ["Default"];
 
     // Twitch properties
     in_out property <string> twitch_oauth_token: "";
@@ -146,6 +155,7 @@ export component MainWindow inherits Window {
 
     callback browse_model();
     callback browse_config();
+    callback browse_voice_sample();
     callback refresh_devices();
     callback audio_settings_changed();
 
@@ -265,6 +275,35 @@ export component MainWindow inherits Window {
                     vertical_stretch: 1;
                 }
 
+                // Engine / Model status mini indicator in sidebar
+                Rectangle {
+                    height: 38px;
+                    background: Theme.surface_light;
+                    border_radius: Theme.radius_base;
+                    HorizontalLayout {
+                        padding_left: 10px;
+                        padding_right: 10px;
+                        spacing: 8px;
+                        alignment: center;
+
+                        Rectangle {
+                            width: 8px;
+                            height: 8px;
+                            border_radius: 4px;
+                            background: root.engine_status == "ready" ? Theme.success : (root.engine_status == "loading" ? Theme.warning : Theme.danger);
+                        }
+
+                        Text {
+                            text: root.engine_status == "ready" ? "TTS Ready" : (root.engine_status == "loading" ? root.engine_status_message : "TTS Error");
+                            color: root.engine_status == "ready" ? Theme.text_secondary : (root.engine_status == "loading" ? Theme.warning : Theme.danger);
+                            font_size: Theme.font_size_sm;
+                            font_weight: 600;
+                            vertical_alignment: center;
+                            overflow: elide;
+                        }
+                    }
+                }
+
                 // Connection status mini indicator in sidebar
                 Rectangle {
                     height: 38px;
@@ -306,6 +345,8 @@ export component MainWindow inherits Window {
                 if root.active_tab == 0: LiveView {
                     connection_status: root.connection_status;
                     channel_name: root.channel_name;
+                    engine_status: root.engine_status;
+                    engine_status_message: root.engine_status_message;
                     is_muted: root.is_muted;
                     queue_count: root.queue_count;
                     volume <=> root.volume;
@@ -329,6 +370,7 @@ export component MainWindow inherits Window {
                     transformed_final: root.transformed_final;
                     test_speed <=> root.test_speed;
                     is_synthesizing: root.is_synthesizing;
+                    engine_status: root.engine_status;
 
                     text_changed(txt) => { root.test_text_changed(txt); }
                     synthesize_and_play(txt, spd) => { root.test_synthesize_and_play(txt, spd); }
@@ -357,6 +399,13 @@ export component MainWindow inherits Window {
                 }
 
                 if root.active_tab == 3: AudioView {
+                    is_chatterbox: root.is_chatterbox;
+                    selected_language <=> root.selected_language;
+                    available_languages: root.available_languages;
+                    selected_voice_sample <=> root.selected_voice_sample;
+                    available_voices: root.available_voices;
+                    exaggeration <=> root.exaggeration;
+
                     model_path <=> root.model_path;
                     config_path <=> root.config_path;
                     speaker_id <=> root.speaker_id;
@@ -368,6 +417,7 @@ export component MainWindow inherits Window {
 
                     browse_model => { root.browse_model(); }
                     browse_config => { root.browse_config(); }
+                    browse_voice_sample => { root.browse_voice_sample(); }
                     refresh_devices => { root.refresh_devices(); }
                     volume_changed(v) => { root.volume_changed(v); }
                     audio_settings_changed => { root.audio_settings_changed(); }

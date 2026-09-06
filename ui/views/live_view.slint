@@ -13,6 +13,8 @@ export struct ActivityItem {
 export component LiveView inherits VerticalLayout {
     in property <string> connection_status: "offline"; // "connected", "reconnecting", "offline"
     in property <string> channel_name: "";
+    in property <string> engine_status: "loading"; // "loading", "ready", "error"
+    in property <string> engine_status_message: "Loading models...";
     in property <bool> is_muted: false;
     in property <int> queue_count: 0;
     in_out property <float> volume: 1.0;
@@ -58,6 +60,36 @@ export component LiveView inherits VerticalLayout {
                     font_size: Theme.font_size_md;
                     font_weight: 700;
                     vertical_alignment: center;
+                }
+
+                // Engine status badge
+                Rectangle {
+                    height: 24px;
+                    border_radius: 12px;
+                    background: root.engine_status == "ready" ? Theme.success_bg : (root.engine_status == "loading" ? Theme.warning_bg : Theme.danger_bg);
+                    border_width: 1px;
+                    border_color: root.engine_status == "ready" ? Theme.success : (root.engine_status == "loading" ? Theme.warning : Theme.danger);
+                    HorizontalLayout {
+                        padding_left: 10px;
+                        padding_right: 10px;
+                        spacing: 6px;
+                        alignment: center;
+
+                        Rectangle {
+                            width: 6px;
+                            height: 6px;
+                            border_radius: 3px;
+                            background: root.engine_status == "ready" ? Theme.success : (root.engine_status == "loading" ? Theme.warning : Theme.danger);
+                        }
+
+                        Text {
+                            text: root.engine_status == "ready" ? "READY TO SYNTHESIZE" : (root.engine_status == "loading" ? "LOADING MODELS..." : "ENGINE ERROR");
+                            color: root.engine_status == "ready" ? Theme.success : (root.engine_status == "loading" ? Theme.warning : Theme.danger);
+                            font_size: 10px;
+                            font_weight: 800;
+                            vertical_alignment: center;
+                        }
+                    }
                 }
 
                 if root.is_speaking : Rectangle {

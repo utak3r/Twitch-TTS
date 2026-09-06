@@ -8,6 +8,7 @@ export component TestLabView inherits VerticalLayout {
     in property <string> transformed_final: "";
     in_out property <float> test_speed: 1.0;
     in property <bool> is_synthesizing: false;
+    in property <string> engine_status: "ready";
 
     callback text_changed(string);
     callback synthesize_and_play(string, float);
@@ -95,8 +96,8 @@ export component TestLabView inherits VerticalLayout {
 
                         PrimaryButton {
                             horizontal_stretch: 1;
-                            text: root.is_synthesizing ? "⏳ Synthesizing..." : "🔊 Synthesize & Play";
-                            enabled: root.test_text != "" && !root.is_synthesizing;
+                            text: root.engine_status == "loading" ? "⏳ Loading Models..." : (root.is_synthesizing ? "⏳ Synthesizing..." : "🔊 Synthesize & Play");
+                            enabled: root.test_text != "" && !root.is_synthesizing && root.engine_status == "ready";
                             clicked => {
                                 root.synthesize_and_play(root.test_text, root.test_speed);
                             }
@@ -104,7 +105,7 @@ export component TestLabView inherits VerticalLayout {
 
                         SecondaryButton {
                             text: "💾 Export WAV";
-                            enabled: root.test_text != "" && !root.is_synthesizing;
+                            enabled: root.test_text != "" && !root.is_synthesizing && root.engine_status == "ready";
                             clicked => {
                                 root.export_to_wav(root.test_text, root.test_speed);
                             }

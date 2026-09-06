@@ -3,6 +3,24 @@
     <Fragment>
         <DirectoryRef Id="APPLICATIONFOLDER">
             <Directory Id="dir_models_bb021c3315a8cc0b" Name="models">
+                <Component Id="cmp_odels_conditional_decoder_onnx_1908fa14366ca859" Guid="*">
+                    <File Id="fil_odels_conditional_decoder_onnx_1908fa14366ca859" Source="models\conditional_decoder.onnx" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp__conditional_decoder_onnx_data_d03cf41592681ee2" Guid="*">
+                    <File Id="fil__conditional_decoder_onnx_data_d03cf41592681ee2" Source="models\conditional_decoder.onnx_data" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_models_embed_tokens_onnx_b7d65d4f27e9c436" Guid="*">
+                    <File Id="fil_models_embed_tokens_onnx_b7d65d4f27e9c436" Source="models\embed_tokens.onnx" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_models_embed_tokens_onnx_data_c809a16745c5d3f3" Guid="*">
+                    <File Id="fil_models_embed_tokens_onnx_data_c809a16745c5d3f3" Source="models\embed_tokens.onnx_data" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_models_language_model_onnx_2da54fb36f83b986" Guid="*">
+                    <File Id="fil_models_language_model_onnx_2da54fb36f83b986" Source="models\language_model.onnx" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_odels_language_model_onnx_data_1c9201ba3c906d23" Guid="*">
+                    <File Id="fil_odels_language_model_onnx_data_1c9201ba3c906d23" Source="models\language_model.onnx_data" KeyPath="yes" />
+                </Component>
                 <Component Id="cmp_models_pl_meski_1_onnx_e90f2de4fbcca822" Guid="*">
                     <File Id="fil_models_pl_meski_1_onnx_e90f2de4fbcca822" Source="models\pl_meski_1.onnx" KeyPath="yes" />
                 </Component>
@@ -21,17 +39,39 @@
                 <Component Id="cmp_models_pl_zenski_1_onnx_json_ca8232d916e6ce23" Guid="*">
                     <File Id="fil_models_pl_zenski_1_onnx_json_ca8232d916e6ce23" Source="models\pl_zenski_1.onnx.json" KeyPath="yes" />
                 </Component>
+                <Component Id="cmp_models_speech_encoder_onnx_14875c6f65f6b52d" Guid="*">
+                    <File Id="fil_models_speech_encoder_onnx_14875c6f65f6b52d" Source="models\speech_encoder.onnx" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_odels_speech_encoder_onnx_data_81fd7aa412316e56" Guid="*">
+                    <File Id="fil_odels_speech_encoder_onnx_data_81fd7aa412316e56" Source="models\speech_encoder.onnx_data" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_models_tokenizer_json_e89553d0acaab3ee" Guid="*">
+                    <File Id="fil_models_tokenizer_json_e89553d0acaab3ee" Source="models\tokenizer.json" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_models_tokenizer_config_json_f9e168ba24fe6697" Guid="*">
+                    <File Id="fil_models_tokenizer_config_json_f9e168ba24fe6697" Source="models\tokenizer_config.json" KeyPath="yes" />
+                </Component>
             </Directory>
         </DirectoryRef>
     </Fragment>
     <Fragment>
         <ComponentGroup Id="ModelsFiles">
+            <ComponentRef Id="cmp_odels_conditional_decoder_onnx_1908fa14366ca859" />
+            <ComponentRef Id="cmp__conditional_decoder_onnx_data_d03cf41592681ee2" />
+            <ComponentRef Id="cmp_models_embed_tokens_onnx_b7d65d4f27e9c436" />
+            <ComponentRef Id="cmp_models_embed_tokens_onnx_data_c809a16745c5d3f3" />
+            <ComponentRef Id="cmp_models_language_model_onnx_2da54fb36f83b986" />
+            <ComponentRef Id="cmp_odels_language_model_onnx_data_1c9201ba3c906d23" />
             <ComponentRef Id="cmp_models_pl_meski_1_onnx_e90f2de4fbcca822" />
             <ComponentRef Id="cmp_models_pl_meski_1_onnx_json_a13ebe308b87cff6" />
             <ComponentRef Id="cmp_models_pl_meski_2_onnx_0aeec18c5611bef9" />
             <ComponentRef Id="cmp_models_pl_meski_2_onnx_json_108bb922440a7993" />
             <ComponentRef Id="cmp_models_pl_zenski_1_onnx_945c20ff71a80909" />
             <ComponentRef Id="cmp_models_pl_zenski_1_onnx_json_ca8232d916e6ce23" />
+            <ComponentRef Id="cmp_models_speech_encoder_onnx_14875c6f65f6b52d" />
+            <ComponentRef Id="cmp_odels_speech_encoder_onnx_data_81fd7aa412316e56" />
+            <ComponentRef Id="cmp_models_tokenizer_json_e89553d0acaab3ee" />
+            <ComponentRef Id="cmp_models_tokenizer_config_json_f9e168ba24fe6697" />
         </ComponentGroup>
     </Fragment>
 </Wix>

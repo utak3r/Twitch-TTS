@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="APPLICATIONFOLDER">
+            <Directory Id="dir_voices_a9f0c9d01997227e" Name="voices">
+                <Component Id="cmp_voices_default_wav_cf92aa117cf90f17" Guid="*">
+                    <File Id="fil_voices_default_wav_cf92aa117cf90f17" Source="voices\default.wav" KeyPath="yes" />
+                </Component>
+                <Component Id="cmp_voices_utak3r_wav_e19c9e5865ea5ece" Guid="*">
+                    <File Id="fil_voices_utak3r_wav_e19c9e5865ea5ece" Source="voices\utak3r.wav" KeyPath="yes" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="VoicesFiles">
+            <ComponentRef Id="cmp_voices_default_wav_cf92aa117cf90f17" />
+            <ComponentRef Id="cmp_voices_utak3r_wav_e19c9e5865ea5ece" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

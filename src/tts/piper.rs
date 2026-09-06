@@ -43,18 +43,18 @@ pub struct PiperEngine {
 }
 
 impl PiperEngine {
-    pub fn new(model_path: &str, config_path: &str, speaker_id: i64) -> Self {
+    pub fn new(config: &crate::config::TTSConfig) -> Self {
         let mut engine = Self {
             config: None,
             mock_fallback: MockTTSEngine::new(),
-            current_model: model_path.to_string(),
-            current_config: config_path.to_string(),
-            speaker_id,
+            current_model: config.model_path.clone(),
+            current_config: config.config_path.clone(),
+            speaker_id: config.speaker_id,
             piper_exe_path: None,
             espeak_data_path: None,
         };
 
-        let _ = engine.reload(model_path, config_path, speaker_id);
+        let _ = engine.reload(config);
         engine
     }
 
@@ -206,7 +206,11 @@ impl TTSEngine for PiperEngine {
         Ok((sample_rate, samples))
     }
 
-    fn reload(&mut self, model_path: &str, config_path: &str, speaker_id: i64) -> Result<(), String> {
+    fn reload(&mut self, config: &crate::config::TTSConfig) -> Result<(), String> {
+        let model_path = &config.model_path;
+        let config_path = &config.config_path;
+        let speaker_id = config.speaker_id;
+
         self.current_model = model_path.to_string();
         self.current_config = config_path.to_string();
         self.speaker_id = speaker_id;

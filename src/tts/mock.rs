@@ -29,7 +29,7 @@ impl TTSEngine for MockTTSEngine {
         Ok((self.sample_rate, samples))
     }
 
-    fn reload(&mut self, _model_path: &str, _config_path: &str, _speaker_id: i64) -> Result<(), String> {
+    fn reload(&mut self, _config: &crate::config::TTSConfig) -> Result<(), String> {
         Ok(())
     }
 }
