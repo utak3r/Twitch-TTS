@@ -15,7 +15,7 @@ LegalTrademarks = ""
 
 [features]
 default = ["chatterbox"]
-chatterbox = ["dep:ort", "dep:tokenizers", "dep:ndarray"]
+chatterbox = ["dep:ort", "dep:tokenizers", "dep:ndarray", "ort?/copy-dylibs", "ort?/directml", "ort?/cuda"]
 piper = []
 
 [dependencies]
@@ -67,6 +67,9 @@ ndarray = { version = "0.17", optional = true }
 [build-dependencies]
 slint-build = "1.17.1"
 winres = "0.1"
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.62", features = ["Win32_Graphics_Dxgi", "Win32_Graphics_Dxgi_Common"] }
 
 [package.metadata.wix]
 defines = ["PiperSrc=piper", "ModelsSrc=models"]

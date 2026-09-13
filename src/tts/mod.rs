@@ -5,6 +5,7 @@ compile_error!("Features 'chatterbox' and 'piper' are mutually exclusive. Please
 compile_error!("At least one TTS engine feature must be enabled: 'chatterbox' or 'piper'.");
 
 pub mod mock;
+pub mod gpu;
 
 #[cfg(feature = "piper")]
 pub mod piper;
@@ -28,6 +29,9 @@ pub trait TTSEngine: Send + Sync {
     }
     fn is_ready(&self) -> bool {
         true
+    }
+    fn device_name(&self) -> String {
+        "CPU".to_string()
     }
 }
 

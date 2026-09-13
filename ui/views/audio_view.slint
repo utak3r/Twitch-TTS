@@ -21,6 +21,7 @@ export component AudioView inherits VerticalLayout {
     in_out property <string> selected_voice_sample: "./voices/utak3r.wav";
     in property <[string]> available_voices: ["./voices/utak3r.wav", "./voices/default.wav"];
     in_out property <float> exaggeration: 0.5;
+    in property <string> active_device_name: "Detecting...";
 
     // Piper properties
     in_out property <string> model_path: "./models/pl_zenski_1.onnx";
@@ -57,6 +58,24 @@ export component AudioView inherits VerticalLayout {
                     color: Theme.text_primary;
                     font_size: Theme.font_size_lg;
                     font_weight: 800;
+                }
+
+                HorizontalLayout {
+                    spacing: 8px;
+                    alignment: start;
+                    Rectangle {
+                        width: 8px;
+                        height: 8px;
+                        border_radius: 4px;
+                        background: Theme.primary;
+                        y: 4px;
+                    }
+                    Text {
+                        text: "Hardware Acceleration: " + root.active_device_name;
+                        color: Theme.primary_hover;
+                        font_size: Theme.font_size_sm;
+                        font_weight: 700;
+                    }
                 }
 
                 // Language selection

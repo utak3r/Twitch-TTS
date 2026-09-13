@@ -107,6 +107,7 @@ export component MainWindow inherits Window {
     in_out property <string> selected_voice_sample: "./voices/utak3r.wav";
     in property <[string]> available_voices: ["./voices/utak3r.wav", "./voices/default.wav"];
     in_out property <float> exaggeration: 0.5;
+    in_out property <string> active_device_name: "Detecting...";
 
     in_out property <string> model_path: "./models/pl_zenski_1.onnx";
     in_out property <string> config_path: "./models/pl_zenski_1.onnx.json";
@@ -405,6 +406,7 @@ export component MainWindow inherits Window {
                     selected_voice_sample <=> root.selected_voice_sample;
                     available_voices: root.available_voices;
                     exaggeration <=> root.exaggeration;
+                    active_device_name: root.active_device_name;
 
                     model_path <=> root.model_path;
                     config_path <=> root.config_path;

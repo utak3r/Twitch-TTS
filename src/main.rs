@@ -33,6 +33,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         AttachConsole(u32::MAX);
     }
 
+    crate::tts::gpu::setup_cuda_env();
+
     let filter_layer = tracing_subscriber::EnvFilter::try_from_default_env()
         .unwrap_or_else(|_| "twitch_tts=info,warn,error".into());
     let fmt_layer = tracing_subscriber::fmt::layer().with_target(false);

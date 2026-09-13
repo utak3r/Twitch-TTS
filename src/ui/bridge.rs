@@ -870,16 +870,18 @@ fn spawn_model_loader(state: Arc<AppState>) {
 
         let mut tts = state_thread.tts.lock().unwrap();
         let res = tts.reload_with_progress(&cfg, progress);
+        let device_name = tts.device_name();
         drop(tts);
 
         let main_window_done = state_thread.main_window.clone();
         match res {
             Ok(()) => {
-                info!("[TTS] Ready to synthesize speech.");
+                info!("[TTS] Ready to synthesize speech. (Device: {})", device_name);
                 let _ = slint::invoke_from_event_loop(move || {
                     if let Some(w) = main_window_done.upgrade() {
                         w.set_engine_status("ready".into());
                         w.set_engine_status_message("Ready to synthesize".into());
+                        w.set_active_device_name(device_name.into());
                     }
                 });
             }

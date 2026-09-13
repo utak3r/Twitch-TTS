@@ -97,6 +97,8 @@ pub struct TTSConfig {
     pub voice_sample: String,
     #[serde(default = "default_exaggeration")]
     pub exaggeration: f32,
+    #[serde(default = "default_device")]
+    pub device: String,
 }
 
 fn default_model_path() -> String {
@@ -132,6 +134,9 @@ fn default_voice_sample() -> String {
 fn default_exaggeration() -> f32 {
     0.5
 }
+fn default_device() -> String {
+    "auto".to_string()
+}
 
 impl Default for TTSConfig {
     fn default() -> Self {
@@ -148,6 +153,7 @@ impl Default for TTSConfig {
             language: default_language(),
             voice_sample: default_voice_sample(),
             exaggeration: default_exaggeration(),
+            device: default_device(),
         }
     }
 }

@@ -33,6 +33,8 @@ pub struct ChatterboxEngine {
     language: String,
     voice_sample_path: String,
     exaggeration: f32,
+    device_preference: String,
+    pub active_device_name: String,
 
     speech_encoder: Option<Session>,
     embed_tokens: Option<Session>,
@@ -45,12 +47,27 @@ pub struct ChatterboxEngine {
 
 impl ChatterboxEngine {
     pub fn new_uninitialized(config: &TTSConfig) -> Self {
+        let models_dir = if std::path::Path::new("models").is_dir() {
+            PathBuf::from("models")
+        } else if let Ok(exe_path) = std::env::current_exe() {
+            let candidate = exe_path.parent().unwrap_or(std::path::Path::new(".")).join("models");
+            if candidate.is_dir() {
+                candidate
+            } else {
+                PathBuf::from("models")
+            }
+        } else {
+            PathBuf::from("models")
+        };
+
         Self {
             mock_fallback: MockTTSEngine::new(),
-            models_dir: PathBuf::from("models"),
+            models_dir,
             language: config.language.clone(),
             voice_sample_path: config.voice_sample.clone(),
             exaggeration: config.exaggeration,
+            device_preference: config.device.clone(),
+            active_device_name: String::new(),
             speech_encoder: None,
             embed_tokens: None,
             language_model: None,
@@ -81,6 +98,77 @@ impl ChatterboxEngine {
         self.init_sessions_with_progress(|_| {})
     }
 
+    fn create_session_dml(
+        model_path: &std::path::Path,
+        gpu: Option<&crate::tts::gpu::GpuInfo>,
+    ) -> Result<(Session, &'static str), String> {
+        #[cfg(feature = "chatterbox")]
+        if let Some(gpu_info) = gpu {
+            let dml_result = (|| -> ort::Result<Session> {
+                let ep = ort::ep::DirectML::default()
+                    .with_device_id(gpu_info.id as i32)
+                    .build();
+                let builder = Session::builder()?;
+                let mut builder = builder.with_execution_providers([ep])?;
+                builder.commit_from_file(model_path)
+            })();
+
+            match dml_result {
+                Ok(session) => return Ok((session, "DirectML")),
+                Err(e) => {
+                    warn!(
+                        "[TTS] DirectML initialization failed for '{}' on GPU [{}]: {}. Falling back to CPU.",
+                        model_path.display(),
+                        gpu_info.id,
+                        e
+                    );
+                }
+            }
+        }
+
+        let mut builder = Session::builder()
+            .map_err(|e| format!("Failed to create SessionBuilder: {}", e))?;
+        let session = builder
+            .commit_from_file(model_path)
+            .map_err(|e| format!("Failed to load model '{}': {}", model_path.display(), e))?;
+        Ok((session, "CPU"))
+    }
+
+    fn create_session_cuda_or_cpu(
+        model_path: &std::path::Path,
+        gpu: Option<&crate::tts::gpu::GpuInfo>,
+    ) -> Result<(Session, &'static str), String> {
+        #[cfg(feature = "chatterbox")]
+        if let Some(gpu_info) = gpu {
+            if gpu_info.is_nvidia {
+                let cuda_result = (|| -> ort::Result<Session> {
+                    let ep = ort::ep::CUDA::default().with_device_id(0).build();
+                    let builder = Session::builder()?;
+                    let mut builder = builder.with_execution_providers([ep])?;
+                    builder.commit_from_file(model_path)
+                })();
+
+                match cuda_result {
+                    Ok(session) => return Ok((session, "CUDA")),
+                    Err(e) => {
+                        warn!(
+                            "[TTS] CUDA initialization failed for '{}': {}. Falling back to CPU.",
+                            model_path.display(),
+                            e
+                        );
+                    }
+                }
+            }
+        }
+
+        let mut builder = Session::builder()
+            .map_err(|e| format!("Failed to create SessionBuilder: {}", e))?;
+        let session = builder
+            .commit_from_file(model_path)
+            .map_err(|e| format!("Failed to load model '{}': {}", model_path.display(), e))?;
+        Ok((session, "CPU"))
+    }
+
     pub fn init_sessions_with_progress<F: FnMut(&str)>(&mut self, mut progress: F) -> Result<(), String> {
         if self.speech_encoder.is_some()
             && self.embed_tokens.is_some()
@@ -107,45 +195,69 @@ impl ChatterboxEngine {
         let total_start = std::time::Instant::now();
         info!("[TTS] Loading Chatterbox ONNX inference sessions from '{}'...", self.models_dir.display());
 
-        // Step 1: speech_encoder.onnx
+        // Setup CUDA environment if available on Windows
+        crate::tts::gpu::setup_cuda_env();
+
+        let gpus = crate::tts::gpu::detect_gpus();
+        let selected_gpu = crate::tts::gpu::select_best_gpu(&gpus, &self.device_preference);
+
+        if !gpus.is_empty() {
+            info!("[TTS] Detected GPUs:");
+            for gpu in &gpus {
+                let is_selected = selected_gpu.as_ref().map(|s| s.id == gpu.id).unwrap_or(false);
+                info!(
+                    "  - [{}] {} ({} MB VRAM, {}){}",
+                    gpu.id,
+                    gpu.name,
+                    gpu.vram_mb(),
+                    if gpu.is_discrete { "Discrete" } else { "Integrated" },
+                    if is_selected { " [SELECTED]" } else { "" }
+                );
+            }
+        } else {
+            info!("[TTS] No DirectX 12 compatible GPUs detected. Using CPU.");
+        }
+
+        if let Some(ref gpu) = selected_gpu {
+            info!(
+                "[TTS] Target GPU [{}]: {} ({} MB VRAM, {}, NVIDIA: {})",
+                gpu.id,
+                gpu.name,
+                gpu.vram_mb(),
+                if gpu.is_discrete { "Discrete" } else { "Integrated" },
+                gpu.is_nvidia
+            );
+        } else {
+            info!("[TTS] Using CPU for Chatterbox inference.");
+        }
+
+        // Step 1: speech_encoder.onnx (DirectML)
         progress("Loading speech encoder (1/5)...");
         info!("[TTS] [1/5] Loading speech encoder (speech_encoder.onnx)...");
         let t0 = std::time::Instant::now();
-        let se = Session::builder()
-            .map_err(|e| format!("Failed to create SessionBuilder: {}", e))?
-            .commit_from_file(&se_path)
-            .map_err(|e| format!("Failed to load speech_encoder.onnx: {}", e))?;
-        info!("[TTS] [1/5] Speech encoder loaded successfully in {:.2}s", t0.elapsed().as_secs_f32());
+        let (se, se_provider) = Self::create_session_dml(&se_path, selected_gpu.as_ref())?;
+        info!("[TTS] [1/5] Speech encoder loaded ({}) in {:.2}s", se_provider, t0.elapsed().as_secs_f32());
 
-        // Step 2: embed_tokens.onnx
+        // Step 2: embed_tokens.onnx (DirectML)
         progress("Loading token embeddings (2/5)...");
         info!("[TTS] [2/5] Loading token embeddings (embed_tokens.onnx)...");
         let t0 = std::time::Instant::now();
-        let et = Session::builder()
-            .map_err(|e| format!("Failed to create SessionBuilder: {}", e))?
-            .commit_from_file(&et_path)
-            .map_err(|e| format!("Failed to load embed_tokens.onnx: {}", e))?;
-        info!("[TTS] [2/5] Token embeddings loaded successfully in {:.2}s", t0.elapsed().as_secs_f32());
+        let (et, et_provider) = Self::create_session_dml(&et_path, selected_gpu.as_ref())?;
+        info!("[TTS] [2/5] Token embeddings loaded ({}) in {:.2}s", et_provider, t0.elapsed().as_secs_f32());
 
-        // Step 3: language_model.onnx
+        // Step 3: language_model.onnx (CUDA on NVIDIA, CPU fallback)
         progress("Loading language model (3/5)...");
         info!("[TTS] [3/5] Loading language model (language_model.onnx)...");
         let t0 = std::time::Instant::now();
-        let lm = Session::builder()
-            .map_err(|e| format!("Failed to create SessionBuilder: {}", e))?
-            .commit_from_file(&lm_path)
-            .map_err(|e| format!("Failed to load language_model.onnx: {}", e))?;
-        info!("[TTS] [3/5] Language model loaded successfully in {:.2}s", t0.elapsed().as_secs_f32());
+        let (lm, lm_provider) = Self::create_session_cuda_or_cpu(&lm_path, selected_gpu.as_ref())?;
+        info!("[TTS] [3/5] Language model loaded ({}) in {:.2}s", lm_provider, t0.elapsed().as_secs_f32());
 
-        // Step 4: conditional_decoder.onnx
+        // Step 4: conditional_decoder.onnx (DirectML)
         progress("Loading conditional decoder (4/5)...");
         info!("[TTS] [4/5] Loading conditional decoder (conditional_decoder.onnx)...");
         let t0 = std::time::Instant::now();
-        let cd = Session::builder()
-            .map_err(|e| format!("Failed to create SessionBuilder: {}", e))?
-            .commit_from_file(&cd_path)
-            .map_err(|e| format!("Failed to load conditional_decoder.onnx: {}", e))?;
-        info!("[TTS] [4/5] Conditional decoder loaded successfully in {:.2}s", t0.elapsed().as_secs_f32());
+        let (cd, cd_provider) = Self::create_session_dml(&cd_path, selected_gpu.as_ref())?;
+        info!("[TTS] [4/5] Conditional decoder loaded ({}) in {:.2}s", cd_provider, t0.elapsed().as_secs_f32());
 
         // Step 5: tokenizer.json
         progress("Loading tokenizer (5/5)...");
@@ -161,13 +273,51 @@ impl ChatterboxEngine {
         self.conditional_decoder = Some(cd);
         self.tokenizer = Some(tok);
 
-        info!("[TTS] All Chatterbox models and tokenizer loaded successfully in {:.2}s!", total_start.elapsed().as_secs_f32());
+        // Update active device name based on providers used
+        self.active_device_name = if let Some(ref gpu) = selected_gpu {
+            if lm_provider == "CUDA" && cd_provider == "DirectML" {
+                format!("CUDA + DirectML ({})", gpu.name)
+            } else if lm_provider == "CUDA" {
+                format!("CUDA ({})", gpu.name)
+            } else if cd_provider == "DirectML" {
+                format!("DirectML ({})", gpu.name)
+            } else {
+                "CPU".to_string()
+            }
+        } else {
+            "CPU".to_string()
+        };
+
+        info!(
+            "[TTS] All Chatterbox models loaded in {:.2}s! (Device: {}, LM: {}, Decoder: {})",
+            total_start.elapsed().as_secs_f32(),
+            self.active_device_name,
+            lm_provider,
+            cd_provider
+        );
         Ok(())
     }
 
+    fn resolve_voice_path(path: &str) -> PathBuf {
+        let p = PathBuf::from(path);
+        if p.exists() {
+            return p;
+        }
+        if let Ok(exe_path) = std::env::current_exe() {
+            if let Some(exe_dir) = exe_path.parent() {
+                let candidate = exe_dir.join(path);
+                if candidate.exists() {
+                    return candidate;
+                }
+            }
+        }
+        p
+    }
+
     fn load_voice_audio(path: &str) -> Result<Vec<f32>, String> {
-        let mut reader = hound::WavReader::open(path)
-            .map_err(|e| format!("Failed to open voice sample '{}': {}", path, e))?;
+        let resolved = Self::resolve_voice_path(path);
+        let mut reader = hound::WavReader::open(&resolved)
+            .map_err(|e| format!("Failed to open voice sample '{}' (resolved: '{}'): {}", path, resolved.display(), e))?;
         let spec = reader.spec();
 
         if spec.channels == 0 {
@@ -285,6 +435,16 @@ impl ChatterboxEngine {
 
         let voice_changed = self.voice_sample_path != config.voice_sample;
         self.voice_sample_path = config.voice_sample.clone();
+
+        let device_changed = self.device_preference != config.device;
+        if device_changed {
+            self.device_preference = config.device.clone();
+            self.speech_encoder = None;
+            self.embed_tokens = None;
+            self.language_model = None;
+            self.conditional_decoder = None;
+            self.cached_voice = None;
+        }
 
         self.init_sessions_with_progress(&mut progress)?;
 
@@ -560,5 +720,49 @@ impl TTSEngine for ChatterboxEngine {
     fn is_ready(&self) -> bool {
         ChatterboxEngine::is_ready(self)
     }
+
+    fn device_name(&self) -> String {
+        if self.active_device_name.is_empty() {
+            "CPU".to_string()
+        } else {
+            self.active_device_name.clone()
+        }
+    }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::config::TTSConfig;
+
+    #[test]
+    fn test_chatterbox_gpu_inference() {
+        let config = TTSConfig::default();
+        let mut engine = ChatterboxEngine::new_uninitialized(&config);
+        let init_res = engine.init_sessions_with_progress(|p| println!("Progress: {}", p));
+        assert!(init_res.is_ok(), "Session init failed: {:?}", init_res.err());
+        assert!(
+            engine.active_device_name.contains("DirectML") || engine.active_device_name.contains("CUDA"),
+            "Expected GPU device, got: {}",
+            engine.active_device_name
+        );
+        println!("Active device: {}", engine.active_device_name);
+
+        let enc_res = engine.encode_reference_voice();
+        assert!(enc_res.is_ok(), "Voice encode failed: {:?}", enc_res.err());
+
+        let t0 = std::time::Instant::now();
+        let synth_res = engine.synthesize("Cześć, test GPU.", 1.0);
+        assert!(synth_res.is_ok(), "Synthesis failed: {:?}", synth_res.err());
+        let (sr, samples) = synth_res.unwrap();
+        println!(
+            "Synthesized {} samples at {} Hz in {:.2}s!",
+            samples.len(),
+            sr,
+            t0.elapsed().as_secs_f32()
+        );
+        assert!(!samples.is_empty());
+    }
+}
+
 
