@@ -26,6 +26,7 @@ fn create_test_state() -> Arc<AppState> {
         main_window: slint::Weak::default(),
         chat_tx,
         status_tx,
+        is_loading_models: Arc::new(std::sync::atomic::AtomicBool::new(false)),
     })
 }
 

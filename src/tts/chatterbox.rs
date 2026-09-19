@@ -4,7 +4,6 @@ use crate::config::TTSConfig;
 use ndarray::{s, Array1, Array2, Array3, Array4};
 use ort::session::Session;
 use ort::value::{DynValue, Value};
-use std::collections::HashMap;
 use std::path::PathBuf;
 use tokenizers::Tokenizer;
 use tracing::{info, warn};
@@ -13,11 +12,76 @@ use unicode_normalization::UnicodeNormalization;
 const S3GEN_SR: u32 = 24000;
 const START_SPEECH_TOKEN: i64 = 6561;
 const STOP_SPEECH_TOKEN: i64 = 6562;
-const NUM_HIDDEN_LAYERS: usize = 30;
 const NUM_KEY_VALUE_HEADS: usize = 16;
 const HEAD_DIM: usize = 64;
 const REPETITION_PENALTY: f32 = 1.2;
 const MAX_NEW_TOKENS: usize = 256;
+
+const PAST_KV_INPUT_NAMES: [&str; 60] = [
+    "past_key_values.0.key", "past_key_values.0.value",
+    "past_key_values.1.key", "past_key_values.1.value",
+    "past_key_values.2.key", "past_key_values.2.value",
+    "past_key_values.3.key", "past_key_values.3.value",
+    "past_key_values.4.key", "past_key_values.4.value",
+    "past_key_values.5.key", "past_key_values.5.value",
+    "past_key_values.6.key", "past_key_values.6.value",
+    "past_key_values.7.key", "past_key_values.7.value",
+    "past_key_values.8.key", "past_key_values.8.value",
+    "past_key_values.9.key", "past_key_values.9.value",
+    "past_key_values.10.key", "past_key_values.10.value",
+    "past_key_values.11.key", "past_key_values.11.value",
+    "past_key_values.12.key", "past_key_values.12.value",
+    "past_key_values.13.key", "past_key_values.13.value",
+    "past_key_values.14.key", "past_key_values.14.value",
+    "past_key_values.15.key", "past_key_values.15.value",
+    "past_key_values.16.key", "past_key_values.16.value",
+    "past_key_values.17.key", "past_key_values.17.value",
+    "past_key_values.18.key", "past_key_values.18.value",
+    "past_key_values.19.key", "past_key_values.19.value",
+    "past_key_values.20.key", "past_key_values.20.value",
+    "past_key_values.21.key", "past_key_values.21.value",
+    "past_key_values.22.key", "past_key_values.22.value",
+    "past_key_values.23.key", "past_key_values.23.value",
+    "past_key_values.24.key", "past_key_values.24.value",
+    "past_key_values.25.key", "past_key_values.25.value",
+    "past_key_values.26.key", "past_key_values.26.value",
+    "past_key_values.27.key", "past_key_values.27.value",
+    "past_key_values.28.key", "past_key_values.28.value",
+    "past_key_values.29.key", "past_key_values.29.value",
+];
+
+const PRESENT_KV_OUTPUT_NAMES: [&str; 60] = [
+    "present.0.key", "present.0.value",
+    "present.1.key", "present.1.value",
+    "present.2.key", "present.2.value",
+    "present.3.key", "present.3.value",
+    "present.4.key", "present.4.value",
+    "present.5.key", "present.5.value",
+    "present.6.key", "present.6.value",
+    "present.7.key", "present.7.value",
+    "present.8.key", "present.8.value",
+    "present.9.key", "present.9.value",
+    "present.10.key", "present.10.value",
+    "present.11.key", "present.11.value",
+    "present.12.key", "present.12.value",
+    "present.13.key", "present.13.value",
+    "present.14.key", "present.14.value",
+    "present.15.key", "present.15.value",
+    "present.16.key", "present.16.value",
+    "present.17.key", "present.17.value",
+    "present.18.key", "present.18.value",
+    "present.19.key", "present.19.value",
+    "present.20.key", "present.20.value",
+    "present.21.key", "present.21.value",
+    "present.22.key", "present.22.value",
+    "present.23.key", "present.23.value",
+    "present.24.key", "present.24.value",
+    "present.25.key", "present.25.value",
+    "present.26.key", "present.26.value",
+    "present.27.key", "present.27.value",
+    "present.28.key", "present.28.value",
+    "present.29.key", "present.29.value",
+];
 
 struct CachedVoice {
     voice_path: String,
@@ -520,12 +584,14 @@ impl TTSEngine for ChatterboxEngine {
 
         let mut generate_tokens = vec![START_SPEECH_TOKEN];
 
-        let mut past_key_values: HashMap<String, Array4<f32>> = HashMap::new();
-        for layer in 0..NUM_HIDDEN_LAYERS {
-            for kv in &["key", "value"] {
-                let k = format!("past_key_values.{}.{}", layer, kv);
-                past_key_values.insert(k, Array4::zeros((1, NUM_KEY_VALUE_HEADS, 0, HEAD_DIM)));
-            }
+        let mut past_key_values: Vec<DynValue> = Vec::with_capacity(60);
+        for _ in 0..60 {
+            let empty_kv = Array4::<f32>::zeros((1, NUM_KEY_VALUE_HEADS, 0, HEAD_DIM));
+            let val: DynValue = Value::from_array(empty_kv)
+                .map_err(|e| format!("Failed to create initial KV tensor: {}", e))?
+                .upcast()
+                .into();
+            past_key_values.push(val);
         }
 
         let mut attention_mask: Option<Array2<i64>> = None;
@@ -577,21 +643,17 @@ impl TTSEngine for ChatterboxEngine {
 
             let mask = attention_mask.as_ref().unwrap();
 
-            // Prepare LLM inputs
-            let mut lm_inputs: Vec<(String, DynValue)> = Vec::with_capacity(62);
-            lm_inputs.push(("inputs_embeds".to_string(), Value::from_array(inputs_embeds).unwrap().upcast().into()));
-            lm_inputs.push(("attention_mask".to_string(), Value::from_array(mask.clone()).unwrap().upcast().into()));
+            // Prepare LLM inputs without per-step heap string formatting
+            let mut lm_inputs: Vec<(&'static str, DynValue)> = Vec::with_capacity(62);
+            lm_inputs.push(("inputs_embeds", Value::from_array(inputs_embeds).unwrap().upcast().into()));
+            lm_inputs.push(("attention_mask", Value::from_array(mask.clone()).unwrap().upcast().into()));
 
-            for layer in 0..NUM_HIDDEN_LAYERS {
-                for kv in &["key", "value"] {
-                    let k = format!("past_key_values.{}.{}", layer, kv);
-                    let val = past_key_values.get(&k).unwrap().clone();
-                    lm_inputs.push((k, Value::from_array(val).unwrap().upcast().into()));
-                }
+            for (name, val) in PAST_KV_INPUT_NAMES.iter().zip(past_key_values) {
+                lm_inputs.push((*name, val));
             }
 
             // Run language_model
-            let lm_outputs = language_model
+            let mut lm_outputs = language_model
                 .run(lm_inputs)
                 .map_err(|e| format!("Failed to run language_model at step {}: {}", i, e))?;
 
@@ -644,22 +706,16 @@ impl TTSEngine for ChatterboxEngine {
             let new_mask = Array2::ones((1, new_mask_len));
             attention_mask = Some(new_mask);
 
-            // Update past_key_values from present_key_values (outputs 1..61)
-            let mut out_idx = 1;
-            for layer in 0..NUM_HIDDEN_LAYERS {
-                for kv in &["key", "value"] {
-                    let k = format!("past_key_values.{}.{}", layer, kv);
-                    let (kv_shape, kv_data) = lm_outputs[out_idx]
-                        .try_extract_tensor::<f32>()
-                        .map_err(|e| format!("Failed to extract present kv: {}", e))?;
-                    let kv_arr = Array4::from_shape_vec(
-                        (kv_shape[0] as usize, kv_shape[1] as usize, kv_shape[2] as usize, kv_shape[3] as usize),
-                        kv_data.to_vec(),
-                    ).map_err(|e| format!("present kv shape mismatch: {}", e))?;
-                    past_key_values.insert(k, kv_arr);
-                    out_idx += 1;
-                }
+            // Retain on-device present_key_values directly as next iteration's past_key_values
+            // (eliminates host-device PCIe roundtrips and CPU memory allocations)
+            let mut next_kvs = Vec::with_capacity(60);
+            for &out_name in &PRESENT_KV_OUTPUT_NAMES {
+                let kv_val = lm_outputs
+                    .remove(out_name)
+                    .ok_or_else(|| format!("Missing present KV output '{}'", out_name))?;
+                next_kvs.push(kv_val);
             }
+            past_key_values = next_kvs;
         }
 
         tracing::debug!("[TTS] Total generate_tokens len: {}", generate_tokens.len());
