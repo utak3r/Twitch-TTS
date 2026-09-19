@@ -8,7 +8,7 @@ use twitch_tts::filter::TextFilter;
 use twitch_tts::hotkeys::manager::HotkeysManager;
 use twitch_tts::tts::mock::MockTTSEngine;
 use twitch_tts::twitch::TwitchCoordinator;
-use twitch_tts::ui::bridge::{add_activity_row, AppState};
+use twitch_tts::ui::bridge::{add_activity_row, AppState, AudioPipelineQueue};
 
 fn create_test_state() -> Arc<AppState> {
     let (chat_tx, _) = mpsc::unbounded_channel::<ChatEvent>();
@@ -27,6 +27,7 @@ fn create_test_state() -> Arc<AppState> {
         chat_tx,
         status_tx,
         is_loading_models: Arc::new(std::sync::atomic::AtomicBool::new(false)),
+        audio_pipeline: Arc::new(AudioPipelineQueue::new(2)),
     })
 }
 
@@ -104,4 +105,48 @@ fn test_activity_history_max_limit_100() {
     assert_eq!(history.len(), 100);
     // The latest inserted item (user_119) should be at index 0
     assert_eq!(history[0].sender, "user_119");
+}
+
+#[test]
+fn test_audio_pipeline_queue_push_pop_clear() {
+    use twitch_tts::ui::bridge::SynthesizedAudio;
+
+    let pipeline = AudioPipelineQueue::new(2);
+    assert_eq!(pipeline.len(), 0);
+    assert!(pipeline.is_empty());
+
+    let item1 = SpokenItem::new("u1".into(), "m1".into(), "m1".into(), MessageStatus::Queued);
+    let audio1 = SynthesizedAudio {
+        item: item1.clone(),
+        sample_rate: 24000,
+        samples: vec![0.1, 0.2],
+    };
+
+    let item2 = SpokenItem::new("u2".into(), "m2".into(), "m2".into(), MessageStatus::Queued);
+    let audio2 = SynthesizedAudio {
+        item: item2.clone(),
+        sample_rate: 24000,
+        samples: vec![0.3, 0.4],
+    };
+
+    pipeline.push(audio1);
+    pipeline.push(audio2);
+    assert_eq!(pipeline.len(), 2);
+    assert!(!pipeline.is_empty());
+
+    // Pop first item
+    let popped1 = pipeline.pop_timeout(std::time::Duration::from_millis(100));
+    assert!(popped1.is_some());
+    assert_eq!(popped1.unwrap().item.id, item1.id);
+    assert_eq!(pipeline.len(), 1);
+
+    // Clear pipeline
+    let cleared = pipeline.clear();
+    assert_eq!(cleared.len(), 1);
+    assert_eq!(cleared[0].item.id, item2.id);
+    assert_eq!(pipeline.len(), 0);
+
+    // Empty pop times out
+    let empty_pop = pipeline.pop_timeout(std::time::Duration::from_millis(50));
+    assert!(empty_pop.is_none());
 }

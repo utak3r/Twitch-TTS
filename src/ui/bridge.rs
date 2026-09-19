@@ -17,9 +17,81 @@ use crate::twitch::TwitchCoordinator;
 use crate::{ActivityItem, AliasItem, IgnoredUserItem, MainWindow};
 use slint::{ComponentHandle, ModelRc, SharedString, VecModel};
 use std::fs;
-use std::sync::{Arc, Mutex};
+use std::collections::VecDeque;
+use std::sync::{Arc, Condvar, Mutex};
 use tokio::sync::mpsc;
 use tracing::{error, info};
+
+#[derive(Debug, Clone)]
+pub struct SynthesizedAudio {
+    pub item: SpokenItem,
+    pub sample_rate: u32,
+    pub samples: Vec<f32>,
+}
+
+#[derive(Debug)]
+pub struct AudioPipelineQueue {
+    items: Mutex<VecDeque<SynthesizedAudio>>,
+    has_items: Condvar,
+    has_space: Condvar,
+    max_size: usize,
+}
+
+impl AudioPipelineQueue {
+    pub fn new(max_size: usize) -> Self {
+        Self {
+            items: Mutex::new(VecDeque::new()),
+            has_items: Condvar::new(),
+            has_space: Condvar::new(),
+            max_size: max_size.max(1),
+        }
+    }
+
+    pub fn push(&self, audio: SynthesizedAudio) {
+        let mut queue = self.items.lock().unwrap();
+        while queue.len() >= self.max_size {
+            let (new_guard, _) = self
+                .has_space
+                .wait_timeout(queue, std::time::Duration::from_millis(100))
+                .unwrap();
+            queue = new_guard;
+        }
+        queue.push_back(audio);
+        self.has_items.notify_one();
+    }
+
+    pub fn pop_timeout(&self, timeout: std::time::Duration) -> Option<SynthesizedAudio> {
+        let mut queue = self.items.lock().unwrap();
+        while queue.is_empty() {
+            let (new_guard, timeout_res) = self.has_items.wait_timeout(queue, timeout).unwrap();
+            queue = new_guard;
+            if timeout_res.timed_out() && queue.is_empty() {
+                return None;
+            }
+        }
+        let item = queue.pop_front();
+        if item.is_some() {
+            self.has_space.notify_one();
+        }
+        item
+    }
+
+    pub fn clear(&self) -> Vec<SynthesizedAudio> {
+        let mut queue = self.items.lock().unwrap();
+        let drained: Vec<SynthesizedAudio> = queue.drain(..).collect();
+        self.has_space.notify_all();
+        drained
+    }
+
+    pub fn len(&self) -> usize {
+        let queue = self.items.lock().unwrap();
+        queue.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+}
 
 pub struct AppState {
     pub config_manager: ConfigManager,
@@ -34,6 +106,7 @@ pub struct AppState {
     pub chat_tx: mpsc::UnboundedSender<ChatEvent>,
     pub status_tx: mpsc::UnboundedSender<String>,
     pub is_loading_models: Arc<std::sync::atomic::AtomicBool>,
+    pub audio_pipeline: Arc<AudioPipelineQueue>,
 }
 
 pub fn setup_ui_bridge(
@@ -61,6 +134,7 @@ pub fn setup_ui_bridge(
     let hotkeys = Arc::new(Mutex::new(HotkeysManager::new()));
     let activity_history = Arc::new(Mutex::new(Vec::new()));
     let is_loading_models = Arc::new(std::sync::atomic::AtomicBool::new(false));
+    let audio_pipeline = Arc::new(AudioPipelineQueue::new(2));
 
     let app_state = Arc::new(AppState {
         config_manager: config_manager.clone(),
@@ -75,6 +149,7 @@ pub fn setup_ui_bridge(
         chat_tx: chat_tx.clone(),
         status_tx: status_tx.clone(),
         is_loading_models,
+        audio_pipeline,
     });
 
     // Populate initial UI properties from config
@@ -83,7 +158,8 @@ pub fn setup_ui_bridge(
     // Register Callbacks
     register_ui_callbacks(main_window, app_state.clone());
 
-    // Spawn Background Audio Processing Worker
+    // Spawn Background Audio Processing Workers (Pipelined Synthesis + Playback)
+    spawn_synthesis_worker(app_state.clone());
     spawn_playback_worker(app_state.clone());
 
     // Spawn Background Model Loader Worker
@@ -209,6 +285,12 @@ fn register_ui_callbacks(ui: &MainWindow, state: Arc<AppState>) {
     ui.on_clear_queue(move || {
         let dropped = state_c.queue.clear();
         for item in dropped {
+            add_activity_row(&state_c, item);
+        }
+        let dropped_pipeline = state_c.audio_pipeline.clear();
+        for audio in dropped_pipeline {
+            let mut item = audio.item;
+            item.status = MessageStatus::DroppedOverflow;
             add_activity_row(&state_c, item);
         }
         if let Some(w) = state_c.main_window.upgrade() {
@@ -952,9 +1034,19 @@ pub fn add_activity_row(state: &Arc<AppState>, item: SpokenItem) {
     });
 }
 
-fn spawn_playback_worker(state: Arc<AppState>) {
+fn update_ui_queue_count(state: &AppState) {
+    let total_pending = (state.queue.len() + state.audio_pipeline.len()) as i32;
+    let main_window = state.main_window.clone();
+    let _ = slint::invoke_from_event_loop(move || {
+        if let Some(w) = main_window.upgrade() {
+            w.set_queue_count(total_pending);
+        }
+    });
+}
+
+fn spawn_synthesis_worker(state: Arc<AppState>) {
     std::thread::spawn(move || {
-        info!("Audio playback worker thread started.");
+        info!("Audio synthesis worker thread started.");
         loop {
             // Wait if engine is still loading models
             let is_ready = state.tts.lock().unwrap().is_ready();
@@ -964,48 +1056,71 @@ fn spawn_playback_worker(state: Arc<AppState>) {
             }
 
             // Check for next queued speech item
-            if let Some(mut item) = state.queue.pop() {
+            if let Some(item) = state.queue.pop() {
+                update_ui_queue_count(&state);
+
+                let speech_rate = state.config_manager.get().tts.speech_rate;
+                let synth_res = {
+                    let mut tts = state.tts.lock().unwrap();
+                    tts.synthesize(&item.spoken_text, speech_rate)
+                };
+
+                match synth_res {
+                    Ok((sample_rate, samples)) => {
+                        state.audio_pipeline.push(SynthesizedAudio {
+                            item,
+                            sample_rate,
+                            samples,
+                        });
+                        update_ui_queue_count(&state);
+                    }
+                    Err(err) => {
+                        error!("TTS Synthesis failed: {}", err);
+                        let mut failed_item = item;
+                        failed_item.status = MessageStatus::Error(err);
+                        add_activity_row(&state, failed_item);
+                        update_ui_queue_count(&state);
+                    }
+                }
+            } else {
+                std::thread::sleep(std::time::Duration::from_millis(50));
+            }
+        }
+    });
+}
+
+fn spawn_playback_worker(state: Arc<AppState>) {
+    std::thread::spawn(move || {
+        info!("Audio playback worker thread started.");
+        loop {
+            if let Some(audio) = state.audio_pipeline.pop_timeout(std::time::Duration::from_millis(100)) {
+                let mut item = audio.item;
                 item.status = MessageStatus::Playing;
                 add_activity_row(&state, item.clone());
 
-                let queue_len = state.queue.len() as i32;
                 let main_window = state.main_window.clone();
                 let _ = slint::invoke_from_event_loop(move || {
                     if let Some(w) = main_window.upgrade() {
-                        w.set_queue_count(queue_len);
                         w.set_is_speaking(true);
                     }
                 });
 
-                // Synthesize PCM
-                let speech_rate = state.config_manager.get().tts.speech_rate;
-                let mut tts = state.tts.lock().unwrap();
-                let synth_res = tts.synthesize(&item.spoken_text, speech_rate);
-                drop(tts);
+                let padding = state.config_manager.get().tts.padding_sec;
+                let _ = state.audio_player.play_samples(audio.sample_rate, &audio.samples, padding);
 
-                match synth_res {
-                    Ok((sample_rate, samples)) => {
-                        let padding = state.config_manager.get().tts.padding_sec;
-                        let _ = state.audio_player.play_samples(sample_rate, &samples, padding);
+                item.status = MessageStatus::Spoken;
+                add_activity_row(&state, item);
 
-                        item.status = MessageStatus::Spoken;
-                        add_activity_row(&state, item);
-                    }
-                    Err(err) => {
-                        error!("TTS Synthesis failed: {}", err);
-                        item.status = MessageStatus::Error(err);
-                        add_activity_row(&state, item);
-                    }
+                update_ui_queue_count(&state);
+
+                if state.audio_pipeline.is_empty() && state.queue.is_empty() {
+                    let main_window = state.main_window.clone();
+                    let _ = slint::invoke_from_event_loop(move || {
+                        if let Some(w) = main_window.upgrade() {
+                            w.set_is_speaking(false);
+                        }
+                    });
                 }
-
-                let main_window = state.main_window.clone();
-                let _ = slint::invoke_from_event_loop(move || {
-                    if let Some(w) = main_window.upgrade() {
-                        w.set_is_speaking(false);
-                    }
-                });
-            } else {
-                std::thread::sleep(std::time::Duration::from_millis(50));
             }
         }
     });
@@ -1035,13 +1150,7 @@ fn handle_incoming_chat_event(state: &Arc<AppState>, event: ChatEvent) {
                 add_activity_row(state, d);
             }
             add_activity_row(state, item);
-            let queue_len = state.queue.len() as i32;
-            let main_window = state.main_window.clone();
-            let _ = slint::invoke_from_event_loop(move || {
-                if let Some(w) = main_window.upgrade() {
-                    w.set_queue_count(queue_len);
-                }
-            });
+            update_ui_queue_count(state);
         }
         FilterResult::Filtered(item) | FilterResult::Ignored(item) => {
             add_activity_row(state, item);
